@@ -9,6 +9,6 @@ import Resolver
 
 extension Resolver {
     static func registerMainDependencies() {
-        
+        register { AppState() }
     }
 }

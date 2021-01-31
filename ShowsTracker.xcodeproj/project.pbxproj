@@ -10,7 +10,6 @@
 		8C28960F25C5D0AD00C2AC37 /* Show.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C28960E25C5D0AD00C2AC37 /* Show.swift */; };
 		8C496FA725C47DAE000282C5 /* PagingScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C496FA625C47DAE000282C5 /* PagingScrollView.swift */; };
 		8CD6C1DD25C327D3004CF261 /* ShowsTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6C1DC25C327D3004CF261 /* ShowsTrackerApp.swift */; };
-		8CD6C1DF25C327D3004CF261 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6C1DE25C327D3004CF261 /* ContentView.swift */; };
 		8CD6C1E125C327D4004CF261 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8CD6C1E025C327D4004CF261 /* Assets.xcassets */; };
 		8CD6C1E425C327D4004CF261 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8CD6C1E325C327D4004CF261 /* Preview Assets.xcassets */; };
 		8CD6C1FB25C32CDB004CF261 /* RootResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6C1FA25C32CDB004CF261 /* RootResolver.swift */; };
@@ -26,7 +25,6 @@
 		8C496FA625C47DAE000282C5 /* PagingScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagingScrollView.swift; sourceTree = "<group>"; };
 		8CD6C1D925C327D3004CF261 /* ShowsTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShowsTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8CD6C1DC25C327D3004CF261 /* ShowsTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowsTrackerApp.swift; sourceTree = "<group>"; };
-		8CD6C1DE25C327D3004CF261 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		8CD6C1E025C327D4004CF261 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8CD6C1E325C327D4004CF261 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		8CD6C1E525C327D4004CF261 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -82,7 +80,6 @@
 				8CD6C1FD25C32D54004CF261 /* Main */,
 				8CD6C1F825C32CCC004CF261 /* Root */,
 				8CD6C1F125C3299C004CF261 /* SupportingFiles */,
-				8CD6C1DE25C327D3004CF261 /* ContentView.swift */,
 				8CD6C1E225C327D4004CF261 /* Preview Content */,
 			);
 			path = ShowsTracker;
@@ -228,7 +225,6 @@
 				8CD6C21325C3303D004CF261 /* ShowsViewInteractor.swift in Sources */,
 				8CD6C20F25C33028004CF261 /* ShowsView.swift in Sources */,
 				8CD6C20925C32F2A004CF261 /* AppState.swift in Sources */,
-				8CD6C1DF25C327D3004CF261 /* ContentView.swift in Sources */,
 				8C28960F25C5D0AD00C2AC37 /* Show.swift in Sources */,
 				8CD6C1FB25C32CDB004CF261 /* RootResolver.swift in Sources */,
 				8CD6C1DD25C327D3004CF261 /* ShowsTrackerApp.swift in Sources */,

@@ -9,6 +9,16 @@ import Resolver
 
 extension Resolver: ResolverRegistering {
     public static func registerAllServices() {
+        register { AppState() }
+        
         registerMainDependencies()
     }
 }
+
+#if DEBUG
+extension Resolver {
+    static func registerPreview() {
+        register { AppState() }
+    }
+}
+#endif

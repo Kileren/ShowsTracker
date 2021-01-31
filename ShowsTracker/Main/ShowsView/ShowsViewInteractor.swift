@@ -7,6 +7,6 @@
 
 import Foundation
 
-class ShowsViewInteractor {
+final class ShowsViewInteractor {
     
 }

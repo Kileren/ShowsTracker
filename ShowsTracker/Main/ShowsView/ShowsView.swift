@@ -6,14 +6,20 @@
 //
 
 import SwiftUI
+import Resolver
 
 struct ShowsView: View {
-    @State var appState = AppState()
+    
+    // MARK: - Injected
+    
+    @InjectedObject var appState: AppState
+    
+    // MARK: - State
     
     @State private var index: Int = 0
     @State private var scrollProgress: CGFloat = 0
     
-    private var timerTimes = 0
+    // MARK: - View
     
     var body: some View {
         ZStack {
@@ -86,9 +92,13 @@ struct ShowsView: View {
     }
 }
 
+// MARK: - Preview
+
 struct ShowsView_Previews: PreviewProvider {
     static var previews: some View {
-        ShowsView()
+        Resolver.registerPreview()
+        
+        return ShowsView()
     }
 }
 
