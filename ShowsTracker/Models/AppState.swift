@@ -8,5 +8,6 @@
 import SwiftUI
 
 class AppState: ObservableObject {
-    
+    @Published var shows: [Show] = [Show(image: Image("TheWitcher")),
+                                    Show(image: Image("TheMandalorian"))]
 }

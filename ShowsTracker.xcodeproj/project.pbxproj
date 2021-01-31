@@ -7,19 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C28960F25C5D0AD00C2AC37 /* Show.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C28960E25C5D0AD00C2AC37 /* Show.swift */; };
+		8C496FA725C47DAE000282C5 /* PagingScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C496FA625C47DAE000282C5 /* PagingScrollView.swift */; };
 		8CD6C1DD25C327D3004CF261 /* ShowsTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6C1DC25C327D3004CF261 /* ShowsTrackerApp.swift */; };
 		8CD6C1DF25C327D3004CF261 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6C1DE25C327D3004CF261 /* ContentView.swift */; };
 		8CD6C1E125C327D4004CF261 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8CD6C1E025C327D4004CF261 /* Assets.xcassets */; };
 		8CD6C1E425C327D4004CF261 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8CD6C1E325C327D4004CF261 /* Preview Assets.xcassets */; };
-		8CD6C1EF25C32905004CF261 /* Resolver in Frameworks */ = {isa = PBXBuildFile; productRef = 8CD6C1EE25C32905004CF261 /* Resolver */; };
 		8CD6C1FB25C32CDB004CF261 /* RootResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6C1FA25C32CDB004CF261 /* RootResolver.swift */; };
 		8CD6C20425C32E06004CF261 /* Main+Resolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6C20325C32E06004CF261 /* Main+Resolver.swift */; };
 		8CD6C20925C32F2A004CF261 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6C20825C32F2A004CF261 /* AppState.swift */; };
 		8CD6C20F25C33028004CF261 /* ShowsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6C20E25C33028004CF261 /* ShowsView.swift */; };
 		8CD6C21325C3303D004CF261 /* ShowsViewInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6C21225C3303D004CF261 /* ShowsViewInteractor.swift */; };
+		8CFADEFE25C6B19A00597413 /* Resolver in Frameworks */ = {isa = PBXBuildFile; productRef = 8CFADEFD25C6B19A00597413 /* Resolver */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8C28960E25C5D0AD00C2AC37 /* Show.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Show.swift; sourceTree = "<group>"; };
+		8C496FA625C47DAE000282C5 /* PagingScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagingScrollView.swift; sourceTree = "<group>"; };
 		8CD6C1D925C327D3004CF261 /* ShowsTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShowsTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8CD6C1DC25C327D3004CF261 /* ShowsTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowsTrackerApp.swift; sourceTree = "<group>"; };
 		8CD6C1DE25C327D3004CF261 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -38,18 +42,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8CD6C1EF25C32905004CF261 /* Resolver in Frameworks */,
+				8CFADEFE25C6B19A00597413 /* Resolver in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8C496FA525C47D8D000282C5 /* SharedViews */ = {
+			isa = PBXGroup;
+			children = (
+				8C496FA625C47DAE000282C5 /* PagingScrollView.swift */,
+			);
+			path = SharedViews;
+			sourceTree = "<group>";
+		};
 		8CD6C1D025C327D3004CF261 = {
 			isa = PBXGroup;
 			children = (
 				8CD6C1DB25C327D3004CF261 /* ShowsTracker */,
 				8CD6C1DA25C327D3004CF261 /* Products */,
+				8CFADEF425C6A44A00597413 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -64,6 +77,7 @@
 		8CD6C1DB25C327D3004CF261 /* ShowsTracker */ = {
 			isa = PBXGroup;
 			children = (
+				8C496FA525C47D8D000282C5 /* SharedViews */,
 				8CD6C20725C32F19004CF261 /* Models */,
 				8CD6C1FD25C32D54004CF261 /* Main */,
 				8CD6C1F825C32CCC004CF261 /* Root */,
@@ -113,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				8CD6C20825C32F2A004CF261 /* AppState.swift */,
+				8C28960E25C5D0AD00C2AC37 /* Show.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -124,6 +139,13 @@
 				8CD6C21225C3303D004CF261 /* ShowsViewInteractor.swift */,
 			);
 			path = ShowsView;
+			sourceTree = "<group>";
+		};
+		8CFADEF425C6A44A00597413 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -143,7 +165,7 @@
 			);
 			name = ShowsTracker;
 			packageProductDependencies = (
-				8CD6C1EE25C32905004CF261 /* Resolver */,
+				8CFADEFD25C6B19A00597413 /* Resolver */,
 			);
 			productName = ShowsTracker;
 			productReference = 8CD6C1D925C327D3004CF261 /* ShowsTracker.app */;
@@ -202,10 +224,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				8CD6C20425C32E06004CF261 /* Main+Resolver.swift in Sources */,
+				8C496FA725C47DAE000282C5 /* PagingScrollView.swift in Sources */,
 				8CD6C21325C3303D004CF261 /* ShowsViewInteractor.swift in Sources */,
 				8CD6C20F25C33028004CF261 /* ShowsView.swift in Sources */,
 				8CD6C20925C32F2A004CF261 /* AppState.swift in Sources */,
 				8CD6C1DF25C327D3004CF261 /* ContentView.swift in Sources */,
+				8C28960F25C5D0AD00C2AC37 /* Show.swift in Sources */,
 				8CD6C1FB25C32CDB004CF261 /* RootResolver.swift in Sources */,
 				8CD6C1DD25C327D3004CF261 /* ShowsTrackerApp.swift in Sources */,
 			);
@@ -409,7 +433,7 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		8CD6C1EE25C32905004CF261 /* Resolver */ = {
+		8CFADEFD25C6B19A00597413 /* Resolver */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 8CD6C1ED25C32905004CF261 /* XCRemoteSwiftPackageReference "Resolver" */;
 			productName = Resolver;
