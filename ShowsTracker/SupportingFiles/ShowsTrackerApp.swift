@@ -12,6 +12,7 @@ struct ShowsTrackerApp: App {
     var body: some Scene {
         WindowGroup {
             ShowsView()
+//            Example()
         }
     }
 }

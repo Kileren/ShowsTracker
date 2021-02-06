@@ -7,7 +7,11 @@
 
 import SwiftUI
 
-struct PagingScrollView<Content: View & Identifiable>: View {
+protocol Indexable {
+    var index: Int { get }
+}
+
+struct PagingScrollView<Content: View & Identifiable & Indexable>: View {
     
     @State private var offset: CGFloat = 0
     @State private var progress: CGFloat = 0
@@ -20,14 +24,12 @@ struct PagingScrollView<Content: View & Identifiable>: View {
     
     var body: some View {
         GeometryReader { geometry in
-            return ScrollView(.horizontal, showsIndicators: false) {
-                LazyHStack(spacing: spacing) {
-                    ForEach(content) { view in
-                        view.frame(width: geometry.size.width, height: geometry.size.height)
-                    }
+            LazyHStack(spacing: spacing) {
+                ForEach(content) { view in
+                    view.frame(width: geometry.size.width, height: geometry.size.height)
+                        .scaleEffect(scale(for: view))
                 }
             }
-            .content
             .offset(x: offset)
             .gesture(
                 DragGesture()
@@ -41,6 +43,16 @@ struct PagingScrollView<Content: View & Identifiable>: View {
             .onAppear {
                 offset = -geometry.size.width * CGFloat(index)
             }
+        }
+    }
+    
+    func scale(for view: Content) -> CGFloat {
+        let index = CGFloat(view.index)
+        
+        if index == progress {
+            return 1
+        } else {
+            return 1 - 0.2 * abs(index - progress)
         }
     }
     
@@ -63,6 +75,7 @@ struct PagingScrollView<Content: View & Identifiable>: View {
         
         withAnimation {
             offset = -geometry.size.width * CGFloat(index) - CGFloat(index) * spacing
+            progress = CGFloat(index)
         }
     }
 }
@@ -72,8 +85,8 @@ struct PagingScrollView_Previews: PreviewProvider {
         GeometryReader { geometry in
             PagingScrollView(
                 index: 0,
-                content: (0...3).map { index in ViewForPreview() },
-                spacing: 32,
+                content: (0...3).map { index in ViewForPreview(index: index) },
+                spacing: 16,
                 changeIndexClosure: { _ in },
                 changeProgressClosure: { _ in }
             )
@@ -84,8 +97,9 @@ struct PagingScrollView_Previews: PreviewProvider {
     }
 }
 
-fileprivate struct ViewForPreview: View, Identifiable {
+fileprivate struct ViewForPreview: View, Identifiable, Indexable {
     var id = UUID()
+    var index: Int
     
     var body: some View {
         GeometryReader { geometry in
