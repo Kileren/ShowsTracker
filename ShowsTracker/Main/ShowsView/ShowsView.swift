@@ -32,11 +32,13 @@ struct ShowsView: View {
     var blurBackground: some View {
         GeometryReader { geometry in
             ZStack(alignment: Alignment(horizontal: .center, vertical: .top), content: {
-                backgroundSubview(geometry: geometry)
                 backgroudImage(geometry: geometry)
                 backgroundImageGradient(geometry: geometry)
             })
         }
+        .background(
+            Color.backgroundLight.edgesIgnoringSafeArea(.all)
+        )
     }
     
     var currentShows: some View {
@@ -58,7 +60,7 @@ struct ShowsView: View {
             .frame(width: geometry.size.width * 0.6,
                    height: geometry.size.width * 0.9)
             .padding(.leading, geometry.size.width * 0.2)
-            .padding(.top, 80)
+            .padding(.top, .topCurrentShowsOffset)
         }
     }
     
@@ -67,17 +69,8 @@ struct ShowsView: View {
             PageDotsView(numberOfPages: appState.shows.count,
                          currentIndex: index)
                 .frame(width: geometry.size.width, height: 12, alignment: .center)
-                .padding(.top, 80 + geometry.size.width * 0.9 + 32)
+                .padding(.top, .topCurrentShowsOffset + geometry.size.width * 0.9 + 32)
         }
-    }
-    
-    func backgroundSubview(geometry: GeometryProxy) -> some View {
-        Rectangle()
-            .frame(width: geometry.size.width,
-                   height: geometry.size.width * 1.335 + 100,
-                   alignment: .top)
-            .foregroundColor(.white)
-            .ignoresSafeArea(edges: .top)
     }
     
     func backgroudImage(geometry: GeometryProxy) -> some View {
@@ -99,10 +92,14 @@ struct ShowsView: View {
     func backgroundImageGradient(geometry: GeometryProxy) -> some View {
         Rectangle()
             .frame(width: geometry.size.width,
-                   height: geometry.size.width * 1.335 + 100,
+                   height: geometry.size.width * 1.45,
                    alignment: .top)
             .foregroundColor(.clear)
-            .background(LinearGradient(gradient: Gradient(colors: [.white, .clear]), startPoint: .bottom, endPoint: .top))
+            .background(
+                LinearGradient(
+                    gradient: Gradient(colors: [.backgroundLight, Color.backgroundLight.opacity(0)]),
+                    startPoint: .bottom,
+                    endPoint: .top))
             .ignoresSafeArea(edges: .top)
     }
 }
@@ -127,6 +124,10 @@ fileprivate struct WatchingShowView: View, Identifiable, Equatable, Indexable {
     var body: some View {
         image
             .resizable()
-            .cornerRadius(16)
+            .cornerRadius(DesignConst.normalCornerRadius)
     }
+}
+
+fileprivate extension CGFloat {
+    static let topCurrentShowsOffset: CGFloat = 80
 }
