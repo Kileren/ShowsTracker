@@ -8,6 +8,8 @@
 import CoreGraphics
 
 enum DesignConst {
+    /// 8
     static let smallCornerRadius: CGFloat = 8
+    /// 16
     static let normalCornerRadius: CGFloat = 16
 }

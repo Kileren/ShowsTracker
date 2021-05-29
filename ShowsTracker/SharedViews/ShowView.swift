@@ -46,7 +46,7 @@ struct ShowView: View {
             .foregroundColor(.text100)
             .overlay(
                 HStack(spacing: 4) {
-                    Image("Shared/Star")
+                    Images.star
                         .resizable()
                         .frame(width: 10, height: 10)
                     

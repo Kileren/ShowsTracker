@@ -13,6 +13,7 @@ struct ShowsView: View {
     // MARK: - Injected
     
     @InjectedObject var appState: AppState
+    @Injected var interactor: ShowsViewInteractor
     
     // MARK: - State
     
@@ -22,59 +23,123 @@ struct ShowsView: View {
     // MARK: - View
     
     var body: some View {
-        ZStack {
-            blurBackground
-            currentShows
-            pageDotsView
+        GeometryReader { geometry in
+            ScrollView(.vertical, showsIndicators: false) {            
+                ZStack(alignment: .top) {
+                    blurBackground(geometry: geometry)
+                    
+                    VStack(spacing: 32) {
+                        if !appState.shows.isEmpty {
+                            currentShows(geometry: geometry)
+                            pageDotsView(geometry: geometry)
+                        } else {
+                            emptyShowsViews(geometry: geometry)
+                        }
+                        popular(geometry: geometry)
+                    }
+                }
+            }
+        }
+        .background(Color.backgroundLight)
+        .edgesIgnoringSafeArea(.all)
+        .onAppear {
+//            interactor.viewAppeared()
         }
     }
     
-    var blurBackground: some View {
-        GeometryReader { geometry in
-            ZStack(alignment: Alignment(horizontal: .center, vertical: .top), content: {
-                backgroudImage(geometry: geometry)
-                backgroundImageGradient(geometry: geometry)
-            })
-        }
+    func blurBackground(geometry: GeometryProxy) -> some View {
+        ZStack(alignment: Alignment(horizontal: .center, vertical: .top), content: {
+            
+            if !appState.shows.isEmpty {
+                backgroundImage(geometry: geometry)
+            }
+            backgroundImageGradient(geometry: geometry)
+        })
         .background(
             Color.backgroundLight.edgesIgnoringSafeArea(.all)
         )
     }
     
-    var currentShows: some View {
+    func currentShows(geometry: GeometryProxy) -> some View {
         let content = appState.shows.enumerated().map {
-            WatchingShowView(image: $0.element.image, index: $0.offset)
+            WatchingShowView(image: $0.element.imageData.image, index: $0.offset)
         }
-        return GeometryReader { geometry in
-            PagingScrollView(
-                content: content,
-                spacing: 16,
-                changeIndexClosure: { index in
-                    withAnimation {
-                        self.index = index
-                    }
-                    scrollProgress = CGFloat(index)
-                },
-                changeProgressClosure: { scrollProgress = $0 }
-            )
-            .frame(width: geometry.size.width * 0.6,
-                   height: geometry.size.width * 0.9)
-            .padding(.leading, geometry.size.width * 0.2)
-            .padding(.top, .topCurrentShowsOffset)
+        
+        return PagingScrollView(
+            content: content,
+            spacing: 16,
+            changeIndexClosure: { index in
+                withAnimation {
+                    self.index = index
+                }
+                scrollProgress = CGFloat(index)
+            },
+            changeProgressClosure: { scrollProgress = $0 }
+        )
+        .frame(width: geometry.size.width * 0.6,
+               height: geometry.size.width * 0.9)
+        .padding(.top, .topCurrentShowsOffset)
+    }
+    
+    private func emptyShowsViews(geometry: GeometryProxy) -> some View {
+        ZStack(alignment: .bottom) {
+            Rectangle()
+                .cornerRadius(DesignConst.normalCornerRadius)
+                .frame(width: geometry.size.width * 0.6,
+                       height: geometry.size.width * 0.9)
+                .padding(.top, .topCurrentShowsOffset)
+                .foregroundColor(.white100)
+                .shadow(color: .black.opacity(0.15), radius: 8, x: 4, y: 4)
+            
+            VStack(spacing: 12) {
+                Images.emptyList
+                    .resizable()
+                    .frame(width: geometry.size.width * 0.35,
+                       height: geometry.size.width * 0.35)
+                
+                Text(Strings.noTrackingShows)
+                    .font(.regular15)
+                    .foregroundColor(.text100)
+                    .multilineTextAlignment(.center)
+            }
+            .padding(.bottom, 55 + geometry.size.width * 0.15)
+            
+//            ZStack {
+//                RoundedRectangle(cornerRadius: 15)
+//                    .frame(width: geometry.size.width * 0.4,
+//                           height: 30)
+//                    .foregroundColor(.bay)
+//
+//                Text(Strings.add)
+//                    .font(.regular15)
+//                    .foregroundColor(.white100)
+//            }
+//            .padding(.bottom, 24)
+            
+            STButton(title: Strings.add,
+                     style: .small(width: .fit),
+                     geometry: geometry) {
+                print("Add button tapped")
+            }
+                .padding(.bottom, 24)
         }
     }
     
-    var pageDotsView: some View {
-        GeometryReader { geometry in
+    @ViewBuilder
+    func pageDotsView(geometry: GeometryProxy) -> some View {
+        if appState.shows.count > 1 {
             PageDotsView(numberOfPages: appState.shows.count,
                          currentIndex: index)
                 .frame(width: geometry.size.width, height: 12, alignment: .center)
-                .padding(.top, .topCurrentShowsOffset + geometry.size.width * 0.9 + 32)
+        } else {
+            Rectangle()
+                .foregroundColor(.clear)
+                .frame(width: 0, height: 0)
         }
     }
     
-    func backgroudImage(geometry: GeometryProxy) -> some View {
-        let images = appState.shows.map { $0.image }
+    func backgroundImage(geometry: GeometryProxy) -> some View {
+        let images = appState.shows.map { $0.imageData.image }
         let index = max(min(Int(scrollProgress.rounded()), images.count - 1), 0)
         let image = images[Int(index)]
         let opacity = 1 - abs(scrollProgress - CGFloat(index)) * 1.25
@@ -101,6 +166,51 @@ struct ShowsView: View {
                     startPoint: .bottom,
                     endPoint: .top))
             .ignoresSafeArea(edges: .top)
+    }
+    
+    func popular(geometry: GeometryProxy) -> some View {
+        VStack(spacing: 16) {
+            HStack {
+                Text(Strings.popular)
+                    .font(.medium28)
+                    .foregroundColor(.text100)
+                Spacer()
+                Text(Strings.more)
+                    .font(.medium13)
+                    .foregroundColor(.bay)
+            }
+            
+            popularShows(geometry: geometry)
+        }
+        .padding(.horizontal, 24)
+    }
+    
+    func popularShows(geometry: GeometryProxy) -> some View {
+        let showWidth = (geometry.size.width - 88) / 3
+        let showHeight = showWidth * (28 / 19)
+        let columns: [GridItem] = [
+            GridItem(.fixed(showWidth), spacing: 20, alignment: .leading),
+            GridItem(.fixed(showWidth), spacing: 20, alignment: .leading),
+            GridItem(.fixed(showWidth), spacing: 20, alignment: .leading)
+        ]
+        
+        return LazyVGrid(
+            columns: columns,
+            alignment: .leading,
+            spacing: 16,
+            pinnedViews: [],
+            content: {
+                ForEach(appState.popularShows, id: \.id) {
+                    showView(show: $0)
+                        .frame(width: showWidth, height: showHeight)
+                }
+            })
+    }
+    
+    func showView(show: PlainShow) -> some View {
+        show.imageData.image
+            .resizable()
+            .cornerRadius(DesignConst.smallCornerRadius)
     }
 }
 

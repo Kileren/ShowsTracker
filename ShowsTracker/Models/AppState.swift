@@ -8,5 +8,20 @@
 import SwiftUI
 
 class AppState: ObservableObject {
-    @Published var shows: [Show] = [Show(image: Image("TheWitcher")), Show(image: Image("TheMandalorian"))]
+//    @Published var shows: [DetailedShow] = []
+//    @Published var popularShows: [PlainShow] = []
+    
+    @Published var shows: [DetailedShow] = [
+        DetailedShow(imageData: UIImage(named: "TheWitcher")?.pngData()),
+        DetailedShow(imageData: UIImage(named: "TheMandalorian")?.pngData())
+    ]
+
+    @Published var popularShows: [PlainShow] = [
+        PlainShow(imageData: UIImage(named: "TheWitcher")?.pngData()),
+        PlainShow(imageData: UIImage(named: "TheMandalorian")?.pngData()),
+        PlainShow(imageData: UIImage(named: "TheWitcher")?.pngData()),
+        PlainShow(imageData: UIImage(named: "TheMandalorian")?.pngData()),
+        PlainShow(imageData: UIImage(named: "TheWitcher")?.pngData()),
+        PlainShow(imageData: UIImage(named: "TheMandalorian")?.pngData())
+    ]
 }

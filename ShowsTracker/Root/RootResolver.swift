@@ -9,8 +9,7 @@ import Resolver
 
 extension Resolver: ResolverRegistering {
     public static func registerAllServices() {
-        register { AppState() }
-        
+        register { AppState() }.scope(.application)
         registerMainDependencies()
     }
 }
@@ -18,7 +17,8 @@ extension Resolver: ResolverRegistering {
 #if DEBUG
 extension Resolver {
     static func registerPreview() {
-        register { AppState() }
+        register { AppState() }.scope(.application)
+        register { ShowsViewInteractor(appState: resolve()) }
     }
 }
 #endif
