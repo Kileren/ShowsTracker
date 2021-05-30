@@ -12,6 +12,8 @@
 		8C3994762620DBCE005BD7DB /* PlainShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3994752620DBCE005BD7DB /* PlainShow.swift */; };
 		8C3994782620DCCD005BD7DB /* Data+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3994772620DCCD005BD7DB /* Data+Image.swift */; };
 		8C496FA725C47DAE000282C5 /* PagingScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C496FA625C47DAE000282C5 /* PagingScrollView.swift */; };
+		8C518F3C2662B27800EE6C4F /* Redactable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C518F3B2662B27800EE6C4F /* Redactable.swift */; };
+		8C518F3E2662B28B00EE6C4F /* Redactable+Shimmered.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C518F3D2662B28B00EE6C4F /* Redactable+Shimmered.swift */; };
 		8C59A92B2628AEB8000C489C /* Localization.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8C59A92A2628AEB8000C489C /* Localization.strings */; };
 		8C59A92D2628B1E0000C489C /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C59A92C2628B1E0000C489C /* Images.swift */; };
 		8C5E8D4C25CF08CD0058A9B1 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C5E8D4B25CF08CD0058A9B1 /* Fonts.swift */; };
@@ -41,6 +43,8 @@
 		8C3994752620DBCE005BD7DB /* PlainShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainShow.swift; sourceTree = "<group>"; };
 		8C3994772620DCCD005BD7DB /* Data+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Image.swift"; sourceTree = "<group>"; };
 		8C496FA625C47DAE000282C5 /* PagingScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagingScrollView.swift; sourceTree = "<group>"; };
+		8C518F3B2662B27800EE6C4F /* Redactable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redactable.swift; sourceTree = "<group>"; };
+		8C518F3D2662B28B00EE6C4F /* Redactable+Shimmered.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Redactable+Shimmered.swift"; sourceTree = "<group>"; };
 		8C59A92A2628AEB8000C489C /* Localization.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localization.strings; sourceTree = "<group>"; };
 		8C59A92C2628B1E0000C489C /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		8C5E8D4B25CF08CD0058A9B1 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
@@ -84,6 +88,23 @@
 				8CA0ECB1262AFABF00EB20D9 /* STButton.swift */,
 			);
 			path = SharedViews;
+			sourceTree = "<group>";
+		};
+		8C518F392662B26300EE6C4F /* Modifiers */ = {
+			isa = PBXGroup;
+			children = (
+				8C518F3A2662B26B00EE6C4F /* Redactable */,
+			);
+			path = Modifiers;
+			sourceTree = "<group>";
+		};
+		8C518F3A2662B26B00EE6C4F /* Redactable */ = {
+			isa = PBXGroup;
+			children = (
+				8C518F3B2662B27800EE6C4F /* Redactable.swift */,
+				8C518F3D2662B28B00EE6C4F /* Redactable+Shimmered.swift */,
+			);
+			path = Redactable;
 			sourceTree = "<group>";
 		};
 		8C5E8D4E25CF0E1F0058A9B1 /* Helpers */ = {
@@ -214,6 +235,7 @@
 		8CFADF0825C7207C00597413 /* Design */ = {
 			isa = PBXGroup;
 			children = (
+				8C518F392662B26300EE6C4F /* Modifiers */,
 				8CFADF0925C7208800597413 /* Colors.swift */,
 				8CE2693D25CEE5040045903F /* DesignConst.swift */,
 				8C5E8D4B25CF08CD0058A9B1 /* Fonts.swift */,
@@ -303,6 +325,7 @@
 				8CFADF0A25C7208800597413 /* Colors.swift in Sources */,
 				8CB9F5BB25CFB0680095F063 /* TruncableText.swift in Sources */,
 				8CA0ECB2262AFABF00EB20D9 /* STButton.swift in Sources */,
+				8C518F3E2662B28B00EE6C4F /* Redactable+Shimmered.swift in Sources */,
 				8C3994762620DBCE005BD7DB /* PlainShow.swift in Sources */,
 				8C496FA725C47DAE000282C5 /* PagingScrollView.swift in Sources */,
 				8CD6C21325C3303D004CF261 /* ShowsViewInteractor.swift in Sources */,
@@ -319,6 +342,7 @@
 				8CD6C1FB25C32CDB004CF261 /* RootResolver.swift in Sources */,
 				8C0F5D3225CFB9D500B9983C /* View+CornerRadius.swift in Sources */,
 				8CD6C1DD25C327D3004CF261 /* ShowsTrackerApp.swift in Sources */,
+				8C518F3C2662B27800EE6C4F /* Redactable.swift in Sources */,
 				8CFAD6A925C872250090DC4F /* PageDotsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

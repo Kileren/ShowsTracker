@@ -8,9 +8,12 @@
 import Foundation
 import UIKit
 
-final class ShowsViewInteractor {
+final class ShowsViewInteractor: ObservableObject {
     
     private var appState: AppState
+    
+    @Published var isCurrentLoaded: Bool = false
+    @Published var isPopularLoaded: Bool = false
     
     init(appState: AppState) {
         self.appState = appState
@@ -30,5 +33,14 @@ final class ShowsViewInteractor {
             PlainShow(imageData: UIImage(named: "TheWitcher")?.pngData()),
             PlainShow(imageData: UIImage(named: "TheMandalorian")?.pngData())
         ]
+        
+        // TODO: Remove it later
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            self?.isCurrentLoaded = true
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self?.isPopularLoaded = true
+            }
+        }
     }
 }

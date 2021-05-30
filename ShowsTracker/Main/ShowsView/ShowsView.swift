@@ -13,7 +13,7 @@ struct ShowsView: View {
     // MARK: - Injected
     
     @InjectedObject var appState: AppState
-    @Injected var interactor: ShowsViewInteractor
+    @InjectedObject var interactor: ShowsViewInteractor
     
     // MARK: - State
     
@@ -24,27 +24,93 @@ struct ShowsView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            ScrollView(.vertical, showsIndicators: false) {            
-                ZStack(alignment: .top) {
-                    blurBackground(geometry: geometry)
-                    
-                    VStack(spacing: 32) {
-                        if !appState.shows.isEmpty {
-                            currentShows(geometry: geometry)
-                            pageDotsView(geometry: geometry)
-                        } else {
-                            emptyShowsViews(geometry: geometry)
+            
+            if interactor.isCurrentLoaded {
+                ScrollView(.vertical, showsIndicators: false) {
+                    ZStack(alignment: .top) {
+                        blurBackground(geometry: geometry)
+                        
+                        VStack(spacing: 32) {
+                            if !appState.shows.isEmpty {
+                                currentShows(geometry: geometry)
+                                pageDotsView(geometry: geometry)
+                            } else {
+                                emptyShowsViews(geometry: geometry)
+                            }
+                            
+                            if interactor.isPopularLoaded {
+                                popular(geometry: geometry)
+                            } else {
+                                skeletonForPopular(geometry: geometry)
+                            }
                         }
-                        popular(geometry: geometry)
                     }
                 }
+            } else {
+                skeletonLoader(geometry: geometry)
             }
         }
         .background(Color.backgroundLight)
         .edgesIgnoringSafeArea(.all)
         .onAppear {
-//            interactor.viewAppeared()
+            interactor.viewAppeared()
         }
+    }
+    
+    func skeletonLoader(geometry: GeometryProxy) -> some View {
+        ZStack(alignment: .top) {
+            skeletonBackground(geometry: geometry)
+            
+            VStack(spacing: 32) {
+                RoundedRectangle(cornerRadius: 16)
+                    .foregroundColor(.separators)
+                    .frame(width: geometry.size.width * 0.6,
+                           height: geometry.size.width * 0.9)
+                    .padding(.top, .topCurrentShowsOffset)
+                
+                RoundedRectangle(cornerRadius: 6)
+                    .foregroundColor(.separators)
+                    .frame(width: 72, height: 12)
+                
+                skeletonForPopular(geometry: geometry)
+            }
+            .redacted(reason: .shimmer)
+        }
+    }
+    
+    func skeletonBackground(geometry: GeometryProxy) -> some View {
+        ZStack(alignment: Alignment(horizontal: .center, vertical: .top), content: {
+            
+            LinearGradient(gradient: .skeletonBackground,
+                           startPoint: .top,
+                           endPoint: .bottom)
+                .frame(width: geometry.size.width,
+                       height: geometry.size.width * 1.45,
+                       alignment: .top)
+                .ignoresSafeArea(edges: .top)
+            
+            backgroundImageGradient(geometry: geometry)
+        })
+        .background(
+            Color.backgroundLight.edgesIgnoringSafeArea(.all)
+        )
+    }
+    
+    func skeletonForPopular(geometry: GeometryProxy) -> some View {
+        VStack(alignment: .leading, spacing: 16) {
+            RoundedRectangle(cornerRadius: 17)
+                .frame(width: 160, height: 34)
+                .foregroundColor(.separators)
+            
+            popularShows(geometry: geometry, content: { width, height in
+                ForEach(0..<3) { _ in
+                    RoundedRectangle(cornerRadius: DesignConst.smallCornerRadius)
+                        .foregroundColor(.separators)
+                        .frame(width: width, height: height)
+                }
+            })
+        }
+        .padding(.horizontal, 24)
     }
     
     func blurBackground(geometry: GeometryProxy) -> some View {
@@ -145,13 +211,14 @@ struct ShowsView: View {
         let opacity = 1 - abs(scrollProgress - CGFloat(index)) * 1.25
         
         return image
-            .resizable(resizingMode: .tile)
+            .resizable()
             .frame(width: geometry.size.width,
                    height: geometry.size.width * 1.335,
                    alignment: .top)
             .opacity(Double(opacity))
             .ignoresSafeArea(edges: .top)
             .blur(radius: 15)
+            .scaleEffect(CGSize(width: 1.05, height: 1.05))
     }
     
     func backgroundImageGradient(geometry: GeometryProxy) -> some View {
@@ -180,12 +247,20 @@ struct ShowsView: View {
                     .foregroundColor(.bay)
             }
             
-            popularShows(geometry: geometry)
+            popularShows(geometry: geometry, content: { width, height in
+                ForEach(appState.popularShows, id: \.id) {
+                    showView(show: $0)
+                        .frame(width: width, height: height)
+                }
+            })
         }
         .padding(.horizontal, 24)
     }
     
-    func popularShows(geometry: GeometryProxy) -> some View {
+    func popularShows<Content: View>(
+        geometry: GeometryProxy,
+        content: (_ width: CGFloat, _ height: CGFloat) -> Content) -> some View {
+        
         let showWidth = (geometry.size.width - 88) / 3
         let showHeight = showWidth * (28 / 19)
         let columns: [GridItem] = [
@@ -200,10 +275,7 @@ struct ShowsView: View {
             spacing: 16,
             pinnedViews: [],
             content: {
-                ForEach(appState.popularShows, id: \.id) {
-                    showView(show: $0)
-                        .frame(width: showWidth, height: showHeight)
-                }
+                content(showWidth, showHeight)
             })
     }
     
@@ -220,7 +292,10 @@ struct ShowsView_Previews: PreviewProvider {
     static var previews: some View {
         Resolver.registerPreview()
         
-        return ShowsView()
+        let view = ShowsView()
+        view.interactor.isCurrentLoaded = true
+        view.interactor.isPopularLoaded = true
+        return view
 //            .previewDevice(PreviewDevice(rawValue: "iPhone SE (2nd generation)"))
 //            .previewDisplayName("iPhone SE (2nd generation)")
     }

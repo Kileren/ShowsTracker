@@ -28,3 +28,8 @@ extension Color {
     static let white60 = Color(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.6))
     static let white40 = Color(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.4))
 }
+
+extension Gradient {
+    static let skeletonBackground = Gradient(colors: [Color(red: 72 / 255, green: 85 / 255, blue: 99 / 255),
+                                                      Color(red: 41 / 255, green: 50 / 255, blue: 60 / 255)])
+}
