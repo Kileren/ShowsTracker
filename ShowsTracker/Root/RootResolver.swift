@@ -18,7 +18,6 @@ extension Resolver: ResolverRegistering {
 extension Resolver {
     static func registerPreview() {
         register { AppState() }.scope(.application)
-        register { ShowsViewInteractor(appState: resolve()) }
     }
 }
 #endif

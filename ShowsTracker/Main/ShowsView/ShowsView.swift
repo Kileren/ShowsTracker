@@ -79,8 +79,7 @@ struct ShowsView: View {
     }
     
     func skeletonBackground(geometry: GeometryProxy) -> some View {
-        ZStack(alignment: Alignment(horizontal: .center, vertical: .top), content: {
-            
+        ZStack(alignment: .top, content: {
             LinearGradient(gradient: .skeletonBackground,
                            startPoint: .top,
                            endPoint: .bottom)
@@ -114,8 +113,7 @@ struct ShowsView: View {
     }
     
     func blurBackground(geometry: GeometryProxy) -> some View {
-        ZStack(alignment: Alignment(horizontal: .center, vertical: .top), content: {
-            
+        ZStack(alignment: .top, content: {
             if !appState.shows.isEmpty {
                 backgroundImage(geometry: geometry)
             }
@@ -286,21 +284,6 @@ struct ShowsView: View {
     }
 }
 
-// MARK: - Preview
-
-struct ShowsView_Previews: PreviewProvider {
-    static var previews: some View {
-        Resolver.registerPreview()
-        
-        let view = ShowsView()
-        view.interactor.isCurrentLoaded = true
-        view.interactor.isPopularLoaded = true
-        return view
-//            .previewDevice(PreviewDevice(rawValue: "iPhone SE (2nd generation)"))
-//            .previewDisplayName("iPhone SE (2nd generation)")
-    }
-}
-
 fileprivate struct WatchingShowView: View, Identifiable, Equatable, Indexable {
     var id = UUID()
     let image: Image
@@ -316,3 +299,27 @@ fileprivate struct WatchingShowView: View, Identifiable, Equatable, Indexable {
 fileprivate extension CGFloat {
     static let topCurrentShowsOffset: CGFloat = 80
 }
+
+// MARK: - Preview
+
+struct ShowsView_Previews: PreviewProvider {
+    static var previews: some View {
+        Resolver.registerPreview()
+        Resolver.registerViewPreview()
+        
+        let view = ShowsView()
+        view.interactor.isCurrentLoaded = true
+        view.interactor.isPopularLoaded = true
+        return view
+//            .previewDevice(PreviewDevice(rawValue: "iPhone SE (2nd generation)"))
+//            .previewDisplayName("iPhone SE (2nd generation)")
+    }
+}
+
+#if DEBUG
+fileprivate extension Resolver {
+    static func registerViewPreview() {
+        register { ShowsViewInteractor(appState: resolve()) }
+    }
+}
+#endif

@@ -11,9 +11,9 @@ struct DetailedShow {
     let id = UUID()
     
     let imageData: Data?
-    let title: String
-    let overview: String?
-    let status: String
+//    let title: String
+//    let overview: String?
+//    let status: String
 }
 
 extension DetailedShow {
