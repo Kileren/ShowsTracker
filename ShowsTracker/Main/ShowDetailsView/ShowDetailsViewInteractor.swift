@@ -6,11 +6,14 @@
 //
 
 import SwiftUI
+import Resolver
 
 final class ShowDetailsViewInteractor: ObservableObject {
     
     @Published var show: DetailedShow = .zero
     @Published var showIsLoaded: Bool = false
+    
+    @Injected var imageLoader: ImageLoader
     
     private var appState: AppState
     private let input: ShowDetailsView.Input

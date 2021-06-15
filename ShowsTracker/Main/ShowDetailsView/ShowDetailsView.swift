@@ -101,6 +101,7 @@ fileprivate extension Resolver {
         let input = ShowDetailsView.Input.detailed(show: detailedShow)
         
         register { ShowDetailsViewInteractor(appState: resolve(), input: input) }
+        register { ImageLoader() }
     }
 }
 #endif

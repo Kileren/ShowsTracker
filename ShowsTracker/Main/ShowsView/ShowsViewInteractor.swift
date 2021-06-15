@@ -26,12 +26,7 @@ final class ShowsViewInteractor: ObservableObject {
         ]
         
         appState.popularShows = [
-            PlainShow(imageData: UIImage(named: "TheWitcher")?.pngData()),
-            PlainShow(imageData: UIImage(named: "TheMandalorian")?.pngData()),
-            PlainShow(imageData: UIImage(named: "TheWitcher")?.pngData()),
-            PlainShow(imageData: UIImage(named: "TheMandalorian")?.pngData()),
-            PlainShow(imageData: UIImage(named: "TheWitcher")?.pngData()),
-            PlainShow(imageData: UIImage(named: "TheMandalorian")?.pngData())
+            .theWitcher(), .theMandalorian(), .theWitcher(), .theMandalorian(), .theWitcher(), .theMandalorian()
         ]
         
         // TODO: Remove it later

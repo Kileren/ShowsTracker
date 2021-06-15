@@ -278,8 +278,7 @@ struct ShowsView: View {
     }
     
     func showView(show: PlainShow) -> some View {
-        show.imageData.image
-            .resizable()
+        LoadableImageView(path: .typed(type: .poster, from: show))
             .cornerRadius(DesignConst.smallCornerRadius)
     }
 }
@@ -320,6 +319,7 @@ struct ShowsView_Previews: PreviewProvider {
 fileprivate extension Resolver {
     static func registerViewPreview() {
         register { ShowsViewInteractor(appState: resolve()) }
+        register { ImageLoader() }
     }
 }
 #endif
