@@ -21,13 +21,16 @@ struct PagingScrollView<Content: View & Identifiable & Indexable>: View {
     let spacing: CGFloat
     let changeIndexClosure: (Int) -> Void
     let changeProgressClosure: (CGFloat) -> Void
+    let tapAction: (Int) -> Void
     
     var body: some View {
         GeometryReader { geometry in
             LazyHStack(spacing: spacing) {
                 ForEach(content) { view in
-                    view.frame(width: geometry.size.width, height: geometry.size.height)
+                    view.frame(width: geometry.size.width,
+                               height: geometry.size.height)
                         .scaleEffect(scale(for: view))
+                        .onTapGesture { tapAction(index) }
                 }
             }
             .offset(x: offset)
@@ -88,7 +91,8 @@ struct PagingScrollView_Previews: PreviewProvider {
                 content: (0...3).map { index in ViewForPreview(index: index) },
                 spacing: 16,
                 changeIndexClosure: { _ in },
-                changeProgressClosure: { _ in }
+                changeProgressClosure: { _ in },
+                tapAction: { _ in }
             )
             .frame(width: geometry.size.width * 0.6,
                    height: geometry.size.width * 0.9)

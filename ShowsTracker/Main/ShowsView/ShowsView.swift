@@ -14,6 +14,7 @@ struct ShowsView: View {
     
     @InjectedObject var appState: AppState
     @InjectedObject var interactor: ShowsViewInteractor
+    @Injected var imageLoader: ImageLoader
     
     // MARK: - State
     
@@ -24,7 +25,6 @@ struct ShowsView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            
             if interactor.isCurrentLoaded {
                 ScrollView(.vertical, showsIndicators: false) {
                     ZStack(alignment: .top) {
@@ -126,7 +126,10 @@ struct ShowsView: View {
     
     func currentShows(geometry: GeometryProxy) -> some View {
         let content = appState.shows.enumerated().map {
-            WatchingShowView(image: $0.element.imageData.image, index: $0.offset)
+            WatchingShowView(
+                image: interactor.imagesForShow[$0.element.id ?? 0] ?? Image(""),
+                index: $0.offset
+            )
         }
         
         return PagingScrollView(
@@ -138,7 +141,8 @@ struct ShowsView: View {
                 }
                 scrollProgress = CGFloat(index)
             },
-            changeProgressClosure: { scrollProgress = $0 }
+            changeProgressClosure: { scrollProgress = $0 },
+            tapAction: { index in print(index) }
         )
         .frame(width: geometry.size.width * 0.6,
                height: geometry.size.width * 0.9)
@@ -203,9 +207,9 @@ struct ShowsView: View {
     }
     
     func backgroundImage(geometry: GeometryProxy) -> some View {
-        let images = appState.shows.map { $0.imageData.image }
-        let index = max(min(Int(scrollProgress.rounded()), images.count - 1), 0)
-        let image = images[Int(index)]
+        let index = max(min(Int(scrollProgress.rounded()), appState.shows.count - 1), 0)
+        let show = appState.shows[index]
+        let image = imageLoader.cachedImage(ofType: .poster, from: show)?.wrapInImage() ?? Image("")
         let opacity = 1 - abs(scrollProgress - CGFloat(index)) * 1.25
         
         return image
@@ -318,8 +322,8 @@ struct ShowsView_Previews: PreviewProvider {
 #if DEBUG
 fileprivate extension Resolver {
     static func registerViewPreview() {
-        register { ShowsViewInteractor(appState: resolve()) }
         register { ImageLoader() }
+        register { ShowsViewInteractor(appState: resolve(), imageLoader: resolve()) }
     }
 }
 #endif

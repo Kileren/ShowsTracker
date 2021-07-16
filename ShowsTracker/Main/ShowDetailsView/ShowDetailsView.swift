@@ -13,6 +13,8 @@ struct ShowDetailsView: View {
     @InjectedObject var appState: AppState
     @InjectedObject var interactor: ShowDetailsViewInteractor
     
+    var input: ShowDetailsView.Input
+    
     var body: some View {
         GeometryReader { geometry in
             if interactor.showIsLoaded {
@@ -26,7 +28,7 @@ struct ShowDetailsView: View {
                     .foregroundColor(.white100)
             }
         }
-        .onAppear { interactor.viewAppeared() }
+        .onAppear { interactor.viewAppeared(with: input) }
     }
     
     func overlayView(geometry: GeometryProxy) -> some View {
@@ -39,8 +41,7 @@ struct ShowDetailsView: View {
     }
     
     func imageView(geometry: GeometryProxy) -> some View {
-        interactor.show.image
-            .resizable()
+        LoadableImageView(path: .typed(type: .poster, from: interactor.show))
             .frame(width: geometry.size.width * 0.4,
                    height: geometry.size.width * 0.62)
             .cornerRadius(DesignConst.normalCornerRadius)
@@ -58,14 +59,14 @@ struct ShowDetailsView: View {
     }
     
     func backgroundImage(geometry: GeometryProxy) -> some View {
-        interactor.show.image
-            .resizable()
+        LoadableImageView(path: .typed(type: .poster, from: interactor.show))
             .frame(width: geometry.size.width,
                    height: geometry.size.width * 1.335,
                    alignment: .top)
             .ignoresSafeArea(edges: .top)
             .blur(radius: 15)
             .scaleEffect(CGSize(width: 1.05, height: 1.05))
+        
     }
     
     func backgroundImageGradient(geometry: GeometryProxy) -> some View {
@@ -88,8 +89,9 @@ struct ShowDetailsView_Previews: PreviewProvider {
         Resolver.registerPreview()
         Resolver.registerViewPreview()
         
-        let view = ShowDetailsView()
-        view.interactor.viewAppeared()
+        let input = ShowDetailsView.Input.detailed(show: .theWitcher())
+        let view = ShowDetailsView(input: input)
+        view.interactor.viewAppeared(with: input)
         return view
     }
 }
@@ -97,10 +99,7 @@ struct ShowDetailsView_Previews: PreviewProvider {
 #if DEBUG
 fileprivate extension Resolver {
     static func registerViewPreview() {
-        let detailedShow = DetailedShow(imageData: UIImage(named: "TheWitcher")?.pngData())
-        let input = ShowDetailsView.Input.detailed(show: detailedShow)
-        
-        register { ShowDetailsViewInteractor(appState: resolve(), input: input) }
+        register { ShowDetailsViewInteractor(appState: resolve()) }
         register { ImageLoader() }
     }
 }

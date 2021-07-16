@@ -10,6 +10,12 @@ import SwiftUI
 
 final class ImageLoader {
     
+    func cachedImage(ofType type: ImageProvidableType, from imageProvidable: ImageProvidable) -> UIImage? {
+        imageProvidable.posterPath == "/zrPpUlehQaBf8YX2NrVrKK8IEpf.jpg"
+            ? UIImage(named: "TheWitcher") ?? UIImage()
+            : UIImage(named: "TheMandalorian") ?? UIImage()
+    }
+    
     func obtainImage(ofType type: ImageProvidableType, from imageProvidable: ImageProvidable) async -> UIImage {
         imageProvidable.posterPath == "/zrPpUlehQaBf8YX2NrVrKK8IEpf.jpg"
             ? UIImage(named: "TheWitcher") ?? UIImage()

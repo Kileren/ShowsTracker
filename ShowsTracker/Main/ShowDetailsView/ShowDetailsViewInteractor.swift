@@ -16,17 +16,16 @@ final class ShowDetailsViewInteractor: ObservableObject {
     @Injected var imageLoader: ImageLoader
     
     private var appState: AppState
-    private let input: ShowDetailsView.Input
+    private var input: ShowDetailsView.Input?
     
-    init(appState: AppState,
-         input: ShowDetailsView.Input) {
-        
+    init(appState: AppState) {
         self.appState = appState
-        self.input = input
     }
     
-    func viewAppeared() {
-        show = DetailedShow(imageData: UIImage(named: "TheWitcher")?.pngData())
+    func viewAppeared(with input: ShowDetailsView.Input) {
+        self.input = input
+        
+        show = .theWitcher()
         showIsLoaded = true
     }
 }

@@ -1,0 +1,126 @@
+{
+  "backdrop_path": "/kysKBF2CJG9qfQDSCDaboJrkZy1.jpg",
+  "created_by": [
+    {
+      "id": 1219517,
+      "credit_id": "5b66d0f10e0a267eed0a3f6d",
+      "name": "Lauren Schmidt",
+      "gender": 1,
+      "profile_path": "/gIYkS3iNC8gMrldAHF09QHPGELb.jpg"
+    }
+  ],
+  "episode_run_time": [
+    60
+  ],
+  "first_air_date": "2019-12-20",
+  "genres": [
+    {
+      "id": 10765,
+      "name": "Sci-Fi & Fantasy"
+    },
+    {
+      "id": 18,
+      "name": "Drama"
+    },
+    {
+      "id": 10759,
+      "name": "Action & Adventure"
+    }
+  ],
+  "homepage": "https://www.netflix.com/title/80189685",
+  "id": 71912,
+  "in_production": true,
+  "languages": [
+    "en"
+  ],
+  "last_air_date": "2019-12-20",
+  "last_episode_to_air": {
+    "air_date": "2019-12-20",
+    "episode_number": 8,
+    "id": 1954618,
+    "name": "Much More",
+    "overview": "A terrifying pack of foes lays Geralt low. Yennefer and her fellow mages prepare to fight back. A shaken Ciri depends on the kindness of a stranger.",
+    "production_code": "",
+    "season_number": 1,
+    "still_path": "/3MqMmcoRShLEylaVlCy97ziGWF0.jpg",
+    "vote_average": 8.556,
+    "vote_count": 45
+  },
+  "name": "The Witcher",
+  "next_episode_to_air": null,
+  "networks": [
+    {
+      "name": "Netflix",
+      "id": 213,
+      "logo_path": "/wwemzKWzjKYJFfCeiB57q3r4Bcm.png",
+      "origin_country": ""
+    }
+  ],
+  "number_of_episodes": 8,
+  "number_of_seasons": 1,
+  "origin_country": [
+    "US"
+  ],
+  "original_language": "en",
+  "original_name": "The Witcher",
+  "overview": "Geralt of Rivia, a mutated monster-hunter for hire, journeys toward his destiny in a turbulent world where people often prove more wicked than beasts.",
+  "popularity": 74.856,
+  "poster_path": "/zrPpUlehQaBf8YX2NrVrKK8IEpf.jpg",
+  "production_companies": [
+    {
+      "id": 19857,
+      "logo_path": null,
+      "name": "Sean Daniel Company",
+      "origin_country": "US"
+    },
+    {
+      "id": 36414,
+      "logo_path": null,
+      "name": "Platige Image",
+      "origin_country": "PL"
+    },
+    {
+      "id": 114032,
+      "logo_path": null,
+      "name": "Pioneer Stilking Films",
+      "origin_country": "GB"
+    }
+  ],
+  "production_countries": [
+    {
+      "iso_3166_1": "PL",
+      "name": "Poland"
+    },
+    {
+      "iso_3166_1": "GB",
+      "name": "United Kingdom"
+    },
+    {
+      "iso_3166_1": "US",
+      "name": "United States of America"
+    }
+  ],
+  "seasons": [
+    {
+      "air_date": "2019-12-20",
+      "episode_count": 8,
+      "id": 88731,
+      "name": "Season 1",
+      "overview": "",
+      "poster_path": "/uZsV5ZIZQMHekWDQQMsBwN0C3yA.jpg",
+      "season_number": 1
+    }
+  ],
+  "spoken_languages": [
+    {
+      "english_name": "English",
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "status": "Returning Series",
+  "tagline": "The worst monsters are the ones we create.",
+  "type": "Scripted",
+  "vote_average": 8.2,
+  "vote_count": 2243
+}
