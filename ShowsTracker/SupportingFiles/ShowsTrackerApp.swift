@@ -11,7 +11,10 @@ import SwiftUI
 struct ShowsTrackerApp: App {
     var body: some Scene {
         WindowGroup {
-            ShowsView()
+            GeometryReader { geometry in
+                TabBarView(geometry: geometry)
+            }
+//            ShowsView()
 //            Example()
         }
     }
