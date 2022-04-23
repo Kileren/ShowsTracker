@@ -11,6 +11,7 @@ extension Resolver: ResolverRegistering {
     public static func registerAllServices() {
         register { AppState() }.scope(.application)
         registerMainDependencies()
+        registerNetworkServices()
         registerServices()
     }
 }

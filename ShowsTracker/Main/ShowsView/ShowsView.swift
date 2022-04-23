@@ -21,6 +21,8 @@ struct ShowsView: View {
     @State private var index: Int = 0
     @State private var scrollProgress: CGFloat = 0
     
+    @State private var detailsScreenIsPresented: Bool = false
+    
     // MARK: - View
     
     var body: some View {
@@ -54,6 +56,9 @@ struct ShowsView: View {
         .edgesIgnoringSafeArea(.all)
         .onAppear {
             interactor.viewAppeared()
+        }
+        .sheet(isPresented: $detailsScreenIsPresented) {
+            ShowDetailsView()
         }
     }
     
@@ -128,8 +133,9 @@ struct ShowsView: View {
         let content = appState.shows.enumerated().map {
             WatchingShowView(
                 image: interactor.imagesForShow[$0.element.id ?? 0] ?? Image(""),
-                index: $0.offset
-            )
+                index: $0.offset,
+                showId: $0.element.id ?? 0,
+                detailsScreenIsPresented: $detailsScreenIsPresented)
         }
         
         return PagingScrollView(
@@ -142,7 +148,9 @@ struct ShowsView: View {
                 scrollProgress = CGFloat(index)
             },
             changeProgressClosure: { scrollProgress = $0 },
-            tapAction: { index in print(index) }
+            tapAction: { _ in
+                detailsScreenIsPresented = true
+            }
         )
         .frame(width: geometry.size.width * 0.6,
                height: geometry.size.width * 0.9)
@@ -250,9 +258,13 @@ struct ShowsView: View {
             }
             
             popularShows(geometry: geometry, content: { width, height in
-                ForEach(appState.popularShows, id: \.id) {
-                    showView(show: $0)
+                ForEach(appState.popularShows, id: \.id) { show in
+                    showView(show: show)
                         .frame(width: width, height: height)
+                        .onTapGesture {
+                            appState.detailedShowId = show.id
+                            detailsScreenIsPresented = true
+                        }
                 }
             })
         }
@@ -287,15 +299,24 @@ struct ShowsView: View {
     }
 }
 
-fileprivate struct WatchingShowView: View, Identifiable, Equatable, Indexable {
+fileprivate struct WatchingShowView: View, Identifiable, Indexable {
     var id = UUID()
     let image: Image
     var index: Int
+    var showId: Int
+    
+    @Binding var detailsScreenIsPresented: Bool
+    
+    @InjectedObject var appState: AppState
     
     var body: some View {
         image
             .resizable()
             .cornerRadius(DesignConst.normalCornerRadius)
+            .onTapGesture {
+                appState.detailedShowId = showId
+                detailsScreenIsPresented = true
+            }
     }
 }
 
@@ -327,3 +348,29 @@ fileprivate extension Resolver {
     }
 }
 #endif
+
+extension View {
+    /// Navigate to a new view.
+    /// - Parameters:
+    ///   - view: View to navigate to.
+    ///   - binding: Only navigates when this condition is `true`.
+    func navigate<NewView: View>(to view: NewView, when binding: Binding<Bool>) -> some View {
+        NavigationView {
+            ZStack {
+                self
+                    .navigationBarTitle("")
+                    .navigationBarHidden(true)
+
+                NavigationLink(
+                    destination: view
+                        .navigationBarTitle("")
+                        .navigationBarHidden(true),
+                    isActive: binding
+                ) {
+                    EmptyView()
+                }
+            }
+        }
+        .navigationViewStyle(.stack)
+    }
+}

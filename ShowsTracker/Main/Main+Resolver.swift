@@ -10,6 +10,6 @@ import Resolver
 extension Resolver {
     static func registerMainDependencies() {
         register { ShowsViewInteractor(appState: resolve(), imageLoader: resolve()) }
-        register { ShowDetailsViewInteractor(appState: resolve()) }
+        register { ShowDetailsViewInteractor() }
     }
 }

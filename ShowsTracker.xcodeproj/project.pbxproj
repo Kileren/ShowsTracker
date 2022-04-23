@@ -8,6 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		8C0F5D3225CFB9D500B9983C /* View+CornerRadius.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0F5D3125CFB9D500B9983C /* View+CornerRadius.swift */; };
+		8C156CD8280B23390049DDD1 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 8C156CD7280B23390049DDD1 /* Moya */; };
+		8C156CDB280B244D0049DDD1 /* SearchTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156CDA280B244D0049DDD1 /* SearchTarget.swift */; };
+		8C156CE3280FCEDF0049DDD1 /* WitcherPlain.json in Resources */ = {isa = PBXBuildFile; fileRef = 8C156CE2280FCCA40049DDD1 /* WitcherPlain.json */; };
+		8C156CE4280FCEE20049DDD1 /* WitcherSearch.json in Resources */ = {isa = PBXBuildFile; fileRef = 8C156CDE280FCC7B0049DDD1 /* WitcherSearch.json */; };
+		8C156CE82811C79B0049DDD1 /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156CE72811C79B0049DDD1 /* SearchService.swift */; };
+		8C156CEB2811CB5A0049DDD1 /* MoyaProvider+Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156CEA2811CB5A0049DDD1 /* MoyaProvider+Async.swift */; };
+		8C156CED2811CC270049DDD1 /* Network+Resolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156CEC2811CC270049DDD1 /* Network+Resolver.swift */; };
+		8C156CEF2811CD370049DDD1 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156CEE2811CD370049DDD1 /* Logger.swift */; };
 		8C28960F25C5D0AD00C2AC37 /* DetailedShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C28960E25C5D0AD00C2AC37 /* DetailedShow.swift */; };
 		8C3994762620DBCE005BD7DB /* PlainShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3994752620DBCE005BD7DB /* PlainShow.swift */; };
 		8C3994782620DCCD005BD7DB /* Data+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3994772620DCCD005BD7DB /* Data+Image.swift */; };
@@ -55,6 +63,13 @@
 
 /* Begin PBXFileReference section */
 		8C0F5D3125CFB9D500B9983C /* View+CornerRadius.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+CornerRadius.swift"; sourceTree = "<group>"; };
+		8C156CDA280B244D0049DDD1 /* SearchTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTarget.swift; sourceTree = "<group>"; };
+		8C156CDE280FCC7B0049DDD1 /* WitcherSearch.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = WitcherSearch.json; sourceTree = "<group>"; };
+		8C156CE2280FCCA40049DDD1 /* WitcherPlain.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = WitcherPlain.json; sourceTree = "<group>"; };
+		8C156CE72811C79B0049DDD1 /* SearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
+		8C156CEA2811CB5A0049DDD1 /* MoyaProvider+Async.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MoyaProvider+Async.swift"; sourceTree = "<group>"; };
+		8C156CEC2811CC270049DDD1 /* Network+Resolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Network+Resolver.swift"; sourceTree = "<group>"; };
+		8C156CEE2811CD370049DDD1 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		8C28960E25C5D0AD00C2AC37 /* DetailedShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedShow.swift; sourceTree = "<group>"; };
 		8C3994752620DBCE005BD7DB /* PlainShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainShow.swift; sourceTree = "<group>"; };
 		8C3994772620DCCD005BD7DB /* Data+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Image.swift"; sourceTree = "<group>"; };
@@ -106,6 +121,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C156CD8280B23390049DDD1 /* Moya in Frameworks */,
 				8CFADEFE25C6B19A00597413 /* Resolver in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -113,6 +129,66 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8C156CD9280B24160049DDD1 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				8C156CE92811CB480049DDD1 /* Helpers */,
+				8C156CE62811C7820049DDD1 /* Services */,
+				8C156CE5281129B70049DDD1 /* Targets */,
+				8C156CEC2811CC270049DDD1 /* Network+Resolver.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		8C156CDC280FCC680049DDD1 /* Detailed */ = {
+			isa = PBXGroup;
+			children = (
+				8CF52875267DE44C00351915 /* TheWitcherDetailed.json */,
+				8CF52877267DE6A200351915 /* TheMandalorianDetailed.json */,
+			);
+			path = Detailed;
+			sourceTree = "<group>";
+		};
+		8C156CDD280FCC720049DDD1 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				8C156CDE280FCC7B0049DDD1 /* WitcherSearch.json */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		8C156CDF280FCC940049DDD1 /* Plain */ = {
+			isa = PBXGroup;
+			children = (
+				8C156CE2280FCCA40049DDD1 /* WitcherPlain.json */,
+			);
+			path = Plain;
+			sourceTree = "<group>";
+		};
+		8C156CE5281129B70049DDD1 /* Targets */ = {
+			isa = PBXGroup;
+			children = (
+				8C156CDA280B244D0049DDD1 /* SearchTarget.swift */,
+			);
+			path = Targets;
+			sourceTree = "<group>";
+		};
+		8C156CE62811C7820049DDD1 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				8C156CE72811C79B0049DDD1 /* SearchService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		8C156CE92811CB480049DDD1 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				8C156CEA2811CB5A0049DDD1 /* MoyaProvider+Async.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		8C496FA525C47D8D000282C5 /* SharedViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -219,6 +295,7 @@
 		8CD6C1DB25C327D3004CF261 /* ShowsTracker */ = {
 			isa = PBXGroup;
 			children = (
+				8C156CD9280B24160049DDD1 /* Network */,
 				8CD2004027A30B5A00F61C6D /* TabBar */,
 				8CF5286626778B4800351915 /* Services */,
 				8CF5285A267777E300351915 /* Storage */,
@@ -230,8 +307,8 @@
 				8CD6C20725C32F19004CF261 /* Models */,
 				8CD6C1FD25C32D54004CF261 /* Main */,
 				8CD6C1F825C32CCC004CF261 /* Root */,
-				8CD6C1F125C3299C004CF261 /* SupportingFiles */,
 				8CD6C1E225C327D4004CF261 /* Preview Content */,
+				8CD6C1F125C3299C004CF261 /* SupportingFiles */,
 				8CFAD6A525C86EA80090DC4F /* Example.swift */,
 			);
 			path = ShowsTracker;
@@ -324,6 +401,7 @@
 			children = (
 				8CF5286726778B5500351915 /* ImageLoader.swift */,
 				8CF5286926778CDE00351915 /* Services+Resolver.swift */,
+				8C156CEE2811CD370049DDD1 /* Logger.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -331,8 +409,9 @@
 		8CF52874267DE41800351915 /* Jsons */ = {
 			isa = PBXGroup;
 			children = (
-				8CF52875267DE44C00351915 /* TheWitcherDetailed.json */,
-				8CF52877267DE6A200351915 /* TheMandalorianDetailed.json */,
+				8C156CDF280FCC940049DDD1 /* Plain */,
+				8C156CDD280FCC720049DDD1 /* Search */,
+				8C156CDC280FCC680049DDD1 /* Detailed */,
 			);
 			path = Jsons;
 			sourceTree = "<group>";
@@ -374,6 +453,7 @@
 			name = ShowsTracker;
 			packageProductDependencies = (
 				8CFADEFD25C6B19A00597413 /* Resolver */,
+				8C156CD7280B23390049DDD1 /* Moya */,
 			);
 			productName = ShowsTracker;
 			productReference = 8CD6C1D925C327D3004CF261 /* ShowsTracker.app */;
@@ -404,6 +484,7 @@
 			mainGroup = 8CD6C1D025C327D3004CF261;
 			packageReferences = (
 				8CD6C1ED25C32905004CF261 /* XCRemoteSwiftPackageReference "Resolver" */,
+				8C156CD6280B23390049DDD1 /* XCRemoteSwiftPackageReference "Moya" */,
 			);
 			productRefGroup = 8CD6C1DA25C327D3004CF261 /* Products */;
 			projectDirPath = "";
@@ -419,7 +500,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C156CE4280FCEE20049DDD1 /* WitcherSearch.json in Resources */,
 				8CD6C1E425C327D4004CF261 /* Preview Assets.xcassets in Resources */,
+				8C156CE3280FCEDF0049DDD1 /* WitcherPlain.json in Resources */,
 				8CF52878267DE6A200351915 /* TheMandalorianDetailed.json in Resources */,
 				8C59A92B2628AEB8000C489C /* Localization.strings in Resources */,
 				8CF52876267DE44C00351915 /* TheWitcherDetailed.json in Resources */,
@@ -434,6 +517,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C156CDB280B244D0049DDD1 /* SearchTarget.swift in Sources */,
 				8C5E8D4C25CF08CD0058A9B1 /* Fonts.swift in Sources */,
 				8CD6C20425C32E06004CF261 /* Main+Resolver.swift in Sources */,
 				8CFADF0A25C7208800597413 /* Colors.swift in Sources */,
@@ -441,13 +525,16 @@
 				8CB9F5BB25CFB0680095F063 /* TruncableText.swift in Sources */,
 				8CA0ECB2262AFABF00EB20D9 /* STButton.swift in Sources */,
 				8CF5286826778B5500351915 /* ImageLoader.swift in Sources */,
+				8C156CED2811CC270049DDD1 /* Network+Resolver.swift in Sources */,
 				8CF528702679267E00351915 /* UIImage+Extensions.swift in Sources */,
 				8C518F3E2662B28B00EE6C4F /* Redactable+Shimmered.swift in Sources */,
 				8C3994762620DBCE005BD7DB /* PlainShow.swift in Sources */,
 				8CF52865267787F700351915 /* ImageProvidable.swift in Sources */,
 				8C496FA725C47DAE000282C5 /* PagingScrollView.swift in Sources */,
 				8CD6C21325C3303D004CF261 /* ShowsViewInteractor.swift in Sources */,
+				8C156CEF2811CD370049DDD1 /* Logger.swift in Sources */,
 				8C59A92D2628B1E0000C489C /* Images.swift in Sources */,
+				8C156CEB2811CB5A0049DDD1 /* MoyaProvider+Async.swift in Sources */,
 				8CD2004427A30B9100F61C6D /* TabBarView.swift in Sources */,
 				8CD6C20F25C33028004CF261 /* ShowsView.swift in Sources */,
 				8CE2693E25CEE5040045903F /* DesignConst.swift in Sources */,
@@ -470,6 +557,7 @@
 				8C0F5D3225CFB9D500B9983C /* View+CornerRadius.swift in Sources */,
 				8CD2004627A311D300F61C6D /* EnvironmentValues+Preview.swift in Sources */,
 				8CD6C1DD25C327D3004CF261 /* ShowsTrackerApp.swift in Sources */,
+				8C156CE82811C79B0049DDD1 /* SearchService.swift in Sources */,
 				8C518F3C2662B27800EE6C4F /* Redactable.swift in Sources */,
 				8CFAD6A925C872250090DC4F /* PageDotsView.swift in Sources */,
 			);
@@ -662,6 +750,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		8C156CD6280B23390049DDD1 /* XCRemoteSwiftPackageReference "Moya" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Moya/Moya";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 15.0.0;
+			};
+		};
 		8CD6C1ED25C32905004CF261 /* XCRemoteSwiftPackageReference "Resolver" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/hmlongco/Resolver";
@@ -673,6 +769,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		8C156CD7280B23390049DDD1 /* Moya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8C156CD6280B23390049DDD1 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = Moya;
+		};
 		8CFADEFD25C6B19A00597413 /* Resolver */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 8CD6C1ED25C32905004CF261 /* XCRemoteSwiftPackageReference "Resolver" */;

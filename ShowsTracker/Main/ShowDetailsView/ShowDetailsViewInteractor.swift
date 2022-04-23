@@ -13,26 +13,16 @@ final class ShowDetailsViewInteractor: ObservableObject {
     @Published var show: DetailedShow = .zero
     @Published var showIsLoaded: Bool = false
     
+    @InjectedObject var appState: AppState
     @Injected var imageLoader: ImageLoader
+    @Injected var searchService: ISearchService
     
-    private var appState: AppState
-    private var input: ShowDetailsView.Input?
-    
-    init(appState: AppState) {
-        self.appState = appState
-    }
-    
-    func viewAppeared(with input: ShowDetailsView.Input) {
-        self.input = input
-        
-        show = .theWitcher()
+    func viewAppeared() {
+        show = appState.shows.first { $0.id == appState.detailedShowId } ?? .theWitcher()
         showIsLoaded = true
-    }
-}
-
-extension ShowDetailsView {
-    enum Input {
-        case plain(show: PlainShow)
-        case detailed(show: DetailedShow)
+        
+        Task {
+            let shows = try? await searchService.searchTVShows(query: "The Witcher")
+        }
     }
 }

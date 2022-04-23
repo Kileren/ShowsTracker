@@ -28,7 +28,7 @@ final class ShowsViewInteractor: ObservableObject {
     func viewAppeared() {
         appState.shows = [.theWitcher(), .theMandalorian()]
         appState.shows.forEach { show in
-            async {
+            Task(priority: .high) {
                 let image = await imageLoader.obtainImage(ofType: .poster, from: show)
                 imagesForShow[show.id ?? 0] = image.wrapInImage()
             }

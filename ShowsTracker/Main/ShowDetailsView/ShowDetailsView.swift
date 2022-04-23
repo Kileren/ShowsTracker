@@ -13,8 +13,6 @@ struct ShowDetailsView: View {
     @InjectedObject var appState: AppState
     @InjectedObject var interactor: ShowDetailsViewInteractor
     
-    var input: ShowDetailsView.Input
-    
     var body: some View {
         GeometryReader { geometry in
             if interactor.showIsLoaded {
@@ -28,7 +26,9 @@ struct ShowDetailsView: View {
                     .foregroundColor(.white100)
             }
         }
-        .onAppear { interactor.viewAppeared(with: input) }
+        .onAppear {
+            interactor.viewAppeared()
+        }
     }
     
     func overlayView(geometry: GeometryProxy) -> some View {
@@ -89,9 +89,8 @@ struct ShowDetailsView_Previews: PreviewProvider {
         Resolver.registerPreview()
         Resolver.registerViewPreview()
         
-        let input = ShowDetailsView.Input.detailed(show: .theWitcher())
-        let view = ShowDetailsView(input: input)
-        view.interactor.viewAppeared(with: input)
+        let view = ShowDetailsView()
+        view.interactor.viewAppeared()
         return view
     }
 }
@@ -99,7 +98,7 @@ struct ShowDetailsView_Previews: PreviewProvider {
 #if DEBUG
 fileprivate extension Resolver {
     static func registerViewPreview() {
-        register { ShowDetailsViewInteractor(appState: resolve()) }
+        register { ShowDetailsViewInteractor() }
         register { ImageLoader() }
     }
 }

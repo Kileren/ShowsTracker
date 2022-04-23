@@ -14,14 +14,22 @@ final class JSONReader {
     }
     
     static func object<Object: Decodable>(forResource resource: String) throws -> Object {
+        do {
+            let data = try data(forResource: resource)
+            return try JSONDecoder().decode(Object.self, from: data)
+        } catch {
+            throw error
+        }
+    }
+    
+    static func data(forResource resource: String) throws -> Data {
         guard let path = Bundle.main.path(forResource: resource, ofType: "json") else {
             throw InternalError.decodingFailure
         }
         
         do {
             let url = URL(fileURLWithPath: path)
-            let data = try Data(contentsOf: url)
-            return try JSONDecoder().decode(Object.self, from: data)
+            return try Data(contentsOf: url)
         } catch {
             throw error
         }

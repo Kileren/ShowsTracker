@@ -10,6 +10,7 @@ import SwiftUI
 class AppState: ObservableObject {
     @Published var shows: [DetailedShow] = []
     @Published var popularShows: [PlainShow] = []
+    @Published var detailedShowId: Int = 0
     
     @Published var selectedTabBarView: STTabBarButton = .shows
     
