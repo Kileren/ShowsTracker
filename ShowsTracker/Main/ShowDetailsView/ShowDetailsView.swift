@@ -41,7 +41,7 @@ struct ShowDetailsView: View {
     }
     
     func imageView(geometry: GeometryProxy) -> some View {
-        LoadableImageView(path: .typed(type: .poster, from: interactor.show))
+        LoadableImageView(path: interactor.show.posterPath ?? "", width: 500)
             .frame(width: geometry.size.width * 0.4,
                    height: geometry.size.width * 0.62)
             .cornerRadius(DesignConst.normalCornerRadius)
@@ -59,7 +59,7 @@ struct ShowDetailsView: View {
     }
     
     func backgroundImage(geometry: GeometryProxy) -> some View {
-        LoadableImageView(path: .typed(type: .poster, from: interactor.show))
+        LoadableImageView(path: interactor.show.posterPath ?? "", width: 500)
             .frame(width: geometry.size.width,
                    height: geometry.size.width * 1.335,
                    alignment: .top)
@@ -99,7 +99,6 @@ struct ShowDetailsView_Previews: PreviewProvider {
 fileprivate extension Resolver {
     static func registerViewPreview() {
         register { ShowDetailsViewInteractor() }
-        register { ImageLoader() }
     }
 }
 #endif

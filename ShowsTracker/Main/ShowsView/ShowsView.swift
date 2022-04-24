@@ -14,7 +14,7 @@ struct ShowsView: View {
     
     @InjectedObject var appState: AppState
     @InjectedObject var interactor: ShowsViewInteractor
-    @Injected var imageLoader: ImageLoader
+    @Injected var imageService: IImageService
     
     // MARK: - State
     
@@ -217,7 +217,7 @@ struct ShowsView: View {
     func backgroundImage(geometry: GeometryProxy) -> some View {
         let index = max(min(Int(scrollProgress.rounded()), appState.shows.count - 1), 0)
         let show = appState.shows[index]
-        let image = imageLoader.cachedImage(ofType: .poster, from: show)?.wrapInImage() ?? Image("")
+        let image = imageService.cachedImage(for: show.posterPath ?? "")?.wrapInImage() ?? Image("")
         let opacity = 1 - abs(scrollProgress - CGFloat(index)) * 1.25
         
         return image
@@ -259,8 +259,9 @@ struct ShowsView: View {
             
             popularShows(geometry: geometry, content: { width, height in
                 ForEach(appState.popularShows, id: \.id) { show in
-                    showView(show: show)
+                    LoadableImageView(path: show.posterPath ?? "", width: 200)
                         .frame(width: width, height: height)
+                        .cornerRadius(DesignConst.smallCornerRadius)
                         .onTapGesture {
                             appState.detailedShowId = show.id
                             detailsScreenIsPresented = true
@@ -291,11 +292,6 @@ struct ShowsView: View {
             content: {
                 content(showWidth, showHeight)
             })
-    }
-    
-    func showView(show: PlainShow) -> some View {
-        LoadableImageView(path: .typed(type: .poster, from: show))
-            .cornerRadius(DesignConst.smallCornerRadius)
     }
 }
 
@@ -343,8 +339,7 @@ struct ShowsView_Previews: PreviewProvider {
 #if DEBUG
 fileprivate extension Resolver {
     static func registerViewPreview() {
-        register { ImageLoader() }
-        register { ShowsViewInteractor(appState: resolve(), imageLoader: resolve()) }
+        register { ShowsViewInteractor(appState: resolve()) }
     }
 }
 #endif

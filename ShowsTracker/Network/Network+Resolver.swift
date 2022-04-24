@@ -10,5 +10,6 @@ import Resolver
 extension Resolver {
     static func registerNetworkServices() {
         register(ISearchService.self) { SearchService() }
+        register(IImageService.self) { ImageService() }.scope(.application)
     }
 }

@@ -16,6 +16,8 @@
 		8C156CEB2811CB5A0049DDD1 /* MoyaProvider+Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156CEA2811CB5A0049DDD1 /* MoyaProvider+Async.swift */; };
 		8C156CED2811CC270049DDD1 /* Network+Resolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156CEC2811CC270049DDD1 /* Network+Resolver.swift */; };
 		8C156CEF2811CD370049DDD1 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156CEE2811CD370049DDD1 /* Logger.swift */; };
+		8C156CF128149B9E0049DDD1 /* ImageTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156CF028149B9E0049DDD1 /* ImageTarget.swift */; };
+		8C156CF328149D550049DDD1 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156CF228149D550049DDD1 /* ImageService.swift */; };
 		8C28960F25C5D0AD00C2AC37 /* DetailedShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C28960E25C5D0AD00C2AC37 /* DetailedShow.swift */; };
 		8C3994762620DBCE005BD7DB /* PlainShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3994752620DBCE005BD7DB /* PlainShow.swift */; };
 		8C3994782620DCCD005BD7DB /* Data+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3994772620DCCD005BD7DB /* Data+Image.swift */; };
@@ -48,8 +50,6 @@
 		8CF5285F2677782600351915 /* ManagedObjectCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF5285E2677782600351915 /* ManagedObjectCodable.swift */; };
 		8CF52862267779E800351915 /* ShowsTrackerDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8CF52860267779E800351915 /* ShowsTrackerDataModel.xcdatamodeld */; };
 		8CF52865267787F700351915 /* ImageProvidable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF52864267787F700351915 /* ImageProvidable.swift */; };
-		8CF5286826778B5500351915 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF5286726778B5500351915 /* ImageLoader.swift */; };
-		8CF5286A26778CDE00351915 /* Services+Resolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF5286926778CDE00351915 /* Services+Resolver.swift */; };
 		8CF5286E26778F5400351915 /* LoadableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF5286D26778F5400351915 /* LoadableImageView.swift */; };
 		8CF528702679267E00351915 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF5286F2679267E00351915 /* UIImage+Extensions.swift */; };
 		8CF52873267DE2F500351915 /* JSONReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF52872267DE2F500351915 /* JSONReader.swift */; };
@@ -70,6 +70,8 @@
 		8C156CEA2811CB5A0049DDD1 /* MoyaProvider+Async.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MoyaProvider+Async.swift"; sourceTree = "<group>"; };
 		8C156CEC2811CC270049DDD1 /* Network+Resolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Network+Resolver.swift"; sourceTree = "<group>"; };
 		8C156CEE2811CD370049DDD1 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		8C156CF028149B9E0049DDD1 /* ImageTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTarget.swift; sourceTree = "<group>"; };
+		8C156CF228149D550049DDD1 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
 		8C28960E25C5D0AD00C2AC37 /* DetailedShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedShow.swift; sourceTree = "<group>"; };
 		8C3994752620DBCE005BD7DB /* PlainShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainShow.swift; sourceTree = "<group>"; };
 		8C3994772620DCCD005BD7DB /* Data+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Image.swift"; sourceTree = "<group>"; };
@@ -104,8 +106,6 @@
 		8CF5285E2677782600351915 /* ManagedObjectCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedObjectCodable.swift; sourceTree = "<group>"; };
 		8CF52861267779E800351915 /* ShowsTrackerDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ShowsTrackerDataModel.xcdatamodel; sourceTree = "<group>"; };
 		8CF52864267787F700351915 /* ImageProvidable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProvidable.swift; sourceTree = "<group>"; };
-		8CF5286726778B5500351915 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
-		8CF5286926778CDE00351915 /* Services+Resolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Services+Resolver.swift"; sourceTree = "<group>"; };
 		8CF5286D26778F5400351915 /* LoadableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadableImageView.swift; sourceTree = "<group>"; };
 		8CF5286F2679267E00351915 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		8CF52872267DE2F500351915 /* JSONReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONReader.swift; sourceTree = "<group>"; };
@@ -169,6 +169,7 @@
 			isa = PBXGroup;
 			children = (
 				8C156CDA280B244D0049DDD1 /* SearchTarget.swift */,
+				8C156CF028149B9E0049DDD1 /* ImageTarget.swift */,
 			);
 			path = Targets;
 			sourceTree = "<group>";
@@ -177,6 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				8C156CE72811C79B0049DDD1 /* SearchService.swift */,
+				8C156CF228149D550049DDD1 /* ImageService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -399,8 +401,6 @@
 		8CF5286626778B4800351915 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				8CF5286726778B5500351915 /* ImageLoader.swift */,
-				8CF5286926778CDE00351915 /* Services+Resolver.swift */,
 				8C156CEE2811CD370049DDD1 /* Logger.swift */,
 			);
 			path = Services;
@@ -524,7 +524,6 @@
 				8CF52862267779E800351915 /* ShowsTrackerDataModel.xcdatamodeld in Sources */,
 				8CB9F5BB25CFB0680095F063 /* TruncableText.swift in Sources */,
 				8CA0ECB2262AFABF00EB20D9 /* STButton.swift in Sources */,
-				8CF5286826778B5500351915 /* ImageLoader.swift in Sources */,
 				8C156CED2811CC270049DDD1 /* Network+Resolver.swift in Sources */,
 				8CF528702679267E00351915 /* UIImage+Extensions.swift in Sources */,
 				8C518F3E2662B28B00EE6C4F /* Redactable+Shimmered.swift in Sources */,
@@ -535,11 +534,11 @@
 				8C156CEF2811CD370049DDD1 /* Logger.swift in Sources */,
 				8C59A92D2628B1E0000C489C /* Images.swift in Sources */,
 				8C156CEB2811CB5A0049DDD1 /* MoyaProvider+Async.swift in Sources */,
+				8C156CF128149B9E0049DDD1 /* ImageTarget.swift in Sources */,
 				8CD2004427A30B9100F61C6D /* TabBarView.swift in Sources */,
 				8CD6C20F25C33028004CF261 /* ShowsView.swift in Sources */,
 				8CE2693E25CEE5040045903F /* DesignConst.swift in Sources */,
 				8CF5285D2677780500351915 /* CoreDataStorage.swift in Sources */,
-				8CF5286A26778CDE00351915 /* Services+Resolver.swift in Sources */,
 				8CFAD6A625C86EA80090DC4F /* Example.swift in Sources */,
 				8CD6C20925C32F2A004CF261 /* AppState.swift in Sources */,
 				8C518F4626640AAE00EE6C4F /* Status.swift in Sources */,
@@ -554,6 +553,7 @@
 				8C28960F25C5D0AD00C2AC37 /* DetailedShow.swift in Sources */,
 				8CF5285F2677782600351915 /* ManagedObjectCodable.swift in Sources */,
 				8CD6C1FB25C32CDB004CF261 /* RootResolver.swift in Sources */,
+				8C156CF328149D550049DDD1 /* ImageService.swift in Sources */,
 				8C0F5D3225CFB9D500B9983C /* View+CornerRadius.swift in Sources */,
 				8CD2004627A311D300F61C6D /* EnvironmentValues+Preview.swift in Sources */,
 				8CD6C1DD25C327D3004CF261 /* ShowsTrackerApp.swift in Sources */,

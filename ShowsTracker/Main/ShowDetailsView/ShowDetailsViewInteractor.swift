@@ -14,8 +14,8 @@ final class ShowDetailsViewInteractor: ObservableObject {
     @Published var showIsLoaded: Bool = false
     
     @InjectedObject var appState: AppState
-    @Injected var imageLoader: ImageLoader
     @Injected var searchService: ISearchService
+    @Injected var imageService: IImageService
     
     func viewAppeared() {
         show = appState.shows.first { $0.id == appState.detailedShowId } ?? .theWitcher()
@@ -23,6 +23,7 @@ final class ShowDetailsViewInteractor: ObservableObject {
         
         Task {
             let shows = try? await searchService.searchTVShows(query: "The Witcher")
+            let image = try? await imageService.loadImage(path: "/jBJWaqoSCiARWtfV0GlqHrcdidd.jpg", width: 500)
         }
     }
 }

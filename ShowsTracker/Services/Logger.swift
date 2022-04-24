@@ -7,10 +7,19 @@
 
 import Foundation
 import Moya
+import UIKit
 
 struct Logger {
     static func log(message: String) {
         print("✉️ \(message)")
+    }
+    
+    static func log(warning: String, response: Response? = nil) {
+        printSeparator()
+        defer { printSeparator() }
+        
+        print("⚠️ \(warning)")
+        printInfo(from: response)
     }
     
     static func log(error: Error, response: Response? = nil, file: String = #file, line: Int = #line) {
@@ -30,6 +39,17 @@ struct Logger {
         print("✅ Successfully parsed")
         print("ℹ️ Result Type: \(String(describing: type))")
         printInfo(from: response)
+    }
+    
+    static func log(imageResponse: Response) {
+        let bcf = ByteCountFormatter()
+        bcf.allowedUnits = [.useKB]
+        bcf.countStyle = .file
+        let size = bcf.string(fromByteCount: Int64(imageResponse.data.count))
+        
+        print()
+        print("🖼 Image loaded (path - \(imageResponse.request?.url?.description ?? "nil"), size - \(size)")
+        print()
     }
 }
 

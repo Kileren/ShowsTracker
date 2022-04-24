@@ -8,29 +8,32 @@
 import Foundation
 import UIKit
 import SwiftUI
+import Resolver
 
 final class ShowsViewInteractor: ObservableObject {
     
     private var appState: AppState
+    @Injected var imageService: IImageService
+    
     private(set) var imagesForShow: [Int: Image] = [:]
     
     @Published var isCurrentLoaded: Bool = false
     @Published var isPopularLoaded: Bool = false
     
-    private let imageLoader: ImageLoader
-    
-    init(appState: AppState,
-         imageLoader: ImageLoader) {
+    init(appState: AppState) {
         self.appState = appState
-        self.imageLoader = imageLoader
     }
     
     func viewAppeared() {
         appState.shows = [.theWitcher(), .theMandalorian()]
         appState.shows.forEach { show in
             Task(priority: .high) {
-                let image = await imageLoader.obtainImage(ofType: .poster, from: show)
-                imagesForShow[show.id ?? 0] = image.wrapInImage()
+                do {
+                    let image = try await imageService.loadImage(path: show.posterPath ?? "", width: 500)
+                    imagesForShow[show.id ?? 0] = image.wrapInImage()
+                } catch {
+                    Logger.log(warning: "Image not loaded and its not handled")
+                }
             }
         }
         
