@@ -39,21 +39,13 @@ extension SearchTarget: TargetType {
     
     var sampleData: Data {
         switch self {
-        case .tv(let query):
+        case .tv:
             do {
                 return try JSONReader.data(forResource: "WitcherSearch")
             } catch {
-                print("Error - ", error)
+                Logger.log(error: error)
                 return Data()
             }
         }
-    }
-}
-
-private extension Dictionary where Key == String, Value == Any {
-    var withApiKey: [String: Any] {
-        var dict = self
-        dict["api_key"] = ""
-        return dict
     }
 }

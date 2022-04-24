@@ -14,14 +14,15 @@ final class ShowDetailsViewInteractor: ObservableObject {
     @Published var showIsLoaded: Bool = false
     
     @InjectedObject var appState: AppState
-    @Injected var imageService: IImageService
+    @Injected var tvService: ITVService
     
     func viewAppeared() {
         show = appState.shows.first { $0.id == appState.detailedShowId } ?? .theWitcher()
         showIsLoaded = true
         
         Task {
-            let image = try? await imageService.loadImage(path: "/jBJWaqoSCiARWtfV0GlqHrcdidd.jpg", width: 500)
+            let detailedShow = try? await tvService.getDetails(for: show.id ?? 0)
+            print(detailedShow)
         }
     }
 }

@@ -11,6 +11,7 @@ extension Resolver {
     static func registerNetworkServices() {
         register(ISearchService.self) { SearchService() }.scope(.application)
         register(IImageService.self) { ImageService() }.scope(.application)
+        register(ITVService.self) { TVService() }.scope(.application)
     }
     
     #if DEBUG

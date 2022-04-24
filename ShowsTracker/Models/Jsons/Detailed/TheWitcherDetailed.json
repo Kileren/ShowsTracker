@@ -1,10 +1,11 @@
 {
-  "backdrop_path": "/kysKBF2CJG9qfQDSCDaboJrkZy1.jpg",
+  "adult": false,
+  "backdrop_path": "/jBJWaqoSCiARWtfV0GlqHrcdidd.jpg",
   "created_by": [
     {
       "id": 1219517,
       "credit_id": "5b66d0f10e0a267eed0a3f6d",
-      "name": "Lauren Schmidt",
+      "name": "Lauren Schmidt Hissrich",
       "gender": 1,
       "profile_path": "/gIYkS3iNC8gMrldAHF09QHPGELb.jpg"
     }
@@ -33,18 +34,18 @@
   "languages": [
     "en"
   ],
-  "last_air_date": "2019-12-20",
+  "last_air_date": "2021-12-17",
   "last_episode_to_air": {
-    "air_date": "2019-12-20",
+    "air_date": "2021-12-17",
     "episode_number": 8,
-    "id": 1954618,
-    "name": "Much More",
-    "overview": "A terrifying pack of foes lays Geralt low. Yennefer and her fellow mages prepare to fight back. A shaken Ciri depends on the kindness of a stranger.",
+    "id": 3063826,
+    "name": "Family",
+    "overview": "Geralt faces off with a demon targeting his nearest and dearest while the most powerful players on the Continent ramp up their pursuit of Ciri.",
     "production_code": "",
-    "season_number": 1,
-    "still_path": "/3MqMmcoRShLEylaVlCy97ziGWF0.jpg",
-    "vote_average": 8.556,
-    "vote_count": 45
+    "season_number": 2,
+    "still_path": "/qEfDFrmsF3L9EfnUkniXmEtXITm.jpg",
+    "vote_average": 7.6,
+    "vote_count": 18
   },
   "name": "The Witcher",
   "next_episode_to_air": null,
@@ -56,16 +57,16 @@
       "origin_country": ""
     }
   ],
-  "number_of_episodes": 8,
-  "number_of_seasons": 1,
+  "number_of_episodes": 16,
+  "number_of_seasons": 2,
   "origin_country": [
     "US"
   ],
   "original_language": "en",
   "original_name": "The Witcher",
   "overview": "Geralt of Rivia, a mutated monster-hunter for hire, journeys toward his destiny in a turbulent world where people often prove more wicked than beasts.",
-  "popularity": 74.856,
-  "poster_path": "/zrPpUlehQaBf8YX2NrVrKK8IEpf.jpg",
+  "popularity": 155.747,
+  "poster_path": "/7vjaCdMw15FEbXyLQTVa04URsPm.jpg",
   "production_companies": [
     {
       "id": 19857,
@@ -80,20 +81,28 @@
       "origin_country": "PL"
     },
     {
-      "id": 114032,
+      "id": 124634,
       "logo_path": null,
-      "name": "Pioneer Stilking Films",
-      "origin_country": "GB"
+      "name": "Hivemind",
+      "origin_country": "US"
+    },
+    {
+      "id": 162859,
+      "logo_path": null,
+      "name": "Little Schmidt Productions",
+      "origin_country": "US"
+    },
+    {
+      "id": 137769,
+      "logo_path": null,
+      "name": "Platige Films",
+      "origin_country": ""
     }
   ],
   "production_countries": [
     {
       "iso_3166_1": "PL",
       "name": "Poland"
-    },
-    {
-      "iso_3166_1": "GB",
-      "name": "United Kingdom"
     },
     {
       "iso_3166_1": "US",
@@ -106,9 +115,18 @@
       "episode_count": 8,
       "id": 88731,
       "name": "Season 1",
-      "overview": "",
+      "overview": "Geralt of Rivia, a mutated monster-hunter for hire, journeys toward his destiny in a turbulent world where people often prove more wicked than beasts.",
       "poster_path": "/uZsV5ZIZQMHekWDQQMsBwN0C3yA.jpg",
       "season_number": 1
+    },
+    {
+      "air_date": "2021-12-17",
+      "episode_count": 8,
+      "id": 201716,
+      "name": "Season 2",
+      "overview": "Geralt embraces his destiny as he protects Ciri from the forces battling for control of the Continent — and from the mysterious power she possesses.",
+      "poster_path": "/7vjaCdMw15FEbXyLQTVa04URsPm.jpg",
+      "season_number": 2
     }
   ],
   "spoken_languages": [
@@ -122,5 +140,5 @@
   "tagline": "The worst monsters are the ones we create.",
   "type": "Scripted",
   "vote_average": 8.2,
-  "vote_count": 2243
+  "vote_count": 3667
 }

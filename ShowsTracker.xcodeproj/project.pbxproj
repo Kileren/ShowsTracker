@@ -20,6 +20,9 @@
 		8C156CF328149D550049DDD1 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156CF228149D550049DDD1 /* ImageService.swift */; };
 		8C156CF6281521DC0049DDD1 /* ImageServicePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156CF5281521DC0049DDD1 /* ImageServicePreview.swift */; };
 		8C156CF8281522930049DDD1 /* SearchServicePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156CF7281522930049DDD1 /* SearchServicePreview.swift */; };
+		8C156CFA281527C70049DDD1 /* TVTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156CF9281527C70049DDD1 /* TVTarget.swift */; };
+		8C156CFC281528A90049DDD1 /* TVService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156CFB281528A90049DDD1 /* TVService.swift */; };
+		8C156CFE28152C510049DDD1 /* Dictionary+ApiKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156CFD28152C510049DDD1 /* Dictionary+ApiKey.swift */; };
 		8C28960F25C5D0AD00C2AC37 /* DetailedShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C28960E25C5D0AD00C2AC37 /* DetailedShow.swift */; };
 		8C3994762620DBCE005BD7DB /* PlainShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3994752620DBCE005BD7DB /* PlainShow.swift */; };
 		8C3994782620DCCD005BD7DB /* Data+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3994772620DCCD005BD7DB /* Data+Image.swift */; };
@@ -76,6 +79,9 @@
 		8C156CF228149D550049DDD1 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
 		8C156CF5281521DC0049DDD1 /* ImageServicePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageServicePreview.swift; sourceTree = "<group>"; };
 		8C156CF7281522930049DDD1 /* SearchServicePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchServicePreview.swift; sourceTree = "<group>"; };
+		8C156CF9281527C70049DDD1 /* TVTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVTarget.swift; sourceTree = "<group>"; };
+		8C156CFB281528A90049DDD1 /* TVService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVService.swift; sourceTree = "<group>"; };
+		8C156CFD28152C510049DDD1 /* Dictionary+ApiKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+ApiKey.swift"; sourceTree = "<group>"; };
 		8C28960E25C5D0AD00C2AC37 /* DetailedShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedShow.swift; sourceTree = "<group>"; };
 		8C3994752620DBCE005BD7DB /* PlainShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainShow.swift; sourceTree = "<group>"; };
 		8C3994772620DCCD005BD7DB /* Data+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Image.swift"; sourceTree = "<group>"; };
@@ -174,6 +180,7 @@
 			children = (
 				8C156CDA280B244D0049DDD1 /* SearchTarget.swift */,
 				8C156CF028149B9E0049DDD1 /* ImageTarget.swift */,
+				8C156CF9281527C70049DDD1 /* TVTarget.swift */,
 			);
 			path = Targets;
 			sourceTree = "<group>";
@@ -183,6 +190,7 @@
 			children = (
 				8C156CE72811C79B0049DDD1 /* SearchService.swift */,
 				8C156CF228149D550049DDD1 /* ImageService.swift */,
+				8C156CFB281528A90049DDD1 /* TVService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -191,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				8C156CEA2811CB5A0049DDD1 /* MoyaProvider+Async.swift */,
+				8C156CFD28152C510049DDD1 /* Dictionary+ApiKey.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -537,6 +546,7 @@
 				8CFADF0A25C7208800597413 /* Colors.swift in Sources */,
 				8CF52862267779E800351915 /* ShowsTrackerDataModel.xcdatamodeld in Sources */,
 				8CB9F5BB25CFB0680095F063 /* TruncableText.swift in Sources */,
+				8C156CFE28152C510049DDD1 /* Dictionary+ApiKey.swift in Sources */,
 				8CA0ECB2262AFABF00EB20D9 /* STButton.swift in Sources */,
 				8C156CED2811CC270049DDD1 /* Network+Resolver.swift in Sources */,
 				8CF528702679267E00351915 /* UIImage+Extensions.swift in Sources */,
@@ -571,7 +581,9 @@
 				8CD6C1FB25C32CDB004CF261 /* RootResolver.swift in Sources */,
 				8C156CF328149D550049DDD1 /* ImageService.swift in Sources */,
 				8C0F5D3225CFB9D500B9983C /* View+CornerRadius.swift in Sources */,
+				8C156CFA281527C70049DDD1 /* TVTarget.swift in Sources */,
 				8CD2004627A311D300F61C6D /* EnvironmentValues+Preview.swift in Sources */,
+				8C156CFC281528A90049DDD1 /* TVService.swift in Sources */,
 				8CD6C1DD25C327D3004CF261 /* ShowsTrackerApp.swift in Sources */,
 				8C156CE82811C79B0049DDD1 /* SearchService.swift in Sources */,
 				8C518F3C2662B27800EE6C4F /* Redactable.swift in Sources */,
