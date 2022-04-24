@@ -32,7 +32,8 @@ struct DetailedShow: Codable, Equatable, ImageProvidable {
     let seasons: [Season]?
     let status: Status?
     let tagline: String?
-    let vote: Double?
+    private let voteOriginal: Double?
+    private let voteCountOriginal: Int?
     
     enum CodingKeys: String, CodingKey {
         case posterPath = "poster_path"
@@ -58,7 +59,8 @@ struct DetailedShow: Codable, Equatable, ImageProvidable {
         case seasons
         case status
         case tagline
-        case vote = "vote_average"
+        case voteOriginal = "vote_average"
+        case voteCountOriginal = "vote_count"
     }
 }
 
@@ -201,7 +203,8 @@ extension DetailedShow {
         seasons: nil,
         status: nil,
         tagline: nil,
-        vote: nil)
+        voteOriginal: nil,
+        voteCountOriginal: nil)
 }
 
 // TODO: Just for test, remove it
@@ -220,5 +223,56 @@ extension DetailedShow {
         } catch {
             fatalError("There's an error at json reader - \(error)")
         }
+    }
+}
+
+extension DetailedShow {
+    var releaseYear: String {
+        if let date = airDate {
+            return year(from: date) ?? ""
+        }
+        return ""
+    }
+    
+    var lastEpisodeYear: String {
+        if let date = lastAirDate {
+            return year(from: date) ?? ""
+        }
+        return ""
+    }
+    
+    var broadcastYears: String {
+        if inProduction == true {
+            return "\(releaseYear) - н.в."
+        } else {
+            return "\(releaseYear) - \(lastEpisodeYear)"
+        }
+    }
+    
+    var vote: String {
+        guard let voteOriginal = voteOriginal else { return "" }
+        let formatter = NumberFormatter()
+        formatter.maximumFractionDigits = 2
+        return formatter.string(from: NSNumber(value: voteOriginal)) ?? "\(voteOriginal)"
+    }
+    
+    var voteCount: String {
+        guard let voteCountOriginal = voteCountOriginal else { return "" }
+        let formatter = NumberFormatter()
+        formatter.groupingSeparator = " "
+        formatter.groupingSize = 3
+        formatter.usesGroupingSeparator = true
+        return formatter.string(from: NSNumber(value: voteCountOriginal)) ?? "\(voteCountOriginal)"
+    }
+}
+
+private extension DetailedShow {
+    func year(from string: String) -> String? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        
+        guard let date = formatter.date(from: string) else { return nil }
+        formatter.dateFormat = "yyyy"
+        return formatter.string(from: date)
     }
 }

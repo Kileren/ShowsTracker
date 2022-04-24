@@ -10,23 +10,12 @@ import SwiftUI
 class AppState: ObservableObject {
     @Published var shows: [DetailedShow] = []
     @Published var popularShows: [PlainShow] = []
-    @Published var detailedShowId: Int = 0
     
     @Published var selectedTabBarView: STTabBarButton = .shows
     
-//    @Published var shows: [DetailedShow] = [
-//        DetailedShow(imageData: UIImage(named: "TheWitcher")?.pngData()),
-//        DetailedShow(imageData: UIImage(named: "TheMandalorian")?.pngData())
-//    ]
-//
-//    @Published var popularShows: [PlainShow] = [
-//        PlainShow(imageData: UIImage(named: "TheWitcher")?.pngData()),
-//        PlainShow(imageData: UIImage(named: "TheMandalorian")?.pngData()),
-//        PlainShow(imageData: UIImage(named: "TheWitcher")?.pngData()),
-//        PlainShow(imageData: UIImage(named: "TheMandalorian")?.pngData()),
-//        PlainShow(imageData: UIImage(named: "TheWitcher")?.pngData()),
-//        PlainShow(imageData: UIImage(named: "TheMandalorian")?.pngData())
-//    ]
+    @Published var detailedShowId: Int = 0
+    @Published var detailedShow: DetailedShow = .zero
+    @Published var detailedShowLoaded: Bool = false
 }
 
 enum STTabBarButton {

@@ -10,19 +10,20 @@ import Resolver
 
 final class ShowDetailsViewInteractor: ObservableObject {
     
-    @Published var show: DetailedShow = .zero
-    @Published var showIsLoaded: Bool = false
+//    @Published var show: DetailedShow = .zero
+//    @Published var showIsLoaded: Bool = false
     
     @InjectedObject var appState: AppState
     @Injected var tvService: ITVService
     
     func viewAppeared() {
-        show = appState.shows.first { $0.id == appState.detailedShowId } ?? .theWitcher()
-        showIsLoaded = true
-        
         Task {
-            let detailedShow = try? await tvService.getDetails(for: show.id ?? 0)
-            print(detailedShow)
+            do {
+                appState.detailedShow = try await tvService.getDetails(for: appState.detailedShowId)
+                appState.detailedShowLoaded = true
+            } catch {
+                Logger.log(warning: "Detailed show not loaded and not handled")
+            }
         }
     }
 }

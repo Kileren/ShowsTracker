@@ -14,7 +14,7 @@ protocol ITVService {
 
 final class TVService {
     
-    private let provider = MoyaProvider<TVTarget>(stubClosure: { _ in .delayed(seconds: 1) })
+    private let provider = MoyaProvider<TVTarget>(stubClosure: { _ in .delayed(seconds: 0) })
 }
 
 extension TVService: ITVService {

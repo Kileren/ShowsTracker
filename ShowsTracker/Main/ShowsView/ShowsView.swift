@@ -127,6 +127,7 @@ struct ShowsView: View {
         .background(
             Color.backgroundLight.edgesIgnoringSafeArea(.all)
         )
+        .scaleEffect(1.1, anchor: .center)
     }
     
     func currentShows(geometry: GeometryProxy) -> some View {

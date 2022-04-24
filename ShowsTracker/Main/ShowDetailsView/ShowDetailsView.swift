@@ -15,11 +15,16 @@ struct ShowDetailsView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            if interactor.showIsLoaded {
+            if appState.detailedShowLoaded {
                 ZStack(alignment: .top) {
                     blurBackground(geometry: geometry)
                     overlayView(geometry: geometry)
-                    imageView(geometry: geometry)
+                    
+                    VStack(spacing: 0) {
+                        imageView(geometry: geometry)
+                        spacer(height: 16)
+                        mainInfoView
+                    }
                 }
             } else {
                 Rectangle()
@@ -41,11 +46,69 @@ struct ShowDetailsView: View {
     }
     
     func imageView(geometry: GeometryProxy) -> some View {
-        LoadableImageView(path: interactor.show.posterPath ?? "", width: 500)
+        LoadableImageView(path: appState.detailedShow.posterPath ?? "", width: 500)
             .frame(width: geometry.size.width * 0.4,
                    height: geometry.size.width * 0.62)
             .cornerRadius(DesignConst.normalCornerRadius)
             .padding(.top, 40)
+    }
+    
+    var mainInfoView: some View {
+        VStack(spacing: 0) {
+            Text(appState.detailedShow.name ?? "")
+                .font(.medium28)
+                .foregroundColor(.text100)
+            spacer(height: 4)
+            Text(appState.detailedShow.broadcastYears)
+                .font(.regular15)
+                .foregroundColor(.text60)
+            spacer(height: 22)
+            
+            HStack {
+                Spacer()
+                ratingView
+                Spacer()
+                statusView
+                Spacer()
+                likeView
+                Spacer()
+            }
+        }
+    }
+    
+    var ratingView: some View {
+        VStack(spacing: 4) {
+            HStack(spacing: 6) {
+                Image(systemName: "star.fill")
+                    .resizable()
+                    .frame(width: 12, height: 12)
+                    .foregroundColor(.yellowSoft)
+                Text(appState.detailedShow.vote)
+                    .font(.medium17Rounded)
+                    .foregroundColor(.yellowSoft)
+            }
+            Text(appState.detailedShow.voteCount)
+                .font(.medium13)
+                .foregroundColor(.text40)
+        }
+    }
+    
+    var statusView: some View {
+        VStack(spacing: 4) {
+            Text(appState.detailedShow.inProduction == true ? "Продолжается" : "Закончен")
+                .font(.medium15)
+                .foregroundColor(appState.detailedShow.inProduction == true ? .greenHard : .redSoft)
+            Text("Статус")
+                .font(.medium13)
+                .foregroundColor(.text40)
+        }
+    }
+    
+    var likeView: some View {
+        Image(systemName: "heart.fill")
+            .resizable()
+            .frame(width: 32, height: 32)
+            .foregroundColor(.bay)
     }
     
     func blurBackground(geometry: GeometryProxy) -> some View {
@@ -59,14 +122,13 @@ struct ShowDetailsView: View {
     }
     
     func backgroundImage(geometry: GeometryProxy) -> some View {
-        LoadableImageView(path: interactor.show.posterPath ?? "", width: 500)
+        LoadableImageView(path: appState.detailedShow.posterPath ?? "", width: 500)
             .frame(width: geometry.size.width,
                    height: geometry.size.width * 1.335,
                    alignment: .top)
             .ignoresSafeArea(edges: .top)
             .blur(radius: 15)
-            .scaleEffect(CGSize(width: 1.05, height: 1.05))
-        
+            .scaleEffect(1.1, anchor: .center)
     }
     
     func backgroundImageGradient(geometry: GeometryProxy) -> some View {
@@ -82,6 +144,12 @@ struct ShowDetailsView: View {
                     endPoint: .top))
             .ignoresSafeArea(edges: .top)
     }
+    
+    func spacer(height: CGFloat) -> some View {
+        Rectangle()
+            .frame(height: height)
+            .foregroundColor(.clear)
+    }
 }
 
 struct ShowDetailsView_Previews: PreviewProvider {
@@ -90,6 +158,7 @@ struct ShowDetailsView_Previews: PreviewProvider {
         Resolver.registerViewPreview()
         
         let view = ShowDetailsView()
+        view.appState.detailedShowId = 71912
         view.interactor.viewAppeared()
         return view
     }
