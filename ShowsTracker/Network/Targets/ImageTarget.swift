@@ -7,6 +7,7 @@
 
 import Foundation
 import Moya
+import UIKit
 
 enum ImageTarget {
     case image(path: String, width: Int)
@@ -32,5 +33,9 @@ extension ImageTarget: TargetType {
     
     var headers: [String : String]? {
         nil
+    }
+    
+    var sampleData: Data {
+        UIImage(named: "TheWitcher")?.pngData() ?? Data()
     }
 }

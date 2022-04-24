@@ -16,7 +16,7 @@ protocol IImageService {
 
 final class ImageService {
     
-    private let provider = MoyaProvider<ImageTarget>()
+    private let provider = MoyaProvider<ImageTarget>(stubClosure: { _ in isPreview ? .immediate : .never })
     
     private var cache: [String: UIImage] = [:]
 }
