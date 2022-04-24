@@ -12,20 +12,11 @@ struct LoadableImageView: View {
     
     // MARK: - Model
     
-//    enum Path {
-//        case short(String)
-//        case full(String)
-//        case typed(type: ImageProvidableType, from: ImageProvidable)
-//    }
-    
     // MARK: - Dependencies
     
-//    @Injected var imageLoader: ImageLoader
     @Injected var imageService: IImageService
     
     // MARK: - State
-    
-//    private let path: Path
     
     private let path: String
     private let width: Int
@@ -33,10 +24,6 @@ struct LoadableImageView: View {
     @State var image: Image?
     
     // MARK: - Lifecycle
-    
-//    init(path: Path) {
-//        self.path = path
-//    }
     
     init(path: String, width: Int = 500) {
         self.path = path
@@ -65,14 +52,6 @@ struct LoadableImageView: View {
 
 private extension LoadableImageView {
     private func obtainImage() {
-//        switch path {
-//        case .short(let shortPath):
-//            image = await imageLoader.obtainImage(byShortPath: shortPath).wrapInImage()
-//        case .full(let fullPath):
-//            image = await imageLoader.obtainImage(byFullPath: fullPath).wrapInImage()
-//        case .typed(let type, let from):
-//            image = await imageLoader.obtainImage(ofType: type, from: from).wrapInImage()
-//        }
         Task {
             do {
                 let loadedImage = try await imageService.loadImage(path: path, width: width)

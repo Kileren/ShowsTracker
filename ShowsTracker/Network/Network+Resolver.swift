@@ -9,7 +9,14 @@ import Resolver
 
 extension Resolver {
     static func registerNetworkServices() {
-        register(ISearchService.self) { SearchService() }
+        register(ISearchService.self) { SearchService() }.scope(.application)
         register(IImageService.self) { ImageService() }.scope(.application)
     }
+    
+    #if DEBUG
+    static func registerNetworkServicesPreview() {
+        register(ISearchService.self) { SearchService() }.scope(.application)
+        register(IImageService.self) { ImageServicePreview() }.scope(.application)
+    }
+    #endif
 }
