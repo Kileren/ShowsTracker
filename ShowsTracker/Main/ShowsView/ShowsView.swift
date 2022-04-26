@@ -264,7 +264,7 @@ struct ShowsView: View {
                         .frame(width: width, height: height)
                         .cornerRadius(DesignConst.smallCornerRadius)
                         .onTapGesture {
-                            appState.detailedShowId = show.id
+                            appState.showDetails.id = show.id
                             detailsScreenIsPresented = true
                         }
                 }
@@ -311,7 +311,7 @@ fileprivate struct WatchingShowView: View, Identifiable, Indexable {
             .resizable()
             .cornerRadius(DesignConst.normalCornerRadius)
             .onTapGesture {
-                appState.detailedShowId = showId
+                appState.showDetails.id = showId
                 detailsScreenIsPresented = true
             }
     }

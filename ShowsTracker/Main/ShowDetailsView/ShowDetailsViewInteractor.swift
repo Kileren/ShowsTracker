@@ -19,8 +19,8 @@ final class ShowDetailsViewInteractor: ObservableObject {
     func viewAppeared() {
         Task {
             do {
-                appState.detailedShow = try await tvService.getDetails(for: appState.detailedShowId)
-                appState.detailedShowLoaded = true
+                appState.showDetails.show = try await tvService.getDetails(for: appState.showDetails.id)
+                appState.showDetails.isLoaded = true
             } catch {
                 Logger.log(warning: "Detailed show not loaded and not handled")
             }

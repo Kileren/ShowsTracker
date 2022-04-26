@@ -15,7 +15,7 @@ struct ShowDetailsView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            if appState.detailedShowLoaded {
+            if appState.showDetails.isLoaded {
                 ZStack(alignment: .top) {
                     blurBackground(geometry: geometry)
                     overlayView(geometry: geometry)
@@ -46,7 +46,7 @@ struct ShowDetailsView: View {
     }
     
     func imageView(geometry: GeometryProxy) -> some View {
-        LoadableImageView(path: appState.detailedShow.posterPath ?? "", width: 500)
+        LoadableImageView(path: appState.showDetails.show.posterPath ?? "", width: 500)
             .frame(width: geometry.size.width * 0.4,
                    height: geometry.size.width * 0.62)
             .cornerRadius(DesignConst.normalCornerRadius)
@@ -55,11 +55,11 @@ struct ShowDetailsView: View {
     
     var mainInfoView: some View {
         VStack(spacing: 0) {
-            Text(appState.detailedShow.name ?? "")
+            Text(appState.showDetails.show.name ?? "")
                 .font(.medium28)
                 .foregroundColor(.text100)
             spacer(height: 4)
-            Text(appState.detailedShow.broadcastYears)
+            Text(appState.showDetails.show.broadcastYears)
                 .font(.regular15)
                 .foregroundColor(.text60)
             spacer(height: 22)
@@ -83,11 +83,11 @@ struct ShowDetailsView: View {
                     .resizable()
                     .frame(width: 12, height: 12)
                     .foregroundColor(.yellowSoft)
-                Text(appState.detailedShow.vote)
+                Text(appState.showDetails.show.vote)
                     .font(.medium17Rounded)
                     .foregroundColor(.yellowSoft)
             }
-            Text(appState.detailedShow.voteCount)
+            Text(appState.showDetails.show.voteCount)
                 .font(.medium13)
                 .foregroundColor(.text40)
         }
@@ -95,9 +95,9 @@ struct ShowDetailsView: View {
     
     var statusView: some View {
         VStack(spacing: 4) {
-            Text(appState.detailedShow.inProduction == true ? "Продолжается" : "Закончен")
+            Text(appState.showDetails.show.inProduction == true ? "Продолжается" : "Закончен")
                 .font(.medium15)
-                .foregroundColor(appState.detailedShow.inProduction == true ? .greenHard : .redSoft)
+                .foregroundColor(appState.showDetails.show.inProduction == true ? .greenHard : .redSoft)
             Text("Статус")
                 .font(.medium13)
                 .foregroundColor(.text40)
@@ -122,7 +122,7 @@ struct ShowDetailsView: View {
     }
     
     func backgroundImage(geometry: GeometryProxy) -> some View {
-        LoadableImageView(path: appState.detailedShow.posterPath ?? "", width: 500)
+        LoadableImageView(path: appState.showDetails.show.posterPath ?? "", width: 500)
             .frame(width: geometry.size.width,
                    height: geometry.size.width * 1.335,
                    alignment: .top)
@@ -158,7 +158,7 @@ struct ShowDetailsView_Previews: PreviewProvider {
         Resolver.registerViewPreview()
         
         let view = ShowDetailsView()
-        view.appState.detailedShowId = 71912
+        view.appState.showDetails.id = 71912
         view.interactor.viewAppeared()
         return view
     }
