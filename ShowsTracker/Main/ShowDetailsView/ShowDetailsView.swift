@@ -5,6 +5,7 @@
 //  Created by Sergey Bogachev on 30.05.2021.
 //
 
+import Combine
 import SwiftUI
 import Resolver
 
@@ -13,9 +14,11 @@ struct ShowDetailsView: View {
     @InjectedObject var appState: AppState
     @InjectedObject var interactor: ShowDetailsViewInteractor
     
+    @State private var model: Model = Model()
+    
     var body: some View {
         GeometryReader { geometry in
-            if appState.showDetails.isLoaded {
+            if model.isLoaded {
                 ZStack(alignment: .top) {
                     blurBackground(geometry: geometry)
                     overlayView(geometry: geometry)
@@ -34,6 +37,7 @@ struct ShowDetailsView: View {
         .onAppear {
             interactor.viewAppeared()
         }
+        .onReceive(modelUpdates) { self.model = $0 }
     }
     
     func overlayView(geometry: GeometryProxy) -> some View {
@@ -46,7 +50,7 @@ struct ShowDetailsView: View {
     }
     
     func imageView(geometry: GeometryProxy) -> some View {
-        LoadableImageView(path: appState.showDetails.show.posterPath ?? "", width: 500)
+        LoadableImageView(path: model.posterPath, width: 500)
             .frame(width: geometry.size.width * 0.4,
                    height: geometry.size.width * 0.62)
             .cornerRadius(DesignConst.normalCornerRadius)
@@ -55,11 +59,11 @@ struct ShowDetailsView: View {
     
     var mainInfoView: some View {
         VStack(spacing: 0) {
-            Text(appState.showDetails.show.name ?? "")
+            Text(model.name)
                 .font(.medium28)
                 .foregroundColor(.text100)
             spacer(height: 4)
-            Text(appState.showDetails.show.broadcastYears)
+            Text(model.broadcastYears)
                 .font(.regular15)
                 .foregroundColor(.text60)
             spacer(height: 22)
@@ -83,11 +87,11 @@ struct ShowDetailsView: View {
                     .resizable()
                     .frame(width: 12, height: 12)
                     .foregroundColor(.yellowSoft)
-                Text(appState.showDetails.show.vote)
+                Text(model.vote)
                     .font(.medium17Rounded)
                     .foregroundColor(.yellowSoft)
             }
-            Text(appState.showDetails.show.voteCount)
+            Text(model.voteCount)
                 .font(.medium13)
                 .foregroundColor(.text40)
         }
@@ -95,9 +99,9 @@ struct ShowDetailsView: View {
     
     var statusView: some View {
         VStack(spacing: 4) {
-            Text(appState.showDetails.show.inProduction == true ? "Продолжается" : "Закончен")
+            Text(model.inProduction ? "Продолжается" : "Закончен")
                 .font(.medium15)
-                .foregroundColor(appState.showDetails.show.inProduction == true ? .greenHard : .redSoft)
+                .foregroundColor(model.inProduction ? .greenHard : .redSoft)
             Text("Статус")
                 .font(.medium13)
                 .foregroundColor(.text40)
@@ -105,10 +109,14 @@ struct ShowDetailsView: View {
     }
     
     var likeView: some View {
-        Image(systemName: "heart.fill")
-            .resizable()
-            .frame(width: 32, height: 32)
-            .foregroundColor(.bay)
+        Button {
+            appState.showDetails.isLiked.toggle()
+        } label: {
+            Image(systemName: model.isLiked ? "heart.fill" : "heart")
+                .resizable()
+                .frame(width: 32, height: 32)
+                .foregroundColor(.bay)
+        }
     }
     
     func blurBackground(geometry: GeometryProxy) -> some View {
@@ -122,7 +130,7 @@ struct ShowDetailsView: View {
     }
     
     func backgroundImage(geometry: GeometryProxy) -> some View {
-        LoadableImageView(path: appState.showDetails.show.posterPath ?? "", width: 500)
+        LoadableImageView(path: model.posterPath, width: 500)
             .frame(width: geometry.size.width,
                    height: geometry.size.width * 1.335,
                    alignment: .top)
@@ -149,6 +157,46 @@ struct ShowDetailsView: View {
         Rectangle()
             .frame(height: height)
             .foregroundColor(.clear)
+    }
+}
+
+// MARK: - State Updates
+
+extension ShowDetailsView {
+    
+    var modelUpdates: AnyPublisher<Model, Never> {
+        let showID = appState.routing.value.showDetails.showID
+        if appState.info[\.showDetails[showID]] == nil {
+            appState.info[\.showDetails[showID]] = .init()
+        }
+        return appState.info.updates(for: \.showDetails[showID])
+    }
+    
+    var routingUpdates: AnyPublisher<Routing, Never> {
+        appState.routing.updates(for: \.showDetails)
+    }
+}
+
+// MARK: - Routing
+
+extension ShowDetailsView {
+    struct Routing: Equatable {
+        var showID: Int = 0
+    }
+}
+
+// MARK: - Model
+
+extension ShowDetailsView {
+    struct Model: Equatable {
+        var isLoaded = false
+        var posterPath = ""
+        var name = ""
+        var broadcastYears = ""
+        var vote = ""
+        var voteCount = ""
+        var inProduction = true
+        var isLiked = true
     }
 }
 

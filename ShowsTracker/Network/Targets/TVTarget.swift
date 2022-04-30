@@ -39,8 +39,11 @@ extension TVTarget: TargetType {
     
     var sampleData: Data {
         switch self {
-        case .details:
+        case .details(let id):
             do {
+                if id == 82856 {
+                    return try JSONReader.data(forResource: "TheMandalorianDetailed")
+                }
                 return try JSONReader.data(forResource: "TheWitcherDetailed")
             } catch {
                 Logger.log(error: error)

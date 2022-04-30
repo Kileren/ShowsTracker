@@ -23,6 +23,7 @@
 		8C156CFE28152C510049DDD1 /* Dictionary+ApiKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156CFD28152C510049DDD1 /* Dictionary+ApiKey.swift */; };
 		8C156D0028152E7B0049DDD1 /* ProcessInfo+isPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156CFF28152E7B0049DDD1 /* ProcessInfo+isPreview.swift */; };
 		8C156D052815CB900049DDD1 /* ShowDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156D042815CB900049DDD1 /* ShowDetails.swift */; };
+		8C156D07281B0EB20049DDD1 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156D06281B0EB20049DDD1 /* Store.swift */; };
 		8C28960F25C5D0AD00C2AC37 /* DetailedShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C28960E25C5D0AD00C2AC37 /* DetailedShow.swift */; };
 		8C3994762620DBCE005BD7DB /* PlainShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3994752620DBCE005BD7DB /* PlainShow.swift */; };
 		8C3994782620DCCD005BD7DB /* Data+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3994772620DCCD005BD7DB /* Data+Image.swift */; };
@@ -54,7 +55,6 @@
 		8CF5285D2677780500351915 /* CoreDataStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF5285C2677780500351915 /* CoreDataStorage.swift */; };
 		8CF5285F2677782600351915 /* ManagedObjectCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF5285E2677782600351915 /* ManagedObjectCodable.swift */; };
 		8CF52862267779E800351915 /* ShowsTrackerDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8CF52860267779E800351915 /* ShowsTrackerDataModel.xcdatamodeld */; };
-		8CF52865267787F700351915 /* ImageProvidable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF52864267787F700351915 /* ImageProvidable.swift */; };
 		8CF5286E26778F5400351915 /* LoadableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF5286D26778F5400351915 /* LoadableImageView.swift */; };
 		8CF528702679267E00351915 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF5286F2679267E00351915 /* UIImage+Extensions.swift */; };
 		8CF52873267DE2F500351915 /* JSONReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF52872267DE2F500351915 /* JSONReader.swift */; };
@@ -82,6 +82,7 @@
 		8C156CFD28152C510049DDD1 /* Dictionary+ApiKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+ApiKey.swift"; sourceTree = "<group>"; };
 		8C156CFF28152E7B0049DDD1 /* ProcessInfo+isPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProcessInfo+isPreview.swift"; sourceTree = "<group>"; };
 		8C156D042815CB900049DDD1 /* ShowDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowDetails.swift; sourceTree = "<group>"; };
+		8C156D06281B0EB20049DDD1 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		8C28960E25C5D0AD00C2AC37 /* DetailedShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedShow.swift; sourceTree = "<group>"; };
 		8C3994752620DBCE005BD7DB /* PlainShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainShow.swift; sourceTree = "<group>"; };
 		8C3994772620DCCD005BD7DB /* Data+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Image.swift"; sourceTree = "<group>"; };
@@ -115,7 +116,6 @@
 		8CF5285C2677780500351915 /* CoreDataStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStorage.swift; sourceTree = "<group>"; };
 		8CF5285E2677782600351915 /* ManagedObjectCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedObjectCodable.swift; sourceTree = "<group>"; };
 		8CF52861267779E800351915 /* ShowsTrackerDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ShowsTrackerDataModel.xcdatamodel; sourceTree = "<group>"; };
-		8CF52864267787F700351915 /* ImageProvidable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageProvidable.swift; sourceTree = "<group>"; };
 		8CF5286D26778F5400351915 /* LoadableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadableImageView.swift; sourceTree = "<group>"; };
 		8CF5286F2679267E00351915 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		8CF52872267DE2F500351915 /* JSONReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONReader.swift; sourceTree = "<group>"; };
@@ -209,6 +209,7 @@
 			children = (
 				8CD6C20825C32F2A004CF261 /* AppState.swift */,
 				8C156D042815CB900049DDD1 /* ShowDetails.swift */,
+				8C156D06281B0EB20049DDD1 /* Store.swift */,
 			);
 			path = AppState;
 			sourceTree = "<group>";
@@ -380,7 +381,6 @@
 			children = (
 				8C156D012815CAF90049DDD1 /* AppState */,
 				8CF52874267DE41800351915 /* Jsons */,
-				8CF52863267787ED00351915 /* Protocols */,
 				8C518F4426640A9700EE6C4F /* Shows */,
 			);
 			path = Models;
@@ -411,14 +411,6 @@
 				8CF52860267779E800351915 /* ShowsTrackerDataModel.xcdatamodeld */,
 			);
 			path = CoreData;
-			sourceTree = "<group>";
-		};
-		8CF52863267787ED00351915 /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				8CF52864267787F700351915 /* ImageProvidable.swift */,
-			);
-			path = Protocols;
 			sourceTree = "<group>";
 		};
 		8CF5286626778B4800351915 /* Services */ = {
@@ -543,6 +535,7 @@
 				8C156CDB280B244D0049DDD1 /* SearchTarget.swift in Sources */,
 				8C5E8D4C25CF08CD0058A9B1 /* Fonts.swift in Sources */,
 				8CD6C20425C32E06004CF261 /* Main+Resolver.swift in Sources */,
+				8C156D07281B0EB20049DDD1 /* Store.swift in Sources */,
 				8CFADF0A25C7208800597413 /* Colors.swift in Sources */,
 				8CF52862267779E800351915 /* ShowsTrackerDataModel.xcdatamodeld in Sources */,
 				8CB9F5BB25CFB0680095F063 /* TruncableText.swift in Sources */,
@@ -552,7 +545,6 @@
 				8CF528702679267E00351915 /* UIImage+Extensions.swift in Sources */,
 				8C518F3E2662B28B00EE6C4F /* Redactable+Shimmered.swift in Sources */,
 				8C3994762620DBCE005BD7DB /* PlainShow.swift in Sources */,
-				8CF52865267787F700351915 /* ImageProvidable.swift in Sources */,
 				8C496FA725C47DAE000282C5 /* PagingScrollView.swift in Sources */,
 				8CD6C21325C3303D004CF261 /* ShowsViewInteractor.swift in Sources */,
 				8C156CEF2811CD370049DDD1 /* Logger.swift in Sources */,

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DetailedShow: Codable, Equatable, ImageProvidable {
+struct DetailedShow: Codable, Equatable {
     
     let posterPath: String?
     let backdropPath: String?

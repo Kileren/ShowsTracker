@@ -11,17 +11,26 @@ import SwiftUI
 class AppState: ObservableObject {
     @Published var shows: [DetailedShow] = []
     @Published var popularShows: [PlainShow] = []
-    
     @Published var selectedTabBarView: STTabBarButton = .shows
-    
     @Published var showDetails: ShowDetails = ShowDetails()
     
-    private var anyCancellable: AnyCancellable? = nil
+    let info: Store<Info>
+    let routing: Store<Routing>
     
     init() {
-        anyCancellable = showDetails.objectWillChange.sink { [weak self] _ in
-            self?.objectWillChange.send()
-        }
+        info = Store<Info>(Info())
+        routing = Store<Routing>(Routing())
+    }
+}
+
+extension AppState {
+    struct Info: Equatable {
+        var showDetails: [Int: ShowDetailsView.Model] = [:]
+    }
+    
+    struct Routing: Equatable {
+        var shows: ShowsView.Routing = .init()
+        var showDetails: ShowDetailsView.Routing = .init()
     }
 }
 
@@ -29,4 +38,10 @@ enum STTabBarButton {
     case shows
     case movies
     case profile
+}
+
+extension Dictionary where Key == Int, Value == ShowDetailsView.Model {
+    subscript(key: Key) -> Value {
+        self[key] ?? Value()
+    }
 }

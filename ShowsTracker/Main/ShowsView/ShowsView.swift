@@ -5,6 +5,7 @@
 //  Created by s.bogachev on 28.01.2021.
 //
 
+import Combine
 import SwiftUI
 import Resolver
 
@@ -21,7 +22,10 @@ struct ShowsView: View {
     @State private var index: Int = 0
     @State private var scrollProgress: CGFloat = 0
     
-    @State private var detailsScreenIsPresented: Bool = false
+    @State private var routing: Routing = .init()
+    private var routingBinding: Binding<Routing> {
+        $routing.dispatched(to: appState.routing, \.shows)
+    }
     
     // MARK: - View
     
@@ -57,9 +61,10 @@ struct ShowsView: View {
         .onAppear {
             interactor.viewAppeared()
         }
-        .sheet(isPresented: $detailsScreenIsPresented) {
+        .sheet(isPresented: routingBinding.detailsShown) {
             ShowDetailsView()
         }
+        .onReceive(routingUpdates) { routing = $0 }
     }
     
     func skeletonLoader(geometry: GeometryProxy) -> some View {
@@ -135,8 +140,7 @@ struct ShowsView: View {
             WatchingShowView(
                 image: interactor.imagesForShow[$0.element.id ?? 0] ?? Image(""),
                 index: $0.offset,
-                showId: $0.element.id ?? 0,
-                detailsScreenIsPresented: $detailsScreenIsPresented)
+                showId: $0.element.id ?? 0)
         }
         
         return PagingScrollView(
@@ -149,9 +153,7 @@ struct ShowsView: View {
                 scrollProgress = CGFloat(index)
             },
             changeProgressClosure: { scrollProgress = $0 },
-            tapAction: { _ in
-                detailsScreenIsPresented = true
-            }
+            tapAction: { _ in }
         )
         .frame(width: geometry.size.width * 0.6,
                height: geometry.size.width * 0.9)
@@ -264,8 +266,8 @@ struct ShowsView: View {
                         .frame(width: width, height: height)
                         .cornerRadius(DesignConst.smallCornerRadius)
                         .onTapGesture {
-                            appState.showDetails.id = show.id
-                            detailsScreenIsPresented = true
+                            appState.routing[\.showDetails.showID] = show.id
+                            appState.routing[\.shows.detailsShown] = true
                         }
                 }
             })
@@ -302,8 +304,6 @@ fileprivate struct WatchingShowView: View, Identifiable, Indexable {
     var index: Int
     var showId: Int
     
-    @Binding var detailsScreenIsPresented: Bool
-    
     @InjectedObject var appState: AppState
     
     var body: some View {
@@ -311,9 +311,26 @@ fileprivate struct WatchingShowView: View, Identifiable, Indexable {
             .resizable()
             .cornerRadius(DesignConst.normalCornerRadius)
             .onTapGesture {
-                appState.showDetails.id = showId
-                detailsScreenIsPresented = true
+                appState.routing[\.showDetails.showID] = showId
+                appState.routing[\.shows.detailsShown] = true
             }
+    }
+}
+
+// MARK: - State Updates
+
+extension ShowsView {
+    
+    var routingUpdates: AnyPublisher<Routing, Never> {
+        appState.routing.updates(for: \.shows)
+    }
+}
+
+// MARK: - Routing
+
+extension ShowsView {
+    struct Routing: Equatable {
+        var detailsShown = false
     }
 }
 

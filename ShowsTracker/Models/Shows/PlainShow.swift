@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PlainShow: Codable, ImageProvidable {
+struct PlainShow: Codable {
     let name: String?
     let originalName: String?
     let vote: Double?

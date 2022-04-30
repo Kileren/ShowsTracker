@@ -12,4 +12,5 @@ class ShowDetails: ObservableObject {
     @Published var id: Int = 0
     @Published var show: DetailedShow = .zero
     @Published var isLoaded: Bool = false
+    @Published var isLiked: Bool = true
 }
