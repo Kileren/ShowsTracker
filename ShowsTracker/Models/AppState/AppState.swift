@@ -9,10 +9,6 @@ import Combine
 import SwiftUI
 
 class AppState: ObservableObject {
-    @Published var shows: [DetailedShow] = []
-    @Published var popularShows: [PlainShow] = []
-    @Published var selectedTabBarView: STTabBarButton = .shows
-    @Published var showDetails: ShowDetails = ShowDetails()
     
     let info: Store<Info>
     let routing: Store<Routing>
@@ -25,6 +21,8 @@ class AppState: ObservableObject {
 
 extension AppState {
     struct Info: Equatable {
+        var tabBar: TabBarView.Model = .init()
+        var shows: ShowsView.Model = .init()
         var showDetails: [Int: ShowDetailsView.Model] = [:]
     }
     
@@ -32,12 +30,6 @@ extension AppState {
         var shows: ShowsView.Routing = .init()
         var showDetails: ShowDetailsView.Routing = .init()
     }
-}
-
-enum STTabBarButton {
-    case shows
-    case movies
-    case profile
 }
 
 extension Dictionary where Key == Int, Value == ShowDetailsView.Model {

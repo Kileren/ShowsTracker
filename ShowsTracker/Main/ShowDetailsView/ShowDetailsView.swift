@@ -110,7 +110,7 @@ struct ShowDetailsView: View {
     
     var likeView: some View {
         Button {
-            appState.showDetails.isLiked.toggle()
+            interactor.didTapLikeButton()
         } label: {
             Image(systemName: model.isLiked ? "heart.fill" : "heart")
                 .resizable()
@@ -206,7 +206,7 @@ struct ShowDetailsView_Previews: PreviewProvider {
         Resolver.registerViewPreview()
         
         let view = ShowDetailsView()
-        view.appState.showDetails.id = 71912
+        view.appState.routing.value.showDetails.showID = 71912
         view.interactor.viewAppeared()
         return view
     }

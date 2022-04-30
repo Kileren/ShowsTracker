@@ -15,38 +15,36 @@ final class ShowsViewInteractor: ObservableObject {
     private var appState: AppState
     @Injected var imageService: IImageService
     
-    private(set) var imagesForShow: [Int: Image] = [:]
-    
-    @Published var isCurrentLoaded: Bool = false
-    @Published var isPopularLoaded: Bool = false
-    
     init(appState: AppState) {
         self.appState = appState
     }
     
     func viewAppeared() {
-        appState.shows = [.theWitcher(), .theMandalorian()]
-        appState.shows.forEach { show in
-            Task(priority: .high) {
-                do {
-                    let image = try await imageService.loadImage(path: show.posterPath ?? "", width: 500)
-                    imagesForShow[show.id ?? 0] = image.wrapInImage()
-                } catch {
-                    Logger.log(warning: "Image not loaded and its not handled")
-                }
-            }
-        }
-        
-        appState.popularShows = [
-            .theWitcher(), .theMandalorian(), .theWitcher(), .theMandalorian(), .theWitcher(), .theMandalorian()
-        ]
-        
-        // TODO: Remove it later
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-            self?.isCurrentLoaded = true
+        Task {
+            let witcherImage = try await imageService.loadImage(path: "/7vjaCdMw15FEbXyLQTVa04URsPm.jpg", width: 500).wrapInImage()
+            let mandalorianImage = try await imageService.loadImage(path: "/sWgBv7LV2PRoQgkxwlibdGXKz1S.jpg", width: 500).wrapInImage()
             
+            let model = ShowsView.Model(
+                isUserShowsLoaded: false,
+                isPopularShowsLoaded: false,
+                userShows: [
+                    .init(id: 71912, posterPath: "/7vjaCdMw15FEbXyLQTVa04URsPm.jpg", image: witcherImage),
+                    .init(id: 82856, posterPath: "/sWgBv7LV2PRoQgkxwlibdGXKz1S.jpg", image: mandalorianImage)
+                ],
+                popularShows: [
+                    .init(id: 71912, posterPath: "/7vjaCdMw15FEbXyLQTVa04URsPm.jpg"),
+                    .init(id: 82856, posterPath: "/sWgBv7LV2PRoQgkxwlibdGXKz1S.jpg")
+                ])
+            
+            appState.info[\.shows] = model
+            
+            // TODO: Remove it later
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self?.isPopularLoaded = true
+                self.appState.info[\.shows.isUserShowsLoaded] = true
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.appState.info[\.shows.isPopularShowsLoaded] = true
+                }
             }
         }
     }

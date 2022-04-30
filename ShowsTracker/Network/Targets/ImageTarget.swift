@@ -36,6 +36,12 @@ extension ImageTarget: TargetType {
     }
     
     var sampleData: Data {
-        UIImage(named: "TheWitcher")?.pngData() ?? Data()
+        switch self {
+        case .image(let path, _):
+            if path == "/sWgBv7LV2PRoQgkxwlibdGXKz1S.jpg" {
+                return UIImage(named: "TheMandalorian")?.pngData() ?? Data()
+            }
+            return UIImage(named: "TheWitcher")?.pngData() ?? Data()
+        }
     }
 }

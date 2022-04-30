@@ -22,6 +22,7 @@ struct ShowsView: View {
     @State private var index: Int = 0
     @State private var scrollProgress: CGFloat = 0
     
+    @State private var model: Model = .init()
     @State private var routing: Routing = .init()
     private var routingBinding: Binding<Routing> {
         $routing.dispatched(to: appState.routing, \.shows)
@@ -31,20 +32,20 @@ struct ShowsView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            if interactor.isCurrentLoaded {
+            if model.isUserShowsLoaded {
                 ScrollView(.vertical, showsIndicators: false) {
                     ZStack(alignment: .top) {
                         blurBackground(geometry: geometry)
                         
                         VStack(spacing: 32) {
-                            if !appState.shows.isEmpty {
+                            if !model.userShows.isEmpty {
                                 currentShows(geometry: geometry)
                                 pageDotsView(geometry: geometry)
                             } else {
                                 emptyShowsViews(geometry: geometry)
                             }
                             
-                            if interactor.isPopularLoaded {
+                            if model.isPopularShowsLoaded {
                                 popular(geometry: geometry)
                             } else {
                                 skeletonForPopular(geometry: geometry)
@@ -64,6 +65,7 @@ struct ShowsView: View {
         .sheet(isPresented: routingBinding.detailsShown) {
             ShowDetailsView()
         }
+        .onReceive(modelUpdate) { model = $0 }
         .onReceive(routingUpdates) { routing = $0 }
     }
     
@@ -124,7 +126,7 @@ struct ShowsView: View {
     
     func blurBackground(geometry: GeometryProxy) -> some View {
         ZStack(alignment: .top, content: {
-            if !appState.shows.isEmpty {
+            if !model.userShows.isEmpty {
                 backgroundImage(geometry: geometry)
             }
             backgroundImageGradient(geometry: geometry)
@@ -136,11 +138,11 @@ struct ShowsView: View {
     }
     
     func currentShows(geometry: GeometryProxy) -> some View {
-        let content = appState.shows.enumerated().map {
+        let content = model.userShows.enumerated().map {
             WatchingShowView(
-                image: interactor.imagesForShow[$0.element.id ?? 0] ?? Image(""),
+                image: $0.element.image,
                 index: $0.offset,
-                showId: $0.element.id ?? 0)
+                showId: $0.element.id)
         }
         
         return PagingScrollView(
@@ -206,8 +208,8 @@ struct ShowsView: View {
     
     @ViewBuilder
     func pageDotsView(geometry: GeometryProxy) -> some View {
-        if appState.shows.count > 1 {
-            PageDotsView(numberOfPages: appState.shows.count,
+        if model.userShows.count > 1 {
+            PageDotsView(numberOfPages: model.userShows.count,
                          currentIndex: index)
                 .frame(width: geometry.size.width, height: 12, alignment: .center)
         } else {
@@ -218,9 +220,9 @@ struct ShowsView: View {
     }
     
     func backgroundImage(geometry: GeometryProxy) -> some View {
-        let index = max(min(Int(scrollProgress.rounded()), appState.shows.count - 1), 0)
-        let show = appState.shows[index]
-        let image = imageService.cachedImage(for: show.posterPath ?? "")?.wrapInImage() ?? Image("")
+        let index = max(min(Int(scrollProgress.rounded()), model.userShows.count - 1), 0)
+        let show = model.userShows[index]
+        let image = imageService.cachedImage(for: show.posterPath)?.wrapInImage() ?? Image("")
         let opacity = 1 - abs(scrollProgress - CGFloat(index)) * 1.25
         
         return image
@@ -261,8 +263,8 @@ struct ShowsView: View {
             }
             
             popularShows(geometry: geometry, content: { width, height in
-                ForEach(appState.popularShows, id: \.id) { show in
-                    LoadableImageView(path: show.posterPath ?? "", width: 200)
+                ForEach(model.popularShows, id: \.id) { show in
+                    LoadableImageView(path: show.posterPath, width: 200)
                         .frame(width: width, height: height)
                         .cornerRadius(DesignConst.smallCornerRadius)
                         .onTapGesture {
@@ -321,6 +323,10 @@ fileprivate struct WatchingShowView: View, Identifiable, Indexable {
 
 extension ShowsView {
     
+    var modelUpdate: AnyPublisher<Model, Never> {
+        appState.info.updates(for: \.shows)
+    }
+    
     var routingUpdates: AnyPublisher<Routing, Never> {
         appState.routing.updates(for: \.shows)
     }
@@ -331,6 +337,29 @@ extension ShowsView {
 extension ShowsView {
     struct Routing: Equatable {
         var detailsShown = false
+    }
+}
+
+// MARK: - Model
+
+extension ShowsView {
+    struct Model: Equatable {
+        var isUserShowsLoaded: Bool = false
+        var isPopularShowsLoaded: Bool = false
+        
+        var userShows: [UserShow] = []
+        var popularShows: [PopularShow] = []
+        
+        struct UserShow: Equatable {
+            var id: Int = 0
+            var posterPath: String = ""
+            var image: Image = Image("")
+        }
+        
+        struct PopularShow: Equatable {
+            var id: Int = 0
+            var posterPath: String = ""
+        }
     }
 }
 
@@ -345,10 +374,7 @@ struct ShowsView_Previews: PreviewProvider {
         Resolver.registerPreview()
         Resolver.registerViewPreview()
         
-        let view = ShowsView()
-        view.interactor.isCurrentLoaded = true
-        view.interactor.isPopularLoaded = true
-        return view
+        return ShowsView()
 //            .previewDevice(PreviewDevice(rawValue: "iPhone SE (2nd generation)"))
 //            .previewDisplayName("iPhone SE (2nd generation)")
     }

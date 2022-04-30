@@ -5,6 +5,7 @@
 //  Created by Sergey Bogachev on 27.01.2022.
 //
 
+import Combine
 import SwiftUI
 import Resolver
 
@@ -16,6 +17,7 @@ struct TabBarView: View {
 
     let geometry: GeometryProxy
     
+    @State private var model: Model = .init()
     private let showsView: ShowsView = ShowsView()
 
     var body: some View {
@@ -28,6 +30,7 @@ struct TabBarView: View {
             }
             .frame(width: geometry.size.width, height: 60)
             .background(Color.white100)
+            .onReceive(modelUpdates) { model = $0 }
         }
     }
 
@@ -35,7 +38,7 @@ struct TabBarView: View {
         if isPreview {
             return AnyView(EmptyView())
         } else {
-            switch appState.selectedTabBarView {
+            switch model.selectedTab {
             case .shows:
                 return AnyView(showsView)
             case .movies:
@@ -45,15 +48,15 @@ struct TabBarView: View {
             }
         }
     }
-    
-    func button(for value: STTabBarButton) -> some View {
+
+    func button(for value: Model.Tab) -> some View {
         Button {
-            appState.selectedTabBarView = value
+            appState.info.value.tabBar.selectedTab = value
         } label: {
             Image(value.imageName)
                 .resizable()
                 .frame(width: 32, height: 32)
-                .foregroundColor(appState.selectedTabBarView == value ? Color.bay : Color.text100)
+                .foregroundColor(model.selectedTab == value ? Color.bay : Color.text100)
         }
     }
 }
@@ -66,6 +69,36 @@ private extension TabBarView {
     }
 }
 
+// MARK: - State Updates
+
+extension TabBarView {
+    var modelUpdates: AnyPublisher<Model, Never> {
+        appState.info.updates(for: \.tabBar)
+    }
+}
+
+// MARK: - Model
+
+extension TabBarView {
+    struct Model: Equatable {
+        var selectedTab: Tab = .shows
+        
+        enum Tab: Equatable {
+            case shows
+            case movies
+            case profile
+            
+            var imageName: String {
+                switch self {
+                case .shows: return "Icons/TabBar/tv"
+                case .movies: return "Icons/TabBar/movies"
+                case .profile: return "Icons/TabBar/profile"
+                }
+            }
+        }
+    }
+}
+
 // MARK: - Constants
 
 private extension TabBarView {
@@ -73,18 +106,6 @@ private extension TabBarView {
         static let iconSize = CGSize(width: 32, height: 32)
         static let horizontalPadding: CGFloat = 42
         static let numberOfItems: Int = 3
-    }
-}
-
-// MARK: - Extensions
-
-extension STTabBarButton {
-    var imageName: String {
-        switch self {
-        case .shows: return "Icons/TabBar/tv"
-        case .movies: return "Icons/TabBar/movies"
-        case .profile: return "Icons/TabBar/profile"
-        }
     }
 }
 

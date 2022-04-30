@@ -36,4 +36,8 @@ final class ShowDetailsViewInteractor: ObservableObject {
             }
         }
     }
+    
+    func didTapLikeButton() {
+        appState.info.value.showDetails[showID]?.isLiked.toggle()
+    }
 }
