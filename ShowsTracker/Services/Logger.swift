@@ -14,22 +14,29 @@ struct Logger {
         print("✉️ \(message)")
     }
     
-    static func log(warning: String, response: Response? = nil) {
+    static func log(warning: String, response: Response? = nil, error: Error? = nil, file: String = #file, line: Int = #line) {
         printSeparator()
         defer { printSeparator() }
         
         print("⚠️ \(warning)")
-        printInfo(from: response)
+        if let response = response {
+            printInfo(from: response)
+        } else if let error = error as? MoyaError {
+            printInfo(from: error.response)
+        }
+        printInfo(from: error, file: file, line: line)
     }
     
     static func log(error: Error, response: Response? = nil, file: String = #file, line: Int = #line) {
         printSeparator()
         defer { printSeparator() }
         
-        print("❌ Error - \(String(describing: error))")
-        print("ℹ️ File - \(file)")
-        print("ℹ️ Line - \(line)")
-        printInfo(from: response)
+        printInfo(from: error, file: file, line: line)
+        if let response = response {
+            printInfo(from: response)
+        } else if let error = error as? MoyaError {
+            printInfo(from: error.response)
+        }
     }
     
     static func log<T>(response: Response, parsedTo type: T) {
@@ -68,6 +75,14 @@ fileprivate extension Logger {
                 print("        ➡️ \(key): \(value)")
             }
         }
+    }
+    
+    static func printInfo(from error: Error?, file: String, line: Int) {
+        guard let error = error else { return }
+        
+        print("❌ Error - \(String(describing: error))")
+        print("ℹ️ File - \(file)")
+        print("ℹ️ Line - \(line)")
     }
     
     static func printSeparator() {

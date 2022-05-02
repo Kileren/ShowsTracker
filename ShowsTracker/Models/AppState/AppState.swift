@@ -12,10 +12,12 @@ class AppState: ObservableObject {
     
     let info: Store<Info>
     let routing: Store<Routing>
+    let service: Store<Service>
     
     init() {
-        info = Store<Info>(Info())
-        routing = Store<Routing>(Routing())
+        info = Store(Info())
+        routing = Store(Routing())
+        service = Store(Service())
     }
 }
 
@@ -29,6 +31,10 @@ extension AppState {
     struct Routing: Equatable {
         var shows: ShowsView.Routing = .init()
         var showDetails: ShowDetailsView.Routing = .init()
+    }
+    
+    struct Service: Equatable {
+        var shownDetailsIDs: Set<Int> = []
     }
 }
 

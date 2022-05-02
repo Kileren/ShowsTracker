@@ -10,6 +10,8 @@ import Moya
 
 enum TVTarget {
     case details(id: Int)
+    case seasonDetails(id: Int, season: Int)
+    case similar(id: Int)
 }
 
 extension TVTarget: TargetType {
@@ -19,6 +21,10 @@ extension TVTarget: TargetType {
         switch self {
         case .details(let id):
             return "\(id)"
+        case .seasonDetails(let id, let season):
+            return "\(id)/season/\(season)"
+        case .similar(let id):
+            return "\(id)/recommendations"
         }
     }
     
@@ -28,8 +34,10 @@ extension TVTarget: TargetType {
     
     var task: Task {
         switch self {
-        case .details:
+        case .details, .seasonDetails:
             return .requestParameters(parameters: [:].withApiKey, encoding: URLEncoding.queryString)
+        case .similar(let id):
+            return .requestParameters(parameters: ["tv_id": id].withApiKey, encoding: URLEncoding.queryString)
         }
     }
     
@@ -45,6 +53,23 @@ extension TVTarget: TargetType {
                     return try JSONReader.data(forResource: "TheMandalorianDetailed")
                 }
                 return try JSONReader.data(forResource: "TheWitcherDetailed")
+            } catch {
+                Logger.log(error: error)
+                return Data()
+            }
+        case .seasonDetails(_, let season):
+            do {
+                if season == 1 {
+                    return try JSONReader.data(forResource: "TVSeasons_Details_s1")
+                }
+                return try JSONReader.data(forResource: "TVSeasons_Details_s2")
+            } catch {
+                Logger.log(error: error)
+                return Data()
+            }
+        case .similar:
+            do {
+                return try JSONReader.data(forResource: "Similar_Witcher")
             } catch {
                 Logger.log(error: error)
                 return Data()

@@ -12,9 +12,10 @@ import Resolver
 struct ShowDetailsView: View {
     
     @InjectedObject var appState: AppState
-    @InjectedObject var interactor: ShowDetailsViewInteractor
+    @Injected var interactor: ShowDetailsViewInteractor
     
     @State private var model: Model = Model()
+    @State private var detailsShown: Bool = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -37,6 +38,9 @@ struct ShowDetailsView: View {
         .onAppear {
             interactor.viewAppeared()
         }
+        .sheet(isPresented: $detailsShown) {
+            ShowDetailsView()
+        }
         .onReceive(modelUpdates) { self.model = $0 }
     }
     
@@ -58,16 +62,20 @@ struct ShowDetailsView: View {
     }
     
     var mainInfoView: some View {
-        VStack(spacing: 0) {
-            Text(model.name)
-                .font(.medium28)
-                .foregroundColor(.text100)
-            spacer(height: 4)
-            Text(model.broadcastYears)
-                .font(.regular15)
-                .foregroundColor(.text60)
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                Spacer()
+                VStack(spacing: 4) {
+                    Text(model.name)
+                        .font(.medium28)
+                        .foregroundColor(.text100)
+                    Text(model.broadcastYears)
+                        .font(.regular15)
+                        .foregroundColor(.text60)
+                }
+                Spacer()
+            }
             spacer(height: 22)
-            
             HStack {
                 Spacer()
                 ratingView
@@ -77,6 +85,28 @@ struct ShowDetailsView: View {
                 likeView
                 Spacer()
             }
+            spacer(height: 32)
+            Group {
+                infoTabs
+                spacer(height: 16)
+                
+                switch model.selectedInfoTab {
+                case .episodes where model.episodesInfo.numberOfSeasons > 0: episodesInfo
+                case .episodes:
+                    Rectangle().foregroundColor(.clear)
+                case .details:
+                    detailsInfo
+                case .similar where !model.similarShowsInfo.isLoaded:
+                    Text("Loading")
+                case .similar:
+                    GeometryReader { geometry in
+                        ScrollView(showsIndicators: false) {
+                            similarInfo(geometry: geometry)
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal, 24)
         }
     }
     
@@ -153,6 +183,152 @@ struct ShowDetailsView: View {
             .ignoresSafeArea(edges: .top)
     }
     
+    var infoTabs: some View {
+        let tabs: [Model.InfoTab] = [.episodes, .details, .similar]
+        return HStack(alignment: .top, spacing: 20) {
+            ForEach(tabs, id: \.self) { tab in
+                infoTab(for: tab)
+                    .fixedSize(horizontal: true, vertical: false)
+            }
+            Spacer()
+        }
+        .frame(height: 32)
+    }
+    
+    func infoTab(for tab: Model.InfoTab) -> some View {
+        Button {
+            if model.selectedInfoTab != tab {
+                interactor.didChangeInfoTab(to: tab)
+            }
+            if tab == .similar, !model.similarShowsInfo.isLoaded {
+                interactor.loadSimilarShows()
+            }
+        } label: {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(tab.rawValue)
+                    .font(.medium20)
+                    .foregroundColor(model.selectedInfoTab == tab ? .bay : .text60)
+                
+                if model.selectedInfoTab == tab {
+                    RoundedRectangle(cornerRadius: 1)
+                        .size(width: 32, height: 2)
+                        .foregroundColor(.bay)
+                }
+            }
+        }
+    }
+    
+    var episodesInfo: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(spacing: 8) {
+                Text("Сезон:")
+                    .font(.regular17)
+                    .foregroundColor(.text60)
+                
+                ForEach(1...model.episodesInfo.numberOfSeasons, id: \.self) { season in
+                    Button {
+                        interactor.didSelectSeason(season)
+                    } label: {
+                        Text("\(season)")
+                            .font(.regular17)
+                            .foregroundColor(model.episodesInfo.selectedSeason == season ? .bay : .text60)
+                    }
+                }
+            }
+            
+            ScrollView(showsIndicators: false) {
+                HStack {
+                    VStack(alignment: .leading, spacing: 16) {
+                        ForEach(model.episodesInfo.episodesPerSeasons[model.episodesInfo.selectedSeason - 1], id: \.self) {
+                            episodeInfo(episode: $0)
+                        }
+                    }
+                    Spacer()
+                }
+            }
+        }
+    }
+    
+    func episodeInfo(episode: Model.EpisodesInfo.Episode) -> some View {
+        HStack(spacing: 24) {
+            Text("\(episode.episodeNumber)")
+                .font(.medium32)
+                .foregroundColor(.text40)
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text(episode.name)
+                    .font(.medium17)
+                    .foregroundColor(.text100)
+                    .lineLimit(1)
+                Text(episode.date)
+                    .font(.regular13)
+                    .foregroundColor(.text40)
+            }
+        }
+    }
+    
+    var detailsInfo: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            tagsView
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Описание")
+                    .font(.semibold17)
+                    .foregroundColor(.text100)
+                ScrollView(.vertical, showsIndicators: false) {
+                    Text(model.detailsInfo.overview)
+                        .font(.regular17)
+                        .foregroundColor(.text100)
+                }
+            }
+        }
+    }
+    
+    var tagsView: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 26) {
+                ForEach(model.detailsInfo.tags, id: \.self) {
+                    tagView(for: $0)
+                }
+                Spacer()
+            }
+            .padding(.horizontal, 8)
+        }
+    }
+    
+    func tagView(for tag: String) -> some View {
+        Text(tag)
+            .font(.regular13)
+            .foregroundColor(.text100)
+            .background {
+                RoundedRectangle(cornerRadius: 8)
+                    .foregroundColor(.separators)
+                    .padding(.vertical, -5)
+                    .padding(.horizontal, -8)
+            }
+            .frame(height: 24)
+    }
+    
+    func similarInfo(geometry: GeometryProxy) -> some View {
+        let spacing: CGFloat = 14
+        let gridWidth = (geometry.size.width - 2 * spacing) / 3
+        return LazyVGrid(
+            columns: [
+                GridItem(.fixed(gridWidth), spacing: spacing, alignment: .topLeading),
+                GridItem(.fixed(gridWidth), spacing: spacing, alignment: .topLeading),
+                GridItem(.fixed(gridWidth), spacing: spacing, alignment: .topLeading)
+            ],
+            alignment: .leading,
+            spacing: 16,
+            pinnedViews: []) {
+                ForEach(model.similarShowsInfo.models, id: \.self) { model in
+                    SimilarShowView(model: model) { showID in
+                        appState.routing.value.showDetails.showID = showID
+                        detailsShown = true
+                    }
+                }
+            }
+    }
+    
     func spacer(height: CGFloat) -> some View {
         Rectangle()
             .frame(height: height)
@@ -165,15 +341,11 @@ struct ShowDetailsView: View {
 extension ShowDetailsView {
     
     var modelUpdates: AnyPublisher<Model, Never> {
-        let showID = appState.routing.value.showDetails.showID
+        let showID = interactor.showID == 0 ? appState.routing.value.showDetails.showID : interactor.showID
         if appState.info[\.showDetails[showID]] == nil {
             appState.info[\.showDetails[showID]] = .init()
         }
         return appState.info.updates(for: \.showDetails[showID])
-    }
-    
-    var routingUpdates: AnyPublisher<Routing, Never> {
-        appState.routing.updates(for: \.showDetails)
     }
 }
 
@@ -197,6 +369,46 @@ extension ShowDetailsView {
         var voteCount = ""
         var inProduction = true
         var isLiked = true
+        var selectedInfoTab: InfoTab = .episodes
+        var detailsInfo = DetailsInfo()
+        var episodesInfo = EpisodesInfo()
+        var similarShowsInfo = SimilarShowsInfo()
+        
+        enum InfoTab: String {
+            case episodes
+            case details
+            case similar
+            
+            var rawValue: String {
+                switch self {
+                case .episodes: return "Эпизоды"
+                case .details: return "Детали"
+                case .similar: return "Похожее"
+                }
+            }
+        }
+        
+        struct DetailsInfo: Equatable {
+            var tags: [String] = []
+            var overview: String = ""
+        }
+        
+        struct EpisodesInfo: Equatable {
+            var numberOfSeasons: Int = 0
+            var selectedSeason = 0
+            var episodesPerSeasons: [[Episode]] = []
+            
+            struct Episode: Equatable, Hashable {
+                var episodeNumber = 0
+                var name = ""
+                var date = ""
+            }
+        }
+        
+        struct SimilarShowsInfo: Equatable {
+            var isLoaded = false
+            var models: [SimilarShowView.Model] = []
+        }
     }
 }
 
@@ -205,10 +417,7 @@ struct ShowDetailsView_Previews: PreviewProvider {
         Resolver.registerPreview()
         Resolver.registerViewPreview()
         
-        let view = ShowDetailsView()
-        view.appState.routing.value.showDetails.showID = 71912
-        view.interactor.viewAppeared()
-        return view
+        return ShowDetailsView()
     }
 }
 

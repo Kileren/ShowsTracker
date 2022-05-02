@@ -36,7 +36,9 @@ final class ShowsViewInteractor: ObservableObject {
                     .init(id: 82856, posterPath: "/sWgBv7LV2PRoQgkxwlibdGXKz1S.jpg")
                 ])
             
-            appState.info[\.shows] = model
+            DispatchQueue.main.async { [weak self] in
+                self?.appState.info[\.shows] = model
+            }
             
             // TODO: Remove it later
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
