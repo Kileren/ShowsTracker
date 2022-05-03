@@ -44,7 +44,11 @@ final class ShowDetailsViewInteractor {
                         selectedSeason: min(1, show.numberOfSeasons ?? 0),
                         episodesPerSeasons: episodesInfo)
                 )
-                appState.info[\.showDetails[showID]] = model
+                
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.appState.info[\.showDetails[self.showID]] = model
+                }
             } catch {
                 Logger.log(warning: "Detailed show not loaded and not handled")
             }

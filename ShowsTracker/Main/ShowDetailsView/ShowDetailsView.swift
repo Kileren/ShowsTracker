@@ -31,8 +31,7 @@ struct ShowDetailsView: View {
                     }
                 }
             } else {
-                Rectangle()
-                    .foregroundColor(.white100)
+                ShowDetailsSkeletonView()
             }
         }
         .onAppear {

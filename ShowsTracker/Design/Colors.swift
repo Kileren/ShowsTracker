@@ -42,4 +42,5 @@ extension Color {
 extension Gradient {
     static let skeletonBackground = Gradient(colors: [Color(red: 72 / 255, green: 85 / 255, blue: 99 / 255),
                                                       Color(red: 41 / 255, green: 50 / 255, blue: 60 / 255)])
+    static let darkBackground = Gradient(colors: [Color(#colorLiteral(red: 0.2823529412, green: 0.3333333333, blue: 0.3882352941, alpha: 1)), Color(#colorLiteral(red: 0.1607843137, green: 0.1960784314, blue: 0.2352941176, alpha: 1))])
 }
