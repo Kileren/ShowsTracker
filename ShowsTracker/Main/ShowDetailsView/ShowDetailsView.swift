@@ -26,7 +26,7 @@ struct ShowDetailsView: View {
                     
                     VStack(spacing: 0) {
                         imageView(geometry: geometry)
-                        spacer(height: 16)
+                        spacer(height: 12)
                         mainInfoView
                     }
                 }
@@ -50,13 +50,13 @@ struct ShowDetailsView: View {
                           corners: [.topLeft, .topRight])
             .foregroundColor(.white100)
             .ignoresSafeArea(edges: .bottom)
-            .padding(.top, geometry.size.width * 0.62 + 8)
+            .padding(.top, geometry.size.width * 0.42 + 8)
     }
     
     func imageView(geometry: GeometryProxy) -> some View {
         LoadableImageView(path: model.posterPath, width: 500)
-            .frame(width: geometry.size.width * 0.4,
-                   height: geometry.size.width * 0.62)
+            .frame(width: geometry.size.width * 0.3,
+                   height: geometry.size.width * 0.45)
             .cornerRadius(DesignConst.normalCornerRadius)
             .padding(.top, 40)
     }
@@ -75,7 +75,7 @@ struct ShowDetailsView: View {
                 }
                 Spacer()
             }
-            spacer(height: 22)
+            spacer(height: 16)
             HStack {
                 Spacer()
                 ratingView
@@ -85,7 +85,7 @@ struct ShowDetailsView: View {
                 likeView
                 Spacer()
             }
-            spacer(height: 32)
+            spacer(height: 24)
             Group {
                 infoTabs
                 spacer(height: 16)
