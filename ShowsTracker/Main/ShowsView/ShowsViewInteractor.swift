@@ -12,8 +12,9 @@ import Resolver
 
 final class ShowsViewInteractor: ObservableObject {
     
-    private var appState: AppState
-    @Injected var imageService: IImageService
+    private let appState: AppState
+    @Injected private var imageService: IImageService
+    @Injected private var tvService: ITVService
     
     init(appState: AppState) {
         self.appState = appState
@@ -24,30 +25,27 @@ final class ShowsViewInteractor: ObservableObject {
             let witcherImage = try await imageService.loadImage(path: "/7vjaCdMw15FEbXyLQTVa04URsPm.jpg", width: 500).wrapInImage()
             let mandalorianImage = try await imageService.loadImage(path: "/sWgBv7LV2PRoQgkxwlibdGXKz1S.jpg", width: 500).wrapInImage()
             
-            let model = ShowsView.Model(
-                isUserShowsLoaded: false,
+            var model = ShowsView.Model(
+                isUserShowsLoaded: true,
                 isPopularShowsLoaded: false,
                 userShows: [
                     .init(id: 71912, posterPath: "/7vjaCdMw15FEbXyLQTVa04URsPm.jpg", image: witcherImage),
                     .init(id: 82856, posterPath: "/sWgBv7LV2PRoQgkxwlibdGXKz1S.jpg", image: mandalorianImage)
                 ],
-                popularShows: [
-                    .init(id: 71912, posterPath: "/7vjaCdMw15FEbXyLQTVa04URsPm.jpg"),
-                    .init(id: 82856, posterPath: "/sWgBv7LV2PRoQgkxwlibdGXKz1S.jpg")
-                ])
+                popularShows: [])
             
-            DispatchQueue.main.async { [weak self] in
-                self?.appState.info[\.shows] = model
-            }
+            await setModel(model: model)
             
-            // TODO: Remove it later
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.appState.info[\.shows.isUserShowsLoaded] = true
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    self.appState.info[\.shows.isPopularShowsLoaded] = true
-                }
-            }
+            let popularShows = try await tvService.getPopular()
+            model.popularShows = popularShows.map { .init(id: $0.id, posterPath: $0.posterPath ?? "") }
+            model.isPopularShowsLoaded = true
+            
+            await setModel(model: model)
         }
+    }
+    
+    @MainActor
+    func setModel(model: ShowsView.Model) {
+        appState.info[\.shows] = model
     }
 }

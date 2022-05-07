@@ -12,6 +12,7 @@ enum TVTarget {
     case details(id: Int)
     case seasonDetails(id: Int, season: Int)
     case similar(id: Int)
+    case popular
 }
 
 extension TVTarget: TargetType {
@@ -25,6 +26,8 @@ extension TVTarget: TargetType {
             return "\(id)/season/\(season)"
         case .similar(let id):
             return "\(id)/recommendations"
+        case .popular:
+            return "popular"
         }
     }
     
@@ -34,7 +37,7 @@ extension TVTarget: TargetType {
     
     var task: Task {
         switch self {
-        case .details, .seasonDetails:
+        case .details, .seasonDetails, .popular:
             return .requestParameters(parameters: [:].withApiKey, encoding: URLEncoding.queryString)
         case .similar(let id):
             return .requestParameters(parameters: ["tv_id": id].withApiKey, encoding: URLEncoding.queryString)
@@ -46,34 +49,26 @@ extension TVTarget: TargetType {
     }
     
     var sampleData: Data {
-        switch self {
-        case .details(let id):
-            do {
+        do {
+            switch self {
+            case .details(let id):
                 if id == 82856 {
                     return try JSONReader.data(forResource: "TheMandalorianDetailed")
                 }
                 return try JSONReader.data(forResource: "TheWitcherDetailed")
-            } catch {
-                Logger.log(error: error)
-                return Data()
-            }
-        case .seasonDetails(_, let season):
-            do {
+            case .seasonDetails(_, let season):
                 if season == 1 {
                     return try JSONReader.data(forResource: "TVSeasons_Details_s1")
                 }
                 return try JSONReader.data(forResource: "TVSeasons_Details_s2")
-            } catch {
-                Logger.log(error: error)
-                return Data()
-            }
-        case .similar:
-            do {
+            case .similar:
                 return try JSONReader.data(forResource: "Similar_Witcher")
-            } catch {
-                Logger.log(error: error)
-                return Data()
+            case .popular:
+                return try JSONReader.data(forResource: "tv_popular")
             }
+        } catch {
+            Logger.log(error: error)
+            return Data()
         }
     }
 }

@@ -12,6 +12,7 @@ protocol ITVService {
     func getDetails(for showId: Int) async throws -> DetailedShow
     func getSeasonDetails(for showId: Int, season: Int) async throws -> SeasonDetails
     func getSimilar(for showId: Int) async throws -> [PlainShow]
+    func getPopular() async throws -> [PlainShow]
 }
 
 final class TVService {
@@ -34,6 +35,11 @@ extension TVService: ITVService {
     
     func getSimilar(for showId: Int) async throws -> [PlainShow] {
         let result = await provider.request(target: .similar(id: showId))
+        return try parse(result: result, to: [PlainShow].self, atKeyPath: "results")
+    }
+    
+    func getPopular() async throws -> [PlainShow] {
+        let result = await provider.request(target: .popular)
         return try parse(result: result, to: [PlainShow].self, atKeyPath: "results")
     }
 }

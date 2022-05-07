@@ -17,6 +17,9 @@ struct ShowDetailsView: View {
     @State private var model: Model = Model()
     @State private var detailsShown: Bool = false
     
+    @State private var episodeDetailsShown: Bool = false
+    @State private var episodeDetails = ""
+    
     var body: some View {
         GeometryReader { geometry in
             if model.isLoaded {
@@ -41,6 +44,23 @@ struct ShowDetailsView: View {
             ShowDetailsView()
         }
         .onReceive(modelUpdates) { self.model = $0 }
+        .overlay {
+            if episodeDetailsShown {
+                VStack(spacing: 16) {
+                    Text("Описание")
+                        .font(.semibold17)
+                        .foregroundColor(.text100)
+                    
+                    Text(episodeDetails)
+                        .font(.regular17)
+                        .foregroundColor(.text100)
+                }
+                .background(
+                    RoundedRectangle(cornerRadius: DesignConst.normalCornerRadius)
+                        .padding(.all, -16)
+                )
+            }
+        }
     }
     
     func overlayView(geometry: GeometryProxy) -> some View {
@@ -264,6 +284,10 @@ struct ShowDetailsView: View {
                     .foregroundColor(.text40)
             }
         }
+        .onTapGesture {
+            episodeDetails = episode.overview
+            episodeDetailsShown = true
+        }
     }
     
     var detailsInfo: some View {
@@ -401,6 +425,7 @@ extension ShowDetailsView {
                 var episodeNumber = 0
                 var name = ""
                 var date = ""
+                var overview = ""
             }
         }
         

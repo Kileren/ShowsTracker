@@ -31,6 +31,7 @@
 		8C156D1C28202D010049DDD1 /* STDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156D1B28202D010049DDD1 /* STDateFormatter.swift */; };
 		8C156D1E28202D0F0049DDD1 /* STNumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156D1D28202D0F0049DDD1 /* STNumberFormatter.swift */; };
 		8C156D2228210F640049DDD1 /* ShowDetailsSkeletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156D2128210F640049DDD1 /* ShowDetailsSkeletonView.swift */; };
+		8C156D242826F78B0049DDD1 /* tv_popular.json in Resources */ = {isa = PBXBuildFile; fileRef = 8C156D232826F75B0049DDD1 /* tv_popular.json */; };
 		8C28960F25C5D0AD00C2AC37 /* DetailedShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C28960E25C5D0AD00C2AC37 /* DetailedShow.swift */; };
 		8C3994762620DBCE005BD7DB /* PlainShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3994752620DBCE005BD7DB /* PlainShow.swift */; };
 		8C3994782620DCCD005BD7DB /* Data+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3994772620DCCD005BD7DB /* Data+Image.swift */; };
@@ -96,6 +97,7 @@
 		8C156D1B28202D010049DDD1 /* STDateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STDateFormatter.swift; sourceTree = "<group>"; };
 		8C156D1D28202D0F0049DDD1 /* STNumberFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STNumberFormatter.swift; sourceTree = "<group>"; };
 		8C156D2128210F640049DDD1 /* ShowDetailsSkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowDetailsSkeletonView.swift; sourceTree = "<group>"; };
+		8C156D232826F75B0049DDD1 /* tv_popular.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = tv_popular.json; sourceTree = "<group>"; };
 		8C28960E25C5D0AD00C2AC37 /* DetailedShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedShow.swift; sourceTree = "<group>"; };
 		8C3994752620DBCE005BD7DB /* PlainShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainShow.swift; sourceTree = "<group>"; };
 		8C3994772620DCCD005BD7DB /* Data+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Image.swift"; sourceTree = "<group>"; };
@@ -247,6 +249,7 @@
 		8C156D10281FF0270049DDD1 /* TV */ = {
 			isa = PBXGroup;
 			children = (
+				8C156D232826F75B0049DDD1 /* tv_popular.json */,
 				8C156D13281FF03D0049DDD1 /* Similar_Witcher.json */,
 			);
 			path = TV;
@@ -573,6 +576,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C156D242826F78B0049DDD1 /* tv_popular.json in Resources */,
 				8C156D14281FF05C0049DDD1 /* Similar_Witcher.json in Resources */,
 				8C156CE4280FCEE20049DDD1 /* WitcherSearch.json in Resources */,
 				8C156D0D281FC5430049DDD1 /* TVSeasons_Details_s1.json in Resources */,
