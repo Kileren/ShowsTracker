@@ -17,7 +17,10 @@ struct ShowDetailsView: View {
     @State private var model: Model = Model()
     @State private var detailsShown: Bool = false
     
-    @State private var episodeDetailsShown: Bool = false
+    @AnimatedState(
+        value: false,
+        animation: .easeInOut(duration: 0.25)
+    ) private var episodeDetailsShown: Bool
     @State private var episodeDetails = ""
     
     var body: some View {
@@ -46,19 +49,7 @@ struct ShowDetailsView: View {
         .onReceive(modelUpdates) { self.model = $0 }
         .overlay {
             if episodeDetailsShown {
-                VStack(spacing: 16) {
-                    Text("Описание")
-                        .font(.semibold17)
-                        .foregroundColor(.text100)
-                    
-                    Text(episodeDetails)
-                        .font(.regular17)
-                        .foregroundColor(.text100)
-                }
-                .background(
-                    RoundedRectangle(cornerRadius: DesignConst.normalCornerRadius)
-                        .padding(.all, -16)
-                )
+                episodeDetailsView
             }
         }
     }
@@ -350,6 +341,33 @@ struct ShowDetailsView: View {
                     }
                 }
             }
+    }
+    
+    var episodeDetailsView: some View {
+        ZStack {
+            Color.backgroundDark.opacity(0.7)
+                .onTapGesture {
+                    episodeDetailsShown = false
+                }
+            
+            VStack(spacing: 16) {
+                Text("Описание")
+                    .font(.semibold17)
+                    .foregroundColor(.text100)
+                
+                Text(episodeDetails)
+                    .font(.regular17)
+                    .foregroundColor(.text100)
+                    .padding(.horizontal, 32)
+            }
+            .background(
+                RoundedRectangle(cornerRadius: DesignConst.normalCornerRadius)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, -16)
+                    .foregroundColor(.white100)
+            )
+        }
+        .ignoresSafeArea()
     }
     
     func spacer(height: CGFloat) -> some View {

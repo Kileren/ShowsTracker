@@ -114,7 +114,8 @@ private extension ShowDetailsViewInteractor {
                     name: episode.name ?? "",
                     date: STDateFormatter.format(
                         episode.airDate ?? "",
-                        format: .full))
+                        format: .full),
+                    overview: episode.overview ?? "")
             }
         }
     }
