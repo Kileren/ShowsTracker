@@ -74,7 +74,7 @@ final class ShowDetailsViewInteractor {
                 let similarShowsViewModels = similarShows
                     .filter { !appState.service.value.shownDetailsIDs.contains($0.id) }
                     .map {
-                        SimilarShowView.Model(
+                        ShowView.Model(
                             id: $0.id,
                             posterPath: $0.posterPath ?? "",
                             name: $0.name ?? "",

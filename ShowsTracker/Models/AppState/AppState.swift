@@ -26,6 +26,7 @@ extension AppState {
         var tabBar: TabBarView.Model = .init()
         var shows: ShowsView.Model = .init()
         var showDetails: [Int: ShowDetailsView.Model] = [:]
+        var showsList: ShowsListView.Model = .init()
     }
     
     struct Routing: Equatable {

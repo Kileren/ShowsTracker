@@ -9,5 +9,4 @@ import SwiftUI
 
 enum Images {
     static let emptyList = Image("Icons/EmptyList")
-    static let star = Image("Shared/Star")
 }

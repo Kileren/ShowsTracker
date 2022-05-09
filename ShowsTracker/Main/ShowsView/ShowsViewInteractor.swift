@@ -34,18 +34,18 @@ final class ShowsViewInteractor: ObservableObject {
                 ],
                 popularShows: [])
             
-            await setModel(model: model)
+            await setModel(model)
             
             let popularShows = try await tvService.getPopular()
             model.popularShows = popularShows.map { .init(id: $0.id, posterPath: $0.posterPath ?? "") }
             model.isPopularShowsLoaded = true
             
-            await setModel(model: model)
+            await setModel(model)
         }
     }
     
     @MainActor
-    func setModel(model: ShowsView.Model) {
+    func setModel(_ model: ShowsView.Model) {
         appState.info[\.shows] = model
     }
 }

@@ -65,6 +65,9 @@ struct ShowsView: View {
         .sheet(isPresented: routingBinding.detailsShown) {
             ShowDetailsView()
         }
+        .sheet(isPresented: routingBinding.showsListShown) {
+            ShowsListView()
+        }
         .onReceive(modelUpdate) { model = $0 }
         .onReceive(routingUpdates) { routing = $0 }
     }
@@ -257,9 +260,13 @@ struct ShowsView: View {
                     .font(.medium28)
                     .foregroundColor(.text100)
                 Spacer()
-                Text(Strings.more)
-                    .font(.medium13)
-                    .foregroundColor(.bay)
+                Button {
+                    appState.routing[\.shows.showsListShown] = true
+                } label: {
+                    Text(Strings.more)
+                        .font(.medium13)
+                        .foregroundColor(.bay)
+                }
             }
             
             popularShows(geometry: geometry, content: { width, height in
@@ -337,6 +344,7 @@ extension ShowsView {
 extension ShowsView {
     struct Routing: Equatable {
         var detailsShown = false
+        var showsListShown = false
     }
 }
 

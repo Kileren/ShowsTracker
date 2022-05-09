@@ -2,91 +2,94 @@
 //  ShowView.swift
 //  ShowsTracker
 //
-//  Created by s.bogachev on 06.02.2021.
+//  Created by Sergey Bogachev on 02.05.2022.
 //
 
 import SwiftUI
 
 struct ShowView: View {
     
-    var image: Image
-    var title: String
-    var rating: Double?
+    private let model: Model
+    private let tapAction: (Int) -> Void
     
-    @State private var isTextTruncated: Bool = false
+    @State private var isTextTruncated = false
+    
+    init(model: Model, tapAction: @escaping (Int) -> Void) {
+        self.model = model
+        self.tapAction = tapAction
+    }
     
     var body: some View {
-        GeometryReader { geometry in
-            VStack(alignment: .trailing, spacing: 4) {
-                imageView(geometry: geometry)
-                titleView(geometry: geometry)
-            }
-        }
-    }
-    
-    private func imageView(geometry: GeometryProxy) -> some View {
-        ZStack(alignment: Alignment(horizontal: .trailing, vertical: .bottom)) {
-            image
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .cornerRadius(DesignConst.smallCornerRadius)
-                .frame(width: geometry.size.width,
-                       height: geometry.size.width * 1.5)
+        VStack(spacing: 4) {
+            LoadableImageView(path: model.posterPath)
+                .mask(RoundedRectangle(cornerRadius: 8))
+                .overlay(
+                    ZStack(alignment: .bottomTrailing) {
+                        LinearGradient(
+                            gradient: Gradient(colors: [.black, .clear]),
+                            startPoint: .bottom,
+                            endPoint: .center)
+                            .mask(RoundedRectangle(cornerRadius: 8))
+                        
+                        ZStack {
+                            Rectangle()
+                                .frame(width: 42, height: 18)
+                                .cornerRadius(8, corners: [.topLeft, .bottomRight])
+                                .foregroundColor(.text100)
+                            
+                            HStack(spacing: 4) {
+                                Image(systemName: "star.fill")
+                                    .resizable()
+                                    .frame(width: 10, height: 10)
+                                    .foregroundColor(.yellowSoft)
+                                
+                                Text(model.vote)
+                                    .font(.medium12)
+                                    .foregroundColor(.white100)
+                            }
+                        }
+                    }
+                )
             
-            if let rating = self.rating {
-                ratingView(rating: rating)
-            }
-        }
-    }
-    
-    private func ratingView(rating: Double) -> some View {
-        Rectangle()
-            .cornerRadius(8, corners: [.topLeft, .bottomRight])
-            .frame(width: 42, height: 18)
-            .foregroundColor(.text100)
-            .overlay(
-                HStack(spacing: 4) {
-                    Images.star
-                        .resizable()
-                        .frame(width: 10, height: 10)
-                    
-                    Text(rating.description)
-                        .foregroundColor(.white100)
-                        .font(.medium12)
-                    
-                    Spacer(minLength: 0)
+            ZStack(alignment: .bottom) {
+                TruncableText(text: Text(model.name), lineLimit: 2) {
+                    isTextTruncated = $0
                 }
-                .padding(.leading, 4)
-            )
-    }
-    
-    private func titleView(geometry: GeometryProxy) -> some View {
-        ZStack(alignment: Alignment(horizontal: .center, vertical: .bottom)) {
-            TruncableText(text: Text(title), lineLimit: 2) {
-                isTextTruncated = $0
-            }
-            .frame(width: geometry.size.width - 2,
-                   alignment: .topLeading)
-            .foregroundColor(.text100)
-            .font(.medium12)
-            
-            if isTextTruncated {
-                Rectangle()
-                    .frame(width: geometry.size.width  - 2,
-                           height: 12,
-                           alignment: .center)
-                    .foregroundColor(.clear)
-                    .background(LinearGradient(gradient: Gradient(colors: [.white60, .white]), startPoint: .leading, endPoint: .trailing))
+                .font(.medium12)
+                .foregroundColor(.text100)
+                .multilineTextAlignment(.center)
+                .frame(width: 96)
+                
+                if isTextTruncated {
+                    Rectangle()
+                        .frame(width: 96, height: 12, alignment: .center)
+                        .foregroundColor(.clear)
+                        .background(LinearGradient(gradient: Gradient(colors: [.white40, .white60, .white]), startPoint: .leading, endPoint: .trailing))
+                }
             }
         }
+        .onTapGesture {
+            tapAction(model.id)
+        }
+    }
+}
+
+// MARK: - Model
+
+extension ShowView {
+    struct Model: Equatable, Hashable {
+        var id: Int = 0
+        var posterPath: String = ""
+        var name: String = ""
+        var vote: String = ""
     }
 }
 
 struct ShowView_Previews: PreviewProvider {
     static var previews: some View {
-        ShowView(image: Image("TheWitcher"),
-                 title: "Леденящие душу приключения",
-                 rating: 7.8)
-            .frame(width: 100, height: 100 * 1.85)
+        ShowView(model: .init(
+            posterPath: "/7vjaCdMw15FEbXyLQTVa04URsPm.jpg",
+            name: "Леденящие душу приключения Сабрины",
+            vote: "8.2")) { _ in }
     }
 }

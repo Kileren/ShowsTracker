@@ -335,7 +335,7 @@ struct ShowDetailsView: View {
             spacing: 16,
             pinnedViews: []) {
                 ForEach(model.similarShowsInfo.models, id: \.self) { model in
-                    SimilarShowView(model: model) { showID in
+                    ShowView(model: model) { showID in
                         appState.routing.value.showDetails.showID = showID
                         detailsShown = true
                     }
@@ -449,7 +449,7 @@ extension ShowDetailsView {
         
         struct SimilarShowsInfo: Equatable {
             var isLoaded = false
-            var models: [SimilarShowView.Model] = []
+            var models: [ShowView.Model] = []
         }
     }
 }

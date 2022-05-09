@@ -11,5 +11,6 @@ extension Resolver {
     static func registerMainDependencies() {
         register { ShowsViewInteractor(appState: resolve()) }
         register { ShowDetailsViewInteractor() }
+        register { ShowsListViewInteractor() }
     }
 }
