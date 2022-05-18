@@ -40,13 +40,9 @@ struct ShowDetailsView: View {
                 ShowDetailsSkeletonView()
             }
         }
-        .onAppear {
-            interactor.viewAppeared()
-        }
-        .sheet(isPresented: $detailsShown) {
-            ShowDetailsView()
-        }
+        .onAppear { interactor.viewAppeared() }
         .onReceive(modelUpdates) { self.model = $0 }
+        .sheet(isPresented: $detailsShown) { ShowDetailsView() }
         .overlay {
             if episodeDetailsShown {
                 episodeDetailsView

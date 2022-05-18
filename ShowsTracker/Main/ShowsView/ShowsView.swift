@@ -59,17 +59,11 @@ struct ShowsView: View {
         }
         .background(Color.backgroundLight)
         .edgesIgnoringSafeArea(.all)
-        .onAppear {
-            interactor.viewAppeared()
-        }
-        .sheet(isPresented: routingBinding.detailsShown) {
-            ShowDetailsView()
-        }
-        .sheet(isPresented: routingBinding.showsListShown) {
-            ShowsListView()
-        }
+        .onAppear { interactor.viewAppeared() }
         .onReceive(modelUpdate) { model = $0 }
         .onReceive(routingUpdates) { routing = $0 }
+        .sheet(isPresented: routingBinding.detailsShown) { ShowDetailsView() }
+        .sheet(isPresented: routingBinding.showsListShown) { ShowsListView() }
     }
     
     func skeletonLoader(geometry: GeometryProxy) -> some View {

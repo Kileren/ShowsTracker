@@ -12,7 +12,7 @@ enum TVTarget {
     case details(id: Int)
     case seasonDetails(id: Int, season: Int)
     case similar(id: Int)
-    case popular
+    case popular(page: Int)
 }
 
 extension TVTarget: TargetType {
@@ -63,8 +63,11 @@ extension TVTarget: TargetType {
                 return try JSONReader.data(forResource: "TVSeasons_Details_s2")
             case .similar:
                 return try JSONReader.data(forResource: "Similar_Witcher")
-            case .popular:
-                return try JSONReader.data(forResource: "tv_popular")
+            case .popular(let page):
+                if page == 1 {
+                    return try JSONReader.data(forResource: "tv_popular_1")
+                }
+                return try JSONReader.data(forResource: "tv_popular_2")
             }
         } catch {
             Logger.log(error: error)

@@ -13,12 +13,16 @@ protocol ITVService {
     func getSeasonDetails(for showId: Int, season: Int) async throws -> SeasonDetails
     func getSimilar(for showId: Int) async throws -> [PlainShow]
     func getPopular() async throws -> [PlainShow]
+    func getMorePopular() async throws -> [PlainShow]
 }
 
 final class TVService {
     
-    private let provider = MoyaProvider<TVTarget>(stubClosure: { _ in .delayed(seconds: 0) })
+    private let provider = MoyaProvider<TVTarget>(stubClosure: { _ in .delayed(seconds: 1) })
 //    private let provider = MoyaProvider<TVTarget>()
+    
+    private var cachedPopularShows: [PlainShow] = []
+    private var popularShowsPage: Int = 1
 }
 
 extension TVService: ITVService {
@@ -39,8 +43,22 @@ extension TVService: ITVService {
     }
     
     func getPopular() async throws -> [PlainShow] {
-        let result = await provider.request(target: .popular)
-        return try parse(result: result, to: [PlainShow].self, atKeyPath: "results")
+        guard cachedPopularShows.isEmpty else {
+            return cachedPopularShows
+        }
+        return try await getMorePopular()
+    }
+    
+    func getMorePopular() async throws -> [PlainShow] {
+        let result = await provider.request(target: .popular(page: popularShowsPage))
+        do {
+            let shows = try parse(result: result, to: [PlainShow].self, atKeyPath: "results")
+            cachedPopularShows.append(contentsOf: shows)
+            popularShowsPage += 1
+            return shows
+        } catch {
+            throw error
+        }
     }
 }
 

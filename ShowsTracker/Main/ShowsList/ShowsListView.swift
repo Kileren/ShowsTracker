@@ -18,6 +18,8 @@ struct ShowsListView: View {
     @State private var searchedText: String = ""
     @State private var filterActive: Bool = false
     
+    @State private var detailsShown: Bool = false
+    
     var body: some View {
         Group {
             if model.isLoaded {
@@ -46,6 +48,7 @@ struct ShowsListView: View {
         .padding(.top, 28)
         .onAppear { interactor.viewAppeared() }
         .onReceive(modelUpdate) { model = $0 }
+        .sheet(isPresented: $detailsShown) { ShowDetailsView() }
     }
     
     func tabView(for tab: Model.Tab) -> some View {
@@ -121,11 +124,16 @@ struct ShowsListView: View {
             pinnedViews: []) {
                 ForEach(model.popularShows, id: \.self) { model in
                     ShowView(model: model) { showID in
-                        print(showID)
-//                        appState.routing.value.showDetails.showID = showID
-//                        detailsShown = true
+                        appState.routing.value.showDetails.showID = showID
+                        detailsShown = true
                     }
                 }
+                Rectangle()
+                    .frame(width: 0, height: 0)
+                    .foregroundColor(.clear)
+                    .onAppear {
+                        interactor.getMorePopular()
+                    }
             }
     }
 }

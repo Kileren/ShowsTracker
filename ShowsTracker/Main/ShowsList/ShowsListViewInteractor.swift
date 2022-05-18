@@ -39,9 +39,21 @@ final class ShowsListViewInteractor {
         Task {
             do {
                 let shows = try await searchService.searchTVShows(query: query)
-                print(shows)
             } catch {
                 Logger.log(warning: "Shows not loaded after search and not handled")
+            }
+        }
+    }
+    
+    func getMorePopular() {
+        Task {
+            do {
+                let shows = try await tvService.getMorePopular().map {
+                    ShowView.Model(from: $0)
+                }
+                addShowsToPopular(shows)
+            } catch {
+                Logger.log(warning: "Additional popular shows not loaded and not handled")
             }
         }
     }
@@ -53,5 +65,19 @@ private extension ShowsListViewInteractor {
     @MainActor
     func setModel(_ model: ShowsListView.Model) {
         appState.info[\.showsList] = model
+    }
+    
+    @MainActor
+    func addShowsToPopular(_ shows: [ShowView.Model]) {
+        appState.info[\.showsList.popularShows].append(contentsOf: shows)
+    }
+}
+
+private extension ShowView.Model {
+    init(from plainShow: PlainShow) {
+        self.id = plainShow.id
+        self.posterPath = plainShow.posterPath ?? ""
+        self.name = plainShow.name ?? ""
+        self.vote = STNumberFormatter.format(plainShow.vote ?? 0, format: .vote)
     }
 }
