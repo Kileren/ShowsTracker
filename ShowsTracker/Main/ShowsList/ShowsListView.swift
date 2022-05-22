@@ -36,6 +36,9 @@ struct ShowsListView: View {
                     GeometryReader { geometry in
                         ScrollView(showsIndicators: false) {
                             popularShows(geometry: geometry)
+                            STSpacer(height: 16)
+                            ProgressView()
+                            STSpacer(height: 8)
                         }
                     }
                 }

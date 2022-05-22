@@ -36,6 +36,7 @@
 		8C156D2C2828F1500049DDD1 /* ShowsListViewInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156D2B2828F1500049DDD1 /* ShowsListViewInteractor.swift */; };
 		8C156D3028295FEF0049DDD1 /* ShowsListSkeletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156D2F28295FEE0049DDD1 /* ShowsListSkeletonView.swift */; };
 		8C156D322833734C0049DDD1 /* tv_popular_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 8C156D3128336F0A0049DDD1 /* tv_popular_2.json */; };
+		8C156D34283A660C0049DDD1 /* STSpacer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156D33283A660C0049DDD1 /* STSpacer.swift */; };
 		8C28960F25C5D0AD00C2AC37 /* DetailedShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C28960E25C5D0AD00C2AC37 /* DetailedShow.swift */; };
 		8C3994762620DBCE005BD7DB /* PlainShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3994752620DBCE005BD7DB /* PlainShow.swift */; };
 		8C3994782620DCCD005BD7DB /* Data+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3994772620DCCD005BD7DB /* Data+Image.swift */; };
@@ -106,6 +107,7 @@
 		8C156D2B2828F1500049DDD1 /* ShowsListViewInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowsListViewInteractor.swift; sourceTree = "<group>"; };
 		8C156D2F28295FEE0049DDD1 /* ShowsListSkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowsListSkeletonView.swift; sourceTree = "<group>"; };
 		8C156D3128336F0A0049DDD1 /* tv_popular_2.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = tv_popular_2.json; sourceTree = "<group>"; };
+		8C156D33283A660C0049DDD1 /* STSpacer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STSpacer.swift; sourceTree = "<group>"; };
 		8C28960E25C5D0AD00C2AC37 /* DetailedShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedShow.swift; sourceTree = "<group>"; };
 		8C3994752620DBCE005BD7DB /* PlainShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainShow.swift; sourceTree = "<group>"; };
 		8C3994772620DCCD005BD7DB /* Data+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Image.swift"; sourceTree = "<group>"; };
@@ -313,6 +315,7 @@
 				8CE2694025CEE7A20045903F /* ShowView.swift */,
 				8CA0ECB1262AFABF00EB20D9 /* STButton.swift */,
 				8CF5286D26778F5400351915 /* LoadableImageView.swift */,
+				8C156D33283A660C0049DDD1 /* STSpacer.swift */,
 			);
 			path = SharedViews;
 			sourceTree = "<group>";
@@ -650,6 +653,7 @@
 				8C3994762620DBCE005BD7DB /* PlainShow.swift in Sources */,
 				8C496FA725C47DAE000282C5 /* PagingScrollView.swift in Sources */,
 				8CD6C21325C3303D004CF261 /* ShowsViewInteractor.swift in Sources */,
+				8C156D34283A660C0049DDD1 /* STSpacer.swift in Sources */,
 				8C156CEF2811CD370049DDD1 /* Logger.swift in Sources */,
 				8C59A92D2628B1E0000C489C /* Images.swift in Sources */,
 				8C156CEB2811CB5A0049DDD1 /* MoyaProvider+Async.swift in Sources */,
