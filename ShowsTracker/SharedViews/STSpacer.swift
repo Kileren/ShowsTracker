@@ -10,11 +10,19 @@ import SwiftUI
 struct STSpacer: View {
     
     let height: CGFloat
+    let width: CGFloat?
+    let color: Color
+    
+    init(height: CGFloat, width: CGFloat? = 0, color: Color = .clear) {
+        self.height = height
+        self.width = width
+        self.color = color
+    }
     
     var body: some View {
         Rectangle()
-            .frame(width: 0, height: height)
-            .foregroundColor(.clear)
+            .frame(width: width, height: height)
+            .foregroundColor(color)
     }
 }
 

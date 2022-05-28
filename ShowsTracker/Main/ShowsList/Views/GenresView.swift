@@ -14,6 +14,8 @@ struct GenresView: View {
     let tags: [Model.Tag]
     let onClose: () -> Void
     
+    @State private var viewOffset: CGFloat = 0
+    
     var body: some View {
         VStack(spacing: 24) {
             VStack(spacing: 16) {
@@ -22,6 +24,7 @@ struct GenresView: View {
             }
             tagsView
             confirmButton
+            STSpacer(height: 0)
         }
         .padding(.horizontal, 16)
         .animation(.interactiveSpring(), value: selectedTags)
@@ -30,12 +33,15 @@ struct GenresView: View {
                 .foregroundColor(.white)
                 .cornerRadius(16, corners: [.topLeft, .topRight])
                 .ignoresSafeArea(edges: .bottom)
+                .padding(.bottom, min(viewOffset, 0))
         }
+        .offset(y: viewOffset)
+        .gesture(dragGesture)
     }
     
     var notchView: some View {
         VStack(spacing: 0) {
-            STSpacer(height: 8)
+            STSpacer(height: 8, width: nil, color: .white100)
             RoundedRectangle(cornerRadius: 2.5)
                 .frame(width: 50, height: 5)
                 .foregroundColor(.graySimple)
@@ -104,6 +110,27 @@ struct GenresView: View {
                 }
         }
 
+    }
+}
+
+// MARK: - Gestures
+
+private extension GenresView {
+    var dragGesture: some Gesture {
+        DragGesture()
+            .onChanged { value in
+                let height = value.translation.height
+                let divider: CGFloat = height > 0 ? 2 : 5
+                viewOffset = height / divider
+                if viewOffset > 50 {
+                    onClose()
+                }
+            }
+            .onEnded { _ in
+                withAnimation {
+                    viewOffset = 0
+                }
+            }
     }
 }
 
