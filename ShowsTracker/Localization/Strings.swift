@@ -13,6 +13,11 @@ enum Strings {
     static let noTrackingShows = string(forKey: "noTrackingShows")
     static let add = string(forKey: "add")
     
+    static func genrePlural(_ count: Int) -> String {
+        let format = NSLocalizedString("genre_plural", tableName: "Localization", comment: "")
+        return String.localizedStringWithFormat(format, count)
+    }
+    
     static func string(forKey key: String) -> String {
         Bundle.main.localizedString(
             forKey: key,
