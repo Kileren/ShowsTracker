@@ -13,10 +13,12 @@ final class ShowsListViewInteractor {
     @InjectedObject private var appState: AppState
     @Injected private var tvService: ITVService
     @Injected private var searchService: ISearchService
+    @Injected private var genresService: IGenresService
     
     func viewAppeared() {
         Task {
             do {
+                await preloadGenres()
                 let popularShows = try await tvService.getPopular().map {
                     ShowView.Model(
                         id: $0.id,
@@ -56,6 +58,13 @@ final class ShowsListViewInteractor {
                 Logger.log(warning: "Additional popular shows not loaded and not handled")
             }
         }
+    }
+    
+    func preloadGenres() async {
+        guard appState.service.value.genres.isEmpty,
+              let genres = try? await genresService.getTVGenres() else { return }
+        
+        appState.service[\.genres] = genres
     }
 }
 

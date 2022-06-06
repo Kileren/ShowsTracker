@@ -36,6 +36,7 @@ extension AppState {
     
     struct Service: Equatable {
         var shownDetailsIDs: Set<Int> = []
+        var genres: [Genre] = []
     }
 }
 

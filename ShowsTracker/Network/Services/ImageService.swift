@@ -34,7 +34,7 @@ extension ImageService: IImageService {
         
         switch result {
         case .success(let response):
-            if let image = UIImage(data: response.data) {
+            if let image = await image(from: response.data) {
                 cache[path] = image
                 Logger.log(imageResponse: response)
                 return image
@@ -49,5 +49,14 @@ extension ImageService: IImageService {
     
     func cachedImage(for path: String) -> UIImage? {
         cache[path]
+    }
+}
+
+// MARK: - Helpers
+
+private extension ImageService {
+    @MainActor
+    func image(from data: Data) async -> UIImage? {
+        UIImage(data: data)
     }
 }

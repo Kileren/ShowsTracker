@@ -24,18 +24,15 @@ struct SliderView: View {
     
     private var minValue: Int
     private var maxValue: Int
-    private let contentWidth: CGFloat
     
     init(minValue: Int,
          maxValue: Int,
          lowerValue: Binding<Int>,
-         upperValue: Binding<Int>,
-         contentWidth: CGFloat) {
+         upperValue: Binding<Int>) {
         self.minValue = minValue
         self.maxValue = maxValue
         self._lowerValue = lowerValue
         self._upperValue = upperValue
-        self.contentWidth = contentWidth
     }
     
     // MARK: - Body
@@ -136,7 +133,7 @@ private extension SliderView {
                 newLocation.x += value.translation.width
                 newLocation.x = min(
                     max(leftStickLocation.x + .circleSide, newLocation.x),
-                    contentWidth - 32 - .circleSide / 2
+                    UIScreen.main.bounds.width - 32 - .circleSide / 2
                 )
                 self.rightStickLocation = newLocation
             }

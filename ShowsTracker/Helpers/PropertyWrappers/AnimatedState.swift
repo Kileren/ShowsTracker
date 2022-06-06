@@ -8,7 +8,7 @@
 import SwiftUI
 
 @propertyWrapper
-struct AnimatedState<Value> : DynamicProperty {
+struct AnimatedState<Value>: DynamicProperty {
     let storage: State<Value>
     let animation: Animation?
 

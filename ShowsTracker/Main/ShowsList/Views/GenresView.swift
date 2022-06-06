@@ -9,12 +9,22 @@ import SwiftUI
 
 struct GenresView: View {
     
-    @Binding var selectedTags: Set<Model.Tag>
-    
     let tags: [Model.Tag]
     let onClose: () -> Void
+    let onConfirm: (Set<Model.Tag>) -> Void
     
     @State private var viewOffset: CGFloat = 0
+    @State private var selectedTags: Set<Model.Tag> = []
+    
+    init(tags: [Model.Tag],
+         selectedTags: Set<Model.Tag>,
+         onClose: @escaping () -> Void,
+         onConfirm: @escaping (Set<Model.Tag>) -> Void) {
+        self.tags = tags
+        self.selectedTags = selectedTags
+        self.onClose = onClose
+        self.onConfirm = onConfirm
+    }
     
     var body: some View {
         VStack(spacing: 24) {
@@ -35,8 +45,7 @@ struct GenresView: View {
                 .ignoresSafeArea(edges: .bottom)
                 .padding(.bottom, min(viewOffset, 0))
         }
-        .offset(y: viewOffset)
-        .gesture(dragGesture)
+        .modifier(Dragging(offset: $viewOffset, onClose: onClose))
     }
     
     var notchView: some View {
@@ -98,7 +107,7 @@ struct GenresView: View {
     
     var confirmButton: some View {
         Button {
-            onClose()
+            onConfirm(selectedTags)
         } label: {
             RoundedRectangle(cornerRadius: 16)
                 .frame(width: 300, height: 50)
@@ -109,28 +118,6 @@ struct GenresView: View {
                         .foregroundColor(.white100)
                 }
         }
-
-    }
-}
-
-// MARK: - Gestures
-
-private extension GenresView {
-    var dragGesture: some Gesture {
-        DragGesture()
-            .onChanged { value in
-                let height = value.translation.height
-                let divider: CGFloat = height > 0 ? 2 : 5
-                viewOffset = height / divider
-                if viewOffset > 50 {
-                    onClose()
-                }
-            }
-            .onEnded { _ in
-                withAnimation {
-                    viewOffset = 0
-                }
-            }
     }
 }
 
@@ -189,7 +176,6 @@ struct GenresView_Previews: PreviewProvider {
     
     static var previews: some View {
         GenresView(
-            selectedTags: Self.$selectedTags,
             tags: [
                 .init(id: 0, text: "Боевик и Приключения"),
                 .init(id: 0, text: "Вестерн"),
@@ -199,8 +185,10 @@ struct GenresView_Previews: PreviewProvider {
                 .init(id: 0, text: "Документальный"),
                 .init(id: 0, text: "Драма"),
                 .init(id: 0, text: "Комедия")
-            ]) {
-                print("Tap close")
-            }
+            ],
+            selectedTags: [],
+            onClose: { },
+            onConfirm: { _ in }
+        )
     }
 }

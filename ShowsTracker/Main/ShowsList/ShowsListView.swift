@@ -16,7 +16,9 @@ struct ShowsListView: View {
     
     @State private var model: Model = .init()
     @State private var searchedText: String = ""
+    
     @State private var filterActive: Bool = false
+    @State private var filterIsShown: Bool = false
     
     @State private var detailsShown: Bool = false
     
@@ -49,6 +51,11 @@ struct ShowsListView: View {
         }
         .padding(.horizontal, 24)
         .padding(.top, 28)
+        .overlay {
+            if filterActive {
+                filterView
+            }
+        }
         .onAppear { interactor.viewAppeared() }
         .onReceive(modelUpdate) { model = $0 }
         .sheet(isPresented: $detailsShown) { ShowDetailsView() }
@@ -104,11 +111,11 @@ struct ShowsListView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 8)
                     .frame(width: 32, height: 32)
-                    .foregroundColor(filterActive ? .bay : .white100)
+                    .foregroundColor(model.filter.isEmpty ? .white100 : .bay)
                 Image(systemName: "slider.horizontal.3")
                     .resizable()
-                    .frame(width: 20, height: 20)
-                    .foregroundColor(filterActive ? .white100 : .bay)
+                    .frame(width: 20, height: 17)
+                    .foregroundColor(model.filter.isEmpty ? .bay : .white100)
             }
         }
     }
@@ -141,6 +148,36 @@ struct ShowsListView: View {
     }
 }
 
+private extension ShowsListView {
+    var filterView: some View {
+        ZStack {
+            Rectangle()
+                .foregroundColor(filterIsShown ? .black.opacity(0.25) : .black.opacity(0))
+                .animation(.easeInOut, value: filterIsShown)
+                .ignoresSafeArea()
+                .disableDragging()
+                .onTapGesture {
+                    filterIsShown = false
+                    after(timeout: 0.3) { filterActive = false }
+                }
+            VStack(spacing: 0) {
+                Spacer()
+                FilterView(
+                    onClose: {
+                        filterIsShown = false
+                        after(timeout: 0.3) { filterActive = false }
+                    }
+                )
+                .offset(y: filterIsShown ? 0 : 500)
+                .animation(.easeInOut, value: filterIsShown)
+            }
+        }
+        .onAppear {
+            filterIsShown = true
+        }
+    }
+}
+
 extension ShowsListView {
     var modelUpdate: AnyPublisher<Model, Never> {
         appState.info.updates(for: \.showsList)
@@ -152,6 +189,7 @@ extension ShowsListView {
         var isLoaded: Bool = false
         var chosenTab: Tab = .popular
         var popularShows: [ShowView.Model] = []
+        var filter: FilterView.Model = .init()
         
         enum Tab {
             case popular

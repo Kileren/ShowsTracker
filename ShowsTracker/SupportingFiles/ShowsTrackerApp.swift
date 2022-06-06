@@ -13,6 +13,7 @@ struct ShowsTrackerApp: App {
         WindowGroup {
             GeometryReader { geometry in
                 TabBarView(geometry: geometry)
+//                FilterView()
             }
 //            ShowsView()
 //            Example()
