@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum LangCode: CaseIterable {
+enum LangCode: String, CaseIterable {
     case aa
     case ab
     case af
