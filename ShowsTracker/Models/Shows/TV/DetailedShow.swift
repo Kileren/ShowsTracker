@@ -154,6 +154,7 @@ extension DetailedShow {
         
         case ongoing
         case ended
+        case inProduction
         case unknown(String)
         
         init?(rawValue: String) {
@@ -162,6 +163,8 @@ extension DetailedShow {
                 self = .ongoing
             case "Ended":
                 self = .ended
+            case "In Production":
+                self = .inProduction
             default:
                 self = .unknown(rawValue)
                 assertionFailure("Unknown status - \(rawValue), add it")
@@ -172,6 +175,7 @@ extension DetailedShow {
             switch self {
             case .ongoing: return "Returning Series"
             case .ended: return "Ended"
+            case .inProduction: return "In Production"
             case .unknown(let value): return value
             }
         }

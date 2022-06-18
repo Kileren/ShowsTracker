@@ -134,10 +134,19 @@ struct ShowDetailsView: View {
     }
     
     var statusView: some View {
-        VStack(spacing: 4) {
-            Text(model.inProduction ? "Продолжается" : "Закончен")
+        var args: (String, Color) {
+            switch model.status {
+            case .ongoing: return ("Продолжается", .greenHard)
+            case .ended: return ("Закончен", .redSoft)
+            case .inProduction: return ("В производстве", .yellowSoft)
+            }
+        }
+        let (name, color) = args
+        
+        return VStack(spacing: 4) {
+            Text(name)
                 .font(.medium15)
-                .foregroundColor(model.inProduction ? .greenHard : .redSoft)
+                .foregroundColor(color)
             Text("Статус")
                 .font(.medium13)
                 .foregroundColor(.text40)
@@ -404,12 +413,18 @@ extension ShowDetailsView {
         var broadcastYears = ""
         var vote = ""
         var voteCount = ""
-        var inProduction = true
+        var status: Status = .inProduction
         var isLiked = true
         var selectedInfoTab: InfoTab = .episodes
         var detailsInfo = DetailsInfo()
         var episodesInfo = EpisodesInfo()
         var similarShowsInfo = SimilarShowsInfo()
+        
+        enum Status {
+            case ongoing
+            case ended
+            case inProduction
+        }
         
         enum InfoTab: String {
             case episodes

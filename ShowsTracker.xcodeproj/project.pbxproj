@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C00633428574F0B00893ECB /* discover_tv_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 8C00633328574EFF00893ECB /* discover_tv_1.json */; };
+		8C00633628574F2600893ECB /* discover_tv_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 8C00633528574F1E00893ECB /* discover_tv_2.json */; };
 		8C0F5D3225CFB9D500B9983C /* View+CornerRadius.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0F5D3125CFB9D500B9983C /* View+CornerRadius.swift */; };
 		8C156CD8280B23390049DDD1 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 8C156CD7280B23390049DDD1 /* Moya */; };
 		8C156CDB280B244D0049DDD1 /* SearchTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156CDA280B244D0049DDD1 /* SearchTarget.swift */; };
@@ -93,6 +95,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8C00633328574EFF00893ECB /* discover_tv_1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = discover_tv_1.json; sourceTree = "<group>"; };
+		8C00633528574F1E00893ECB /* discover_tv_2.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = discover_tv_2.json; sourceTree = "<group>"; };
 		8C0F5D3125CFB9D500B9983C /* View+CornerRadius.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+CornerRadius.swift"; sourceTree = "<group>"; };
 		8C156CDA280B244D0049DDD1 /* SearchTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTarget.swift; sourceTree = "<group>"; };
 		8C156CDE280FCC7B0049DDD1 /* WitcherSearch.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = WitcherSearch.json; sourceTree = "<group>"; };
@@ -191,6 +195,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8C00633228574EEA00893ECB /* Discover */ = {
+			isa = PBXGroup;
+			children = (
+				8C00633528574F1E00893ECB /* discover_tv_2.json */,
+				8C00633328574EFF00893ECB /* discover_tv_1.json */,
+			);
+			path = Discover;
+			sourceTree = "<group>";
+		};
 		8C156CD9280B24160049DDD1 /* Network */ = {
 			isa = PBXGroup;
 			children = (
@@ -571,6 +584,7 @@
 		8CF52874267DE41800351915 /* Jsons */ = {
 			isa = PBXGroup;
 			children = (
+				8C00633228574EEA00893ECB /* Discover */,
 				8C156D432841F7BC0049DDD1 /* Genres */,
 				8C156D10281FF0270049DDD1 /* TV */,
 				8C156D08281F00FB0049DDD1 /* TVSeasons */,
@@ -668,8 +682,10 @@
 				8C156D242826F78B0049DDD1 /* tv_popular_1.json in Resources */,
 				8C156D14281FF05C0049DDD1 /* Similar_Witcher.json in Resources */,
 				8C156CE4280FCEE20049DDD1 /* WitcherSearch.json in Resources */,
+				8C00633628574F2600893ECB /* discover_tv_2.json in Resources */,
 				8C156D0D281FC5430049DDD1 /* TVSeasons_Details_s1.json in Resources */,
 				8CD6C1E425C327D4004CF261 /* Preview Assets.xcassets in Resources */,
+				8C00633428574F0B00893ECB /* discover_tv_1.json in Resources */,
 				8C156CE3280FCEDF0049DDD1 /* WitcherPlain.json in Resources */,
 				8C156D452841F7D40049DDD1 /* TVGenres.json in Resources */,
 				8C156D322833734C0049DDD1 /* tv_popular_2.json in Resources */,

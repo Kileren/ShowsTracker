@@ -30,10 +30,10 @@ extension DiscoverTarget: TargetType {
             parameters["page"] = page
             parameters["include_null_first_air_dates"] = false
             parameters["sort_by"] = filter.sortType.rawValue
-            if !filter.genres.isEmpty { parameters["with_genres"] = filter.genres.joined(separator: ",") }
+            if !filter.genres.isEmpty { parameters["with_genres"] = filter.genres.map { "\($0)" }.joined(separator: ",") }
             filter.originalLanguage.flatMap { parameters["with_original_language"] = $0 }
-            filter.minAirYear.flatMap { parameters["air_date.gte"] = "\($0)-01-01" }
-            filter.maxAirYear.flatMap { parameters["air_date.lte"] = "\($0)-01-01" }
+            filter.minAirDate.flatMap { parameters["first_air_date.gte"] = $0 }
+            filter.maxAirDate.flatMap { parameters["first_air_date.lte"] = $0 }
             
             return .requestParameters(
                 parameters: parameters.withApiKey,
@@ -44,26 +44,63 @@ extension DiscoverTarget: TargetType {
     var headers: [String : String]? {
         ["Content-type": "application/json"]
     }
+    
+    var sampleData: Data {
+        do {
+            switch self {
+            case let .tv(_, page):
+                if page == 1 {
+                    return try JSONReader.data(forResource: "discover_tv_1")
+                }
+                return try JSONReader.data(forResource: "discover_tv_2")
+            }
+        } catch {
+            Logger.log(error: error)
+            return Data()
+        }
+    }
 }
 
 extension DiscoverTarget {
     struct Filter: Hashable {
         let sortType: SortType
-        let genres: [String]
+        let genres: Set<Int>
         let originalLanguage: LangCode?
-        let minAirYear: Int?
-        let maxAirYear: Int?
+        let minAirDate: String?
+        let maxAirDate: String?
         
         init(sortType: SortType,
-             genres: [String],
+             genres: Set<Int> = [],
              originalLanguage: LangCode? = nil,
              minAirYear: Int? = nil,
              maxAirYear: Int? = nil) {
             self.sortType = sortType
             self.genres = genres
             self.originalLanguage = originalLanguage
-            self.minAirYear = minAirYear
-            self.maxAirYear = maxAirYear
+            
+            if let minAirYear = minAirYear {
+                self.minAirDate = "\(minAirYear)-01-01"
+            } else {
+                self.minAirDate = nil
+            }
+            
+            if let maxAirYear = maxAirYear {
+                self.maxAirDate = "\(maxAirYear)-01-01"
+            } else {
+                self.maxAirDate = nil
+            }
+        }
+        
+        init(sortType: SortType,
+             genres: Set<Int> = [],
+             originalLanguage: LangCode? = nil,
+             minAirDate: String? = nil,
+             maxAirDate: String? = nil) {
+            self.sortType = sortType
+            self.genres = genres
+            self.originalLanguage = originalLanguage
+            self.minAirDate = minAirDate
+            self.maxAirDate = maxAirDate
         }
     }
     
@@ -71,5 +108,8 @@ extension DiscoverTarget {
         case popularity = "popularity.desc"
         case airDate = "first_air_date.desc"
         case votes = "vote_average.desc"
+        case popularityAscending = "popularity.asc"
+        case airDateAscending = "first_air_date.asc"
+        case votesAscending = "vote_average.asc"
     }
 }

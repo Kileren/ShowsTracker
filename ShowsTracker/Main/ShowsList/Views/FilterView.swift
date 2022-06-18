@@ -11,8 +11,6 @@ import Resolver
 
 struct FilterView: View {
     
-    @InjectedObject var appState: AppState
-    
     @State private var lowerYear = Model.originalMinYear
     @State private var upperYear = Model.originalMaxYear
     
@@ -24,11 +22,14 @@ struct FilterView: View {
     
     @State private var viewOffset: CGFloat = 0
     
-    @State private var model: Model = Model()
+    @State private var model: Model
     
+    let onConfirm: (Model) -> Void
     let onClose: () -> Void
     
-    init(onClose: @escaping () -> Void) {
+    init(model: Model, onConfirm: @escaping (Model) -> Void, onClose: @escaping () -> Void) {
+        self.model = model
+        self.onConfirm = onConfirm
         self.onClose = onClose
     }
     
@@ -63,9 +64,8 @@ struct FilterView: View {
                 languageView
             }
         }
-        .onReceive(modelUpdates) { model = $0 }
-        .onChange(of: lowerYear) { appState.info.value.showsList.filter.minYear = $0 }
-        .onChange(of: upperYear) { appState.info.value.showsList.filter.maxYear = $0 }
+        .onChange(of: lowerYear) { model.minYear = $0 }
+        .onChange(of: upperYear) { model.maxYear = $0 }
     }
     
     var notchView: some View {
@@ -206,7 +206,7 @@ struct FilterView: View {
                         genresViewIsShown = false
                         after(timeout: 0.3) { genresViewIsActive = false }
                     } onConfirm: { selectedGenres in
-                        appState.info.value.showsList.filter.selectedGenres = selectedGenres
+                        model.selectedGenres = selectedGenres
                         genresViewIsShown = false
                         after(timeout: 0.3) { genresViewIsActive = false }
                     }
@@ -234,7 +234,7 @@ struct FilterView: View {
             VStack(spacing: 0) {
                 Spacer()
                 LanguageSelectorView(selectedLanguage: model.selectedOriginalLanguage) { language in
-                    appState.info.value.showsList.filter.selectedOriginalLanguage = language
+                    model.selectedOriginalLanguage = language
                     languageViewIsShown = false
                     after(timeout: 0.3) { languageViewIsActive = false }
                 }
@@ -276,13 +276,13 @@ struct FilterView: View {
                 .foregroundColor(.text100)
         }
         .onTapGesture {
-            appState.info.value.showsList.filter.sorting = sorting
+            model.sorting = sorting
         }
     }
     
     var confirmButton: some View {
         Button {
-            onClose()
+            onConfirm(model)
         } label: {
             RoundedRectangle(cornerRadius: 16)
                 .frame(width: 300, height: 50)
@@ -293,15 +293,6 @@ struct FilterView: View {
                         .foregroundColor(.white100)
                 }
         }
-    }
-}
-
-// MARK: - State Updates
-
-extension FilterView {
-    
-    var modelUpdates: AnyPublisher<Model, Never> {
-        appState.info.updates(for: \.showsList.filter)
     }
 }
 
@@ -344,6 +335,10 @@ extension FilterView {
 
 struct FilterView_Previews: PreviewProvider {
     static var previews: some View {
-        FilterView { }
+        FilterView(model: .init()) { _ in
+            // Confirm button tapped
+        } onClose: {
+            // View closed
+        }
     }
 }

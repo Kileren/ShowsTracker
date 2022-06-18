@@ -1,0 +1,409 @@
+{
+  "page": 1,
+  "results": [
+    {
+      "backdrop_path": "/stiQsL31rO4uSksWWSUBU5EdKon.jpg",
+      "first_air_date": "2019-07-25",
+      "genre_ids": [
+        10765,
+        10759
+      ],
+      "id": 76479,
+      "name": "The Boys",
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "The Boys",
+      "overview": "A group of vigilantes known informally as “The Boys” set out to take down corrupt superheroes with no more than blue-collar grit and a willingness to fight dirty.",
+      "popularity": 3383.98,
+      "poster_path": "/stTEycfG9928HYGEISBFaG1ngjM.jpg",
+      "vote_average": 8.4,
+      "vote_count": 5925
+    },
+    {
+      "backdrop_path": "/56v2KjBlU4XaOv9rVYEQypROD7P.jpg",
+      "first_air_date": "2016-07-15",
+      "genre_ids": [
+        10765,
+        18,
+        9648
+      ],
+      "id": 66732,
+      "name": "Stranger Things",
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "Stranger Things",
+      "overview": "When a young boy vanishes, a small town uncovers a mystery involving secret experiments, terrifying supernatural forces, and one strange little girl.",
+      "popularity": 3571.914,
+      "poster_path": "/49WJfeN0moxb9IPfGn8AIqMGskD.jpg",
+      "vote_average": 8.6,
+      "vote_count": 10800
+    },
+    {
+      "backdrop_path": "/wiE9doxiLwq3WCGamDIOb2PqBqc.jpg",
+      "first_air_date": "2013-09-12",
+      "genre_ids": [
+        18,
+        80
+      ],
+      "id": 60574,
+      "name": "Peaky Blinders",
+      "origin_country": [
+        "GB"
+      ],
+      "original_language": "en",
+      "original_name": "Peaky Blinders",
+      "overview": "A gangster family epic set in 1919 Birmingham, England and centered on a gang who sew razor blades in the peaks of their caps, and their fierce boss Tommy Shelby, who means to move up in the world.",
+      "popularity": 2257.886,
+      "poster_path": "/vUUqzWa2LnHIVqkaKVlVGkVcZIW.jpg",
+      "vote_average": 8.6,
+      "vote_count": 6502
+    },
+    {
+      "backdrop_path": "/1qpUk27LVI9UoTS7S0EixUBj5aR.jpg",
+      "first_air_date": "2022-03-24",
+      "genre_ids": [
+        10759,
+        10765
+      ],
+      "id": 52814,
+      "name": "Halo",
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "Halo",
+      "overview": "Depicting an epic 26th-century conflict between humanity and an alien threat known as the Covenant, the series weaves deeply drawn personal stories with action, adventure and a richly imagined vision of the future.",
+      "popularity": 2262.747,
+      "poster_path": "/eO0QV5qJaEngP1Ax9w3eV6bJG2f.jpg",
+      "vote_average": 8.6,
+      "vote_count": 933
+    },
+    {
+      "backdrop_path": "/8H64YmIYxpRJgSTuLUGRUSyi2kN.jpg",
+      "first_air_date": "2022-05-26",
+      "genre_ids": [
+        10765,
+        10759,
+        18
+      ],
+      "id": 92830,
+      "name": "Obi-Wan Kenobi",
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "Obi-Wan Kenobi",
+      "overview": "During the reign of the Galactic Empire, former Jedi Master, Obi-Wan Kenobi, embarks on a crucial mission to confront allies turned enemies and face the wrath of the Empire.",
+      "popularity": 1973.55,
+      "poster_path": "/qJRB789ceLryrLvOKrZqLKr2CGf.jpg",
+      "vote_average": 8.1,
+      "vote_count": 258
+    },
+    {
+      "backdrop_path": "/pUP3Owwq7WABfUV7TahwzstmXKC.jpg",
+      "first_air_date": "2022-03-30",
+      "genre_ids": [
+        10759,
+        10765,
+        9648
+      ],
+      "id": 92749,
+      "name": "Moon Knight",
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "Moon Knight",
+      "overview": "When Steven Grant, a mild-mannered gift-shop employee, becomes plagued with blackouts and memories of another life, he discovers he has dissociative identity disorder and shares a body with mercenary Marc Spector. As Steven/Marc’s enemies converge upon them, they must navigate their complex identities while thrust into a deadly mystery among the powerful gods of Egypt.",
+      "popularity": 1429.958,
+      "poster_path": "/vKDUmKO6F9bSKKyHhg7YGbgcEeF.jpg",
+      "vote_average": 8.2,
+      "vote_count": 1031
+    },
+    {
+      "backdrop_path": "/tUyMPMJlql8Ec7d58EIhX5WEGG4.jpg",
+      "first_air_date": "2022-04-09",
+      "genre_ids": [
+        16,
+        35,
+        10759,
+        80
+      ],
+      "id": 120089,
+      "name": "SPY x FAMILY",
+      "origin_country": [
+        "JP"
+      ],
+      "original_language": "ja",
+      "original_name": "SPY×FAMILY",
+      "overview": "Master spy Twilight is the best at what he does when it comes to going undercover on dangerous missions in the name of a better world. But when he receives the ultimate impossible assignment—get married and have a kid—he may finally be in over his head!\n\nNot one to depend on others, Twilight has his work cut out for him procuring both a wife and a child for his mission to infiltrate an elite private school. What he doesn't know is that the wife he's chosen is an assassin and the child he's adopted is a telepath!",
+      "popularity": 1452.463,
+      "poster_path": "/nShEY0JnMOsvdhEnmYvL9mowIKz.jpg",
+      "vote_average": 8.6,
+      "vote_count": 199
+    },
+    {
+      "backdrop_path": "/r9slE8R3rFgDC84VPb10GgPDQUg.jpg",
+      "first_air_date": "2022-02-14",
+      "genre_ids": [
+        18,
+        10766
+      ],
+      "id": 49608,
+      "name": "Canım Annem",
+      "origin_country": [
+        "TR"
+      ],
+      "original_language": "tr",
+      "original_name": "Canım Annem",
+      "overview": "",
+      "popularity": 1059.094,
+      "poster_path": "/pPjyZWvaLzu2MRllG64p6eyQyre.jpg",
+      "vote_average": 7.2,
+      "vote_count": 9
+    },
+    {
+      "backdrop_path": "/8Xs20y8gFR0W9u8Yy9NKdpZtSu7.jpg",
+      "first_air_date": "2022-01-28",
+      "genre_ids": [
+        10759,
+        18,
+        10765
+      ],
+      "id": 99966,
+      "name": "All of Us Are Dead",
+      "origin_country": [
+        "KR"
+      ],
+      "original_language": "ko",
+      "original_name": "지금 우리 학교는",
+      "overview": "A high school becomes ground zero for a zombie virus outbreak. Trapped students must fight their way out — or turn into one of the rabid infected.",
+      "popularity": 906.145,
+      "poster_path": "/pTEFqAjLd5YTsMD6NSUxV6Dq7A6.jpg",
+      "vote_average": 8.5,
+      "vote_count": 2198
+    },
+    {
+      "backdrop_path": "/AnfXhKJwb9rBa8cvPBV54XgJxMF.jpg",
+      "first_air_date": "2022-03-28",
+      "genre_ids": [
+        18,
+        10766
+      ],
+      "id": 158415,
+      "name": "Pantanal",
+      "origin_country": [
+        "BR"
+      ],
+      "original_language": "pt",
+      "original_name": "Pantanal",
+      "overview": "After the mysterious disappearance of his father, Joventino, the cowboy José Leôncio becomes a wealthy farm owner in Pantanal. Over twenty years have passed and, bitter-hearted because of his father vanishing and the escape of his wife to Rio de Janeiro with his baby, José Leôncio has the chance to make amends with the boy, now a young man raised in the big city with very different values and habits than his own.",
+      "popularity": 1202.636,
+      "poster_path": "/4Ru1BwcAKWtpM345dWe8YgHf35V.jpg",
+      "vote_average": 4.5,
+      "vote_count": 21
+    },
+    {
+      "backdrop_path": "/dpzC0ACzwkVporKvzZGvNFOBFr6.jpg",
+      "first_air_date": "2005-03-27",
+      "genre_ids": [
+        18
+      ],
+      "id": 1416,
+      "name": "Grey's Anatomy",
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "Grey's Anatomy",
+      "overview": "Follows the personal and professional lives of a group of doctors at Seattle’s Grey Sloan Memorial Hospital.",
+      "popularity": 848.21,
+      "poster_path": "/zPIug5giU8oug6Xes5K1sTfQJxY.jpg",
+      "vote_average": 8.3,
+      "vote_count": 8080
+    },
+    {
+      "backdrop_path": "/tjXXXRnEI3rxzTsrs4FvhjhPlQt.jpg",
+      "first_air_date": "2022-05-23",
+      "genre_ids": [
+        99
+      ],
+      "id": 95171,
+      "name": "Prehistoric Planet",
+      "origin_country": [
+        "GB"
+      ],
+      "original_language": "en",
+      "original_name": "Prehistoric Planet",
+      "overview": "Experience the wonders of our world like never before in this epic docuseries from Jon Favreau and the producers of Planet Earth. Travel back 66 million years to when majestic dinosaurs and extraordinary creatures roamed the lands, seas, and skies.",
+      "popularity": 824.242,
+      "poster_path": "/yMdFsHKp4YX2CUkAQcZswxXDuoe.jpg",
+      "vote_average": 8.7,
+      "vote_count": 103
+    },
+    {
+      "backdrop_path": "/5y2sHlCndnEZC6MjkJ4w40WFzo5.jpg",
+      "first_air_date": "2022-02-07",
+      "genre_ids": [
+        18,
+        10766
+      ],
+      "id": 154911,
+      "name": "Além da Ilusão",
+      "origin_country": [
+        "BR"
+      ],
+      "original_language": "pt",
+      "original_name": "Além da Ilusão",
+      "overview": "",
+      "popularity": 807.108,
+      "poster_path": "/8BzuwDAMamf5TX4TepbDDEq7ima.jpg",
+      "vote_average": 6,
+      "vote_count": 10
+    },
+    {
+      "backdrop_path": "/ktDJ21QQscbMNQfPpZBsNORxdDx.jpg",
+      "first_air_date": "2016-01-25",
+      "genre_ids": [
+        80,
+        10765
+      ],
+      "id": 63174,
+      "name": "Lucifer",
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "Lucifer",
+      "overview": "Bored and unhappy as the Lord of Hell, Lucifer Morningstar abandoned his throne and retired to Los Angeles, where he has teamed up with LAPD detective Chloe Decker to take down criminals. But the longer he's away from the underworld, the greater the threat that the worst of humanity could escape.",
+      "popularity": 773.691,
+      "poster_path": "/ekZobS8isE6mA53RAiGDG93hBxL.jpg",
+      "vote_average": 8.5,
+      "vote_count": 11958
+    },
+    {
+      "backdrop_path": "/xlKKD1TXJvh0YYlVPqqQ3g3ZUjM.jpg",
+      "first_air_date": "2018-07-01",
+      "genre_ids": [
+        16,
+        10759,
+        10765
+      ],
+      "id": 80020,
+      "name": "Super Dragon Ball Heroes",
+      "origin_country": [
+        "JP"
+      ],
+      "original_language": "ja",
+      "original_name": "スーパードラゴンボールヒーローズ",
+      "overview": "Trunks returns from the future to train with Goku and Vegeta. However, it disappears without warning. Then the mysterious Fu bursts in, telling them that Trunks has been imprisoned in the Prison Planet, a mysterious complex in an unknown place in the universes. The group seeks the dragon balls to free Trunks, but an endless battle awaits them! Will Goku and the others rescue Trunks and escape the Prison Planet?",
+      "popularity": 817.016,
+      "poster_path": "/jYeTfpxS3IzgqKkYCjmdCKwq8PW.jpg",
+      "vote_average": 7.5,
+      "vote_count": 2581
+    },
+    {
+      "backdrop_path": "/rzAzvWJoZSwVSswvWsKx1lqT63m.jpg",
+      "first_air_date": "2022-05-05",
+      "genre_ids": [
+        10765
+      ],
+      "id": 103516,
+      "name": "Star Trek: Strange New Worlds",
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "Star Trek: Strange New Worlds",
+      "overview": "Follow Christopher Pike, Spock and Number One in the years before Captain Kirk boarded the U.S.S. Enterprise, as they explore new worlds around the galaxy. This show is a prequel to the original series and Star Trek: Discovery.",
+      "popularity": 662.684,
+      "poster_path": "/iwIdajr5Y4zq2ibvq75VnDAJBr.jpg",
+      "vote_average": 8.1,
+      "vote_count": 79
+    },
+    {
+      "backdrop_path": "/41yaWnIT8AjIHiULHtTbKNzZTjc.jpg",
+      "first_air_date": "2014-10-07",
+      "genre_ids": [
+        18,
+        10765
+      ],
+      "id": 60735,
+      "name": "The Flash",
+      "origin_country": [
+        "US"
+      ],
+      "original_language": "en",
+      "original_name": "The Flash",
+      "overview": "After a particle accelerator causes a freak storm, CSI Investigator Barry Allen is struck by lightning and falls into a coma. Months later he awakens with the power of super speed, granting him the ability to move through Central City like an unseen guardian angel. Though initially excited by his newfound powers, Barry is shocked to discover he is not the only \"meta-human\" who was created in the wake of the accelerator explosion -- and not everyone is using their new powers for good. Barry partners with S.T.A.R. Labs and dedicates his life to protect the innocent. For now, only a few close friends and associates know that Barry is literally the fastest man alive, but it won't be long before the world learns what Barry Allen has become...The Flash.",
+      "popularity": 694.272,
+      "poster_path": "/lJA2RCMfsWoskqlQhXPSLFQGXEJ.jpg",
+      "vote_average": 7.8,
+      "vote_count": 9685
+    },
+    {
+      "backdrop_path": "/zDSh6kOfuiXWJQwbAfw6sSGgqNP.jpg",
+      "first_air_date": "2014-09-01",
+      "genre_ids": [],
+      "id": 62348,
+      "name": "A Konyhafőnök",
+      "origin_country": [
+        "HU"
+      ],
+      "original_language": "hu",
+      "original_name": "A Konyhafőnök",
+      "overview": "A cooking competition where amatuer chefs compete for the title of A Konyhafőnök, the Chief Chef.",
+      "popularity": 388.014,
+      "poster_path": "/1CoHXUTSS3IPN41pgxlvTfcVuu4.jpg",
+      "vote_average": 7,
+      "vote_count": 1
+    },
+    {
+      "backdrop_path": "/aScn0gmLiwfz8fGSm8nwAPgo0pD.jpg",
+      "first_air_date": "2022-05-06",
+      "genre_ids": [
+        10759,
+        10765,
+        18
+      ],
+      "id": 128010,
+      "name": "Welcome to Eden",
+      "origin_country": [
+        "ES",
+        "KN"
+      ],
+      "original_language": "es",
+      "original_name": "Bienvenidos a Edén",
+      "overview": "Are you happy? With this question, Zoa and four other attractive young people, very active on social networks, are invited to the most exclusive party in history on a secret island, organized by the brand of a new drink. What begins as an exciting journey will soon become the journey of a lifetime. But paradise is not really what it seems - Welcome to Eden.",
+      "popularity": 637.076,
+      "poster_path": "/kZO0mtTHAgg9QVscLVtwCcQ7Hgx.jpg",
+      "vote_average": 7.4,
+      "vote_count": 82
+    },
+    {
+      "backdrop_path": "/fKAZtVH3NvId6phiv7OueYHK2Hr.jpg",
+      "first_air_date": "2022-05-21",
+      "genre_ids": [
+        18
+      ],
+      "id": 202728,
+      "name": "Bisik-Bisik Gelora",
+      "origin_country": [
+        "MY"
+      ],
+      "original_language": "ms",
+      "original_name": "Bisik-Bisik Gelora",
+      "overview": "Jad, a naive youth meets Arumi, a wild city girl at a young age. They were accused of 'khalwat' and forced to get married. On the night after their wedding, Jad was arrested and later jailed. Arumi studies abroad and forgets the fact that she is still Jad's wife. After Jad is released, he has been obscured by revenge. Jad has found Arumi and demands her return to obedience to him as a wife.",
+      "popularity": 836.816,
+      "poster_path": null,
+      "vote_average": 0,
+      "vote_count": 0
+    }
+  ],
+  "total_pages": 2804,
+  "total_results": 56069
+}

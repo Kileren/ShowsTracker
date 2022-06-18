@@ -31,22 +31,11 @@ struct ShowView: View {
                             endPoint: .center)
                             .mask(RoundedRectangle(cornerRadius: 8))
                         
-                        ZStack {
-                            Rectangle()
-                                .frame(width: 42, height: 18)
-                                .cornerRadius(8, corners: [.topLeft, .bottomRight])
-                                .foregroundColor(.text100)
-                            
-                            HStack(spacing: 4) {
-                                Image(systemName: "star.fill")
-                                    .resizable()
-                                    .frame(width: 10, height: 10)
-                                    .foregroundColor(.yellowSoft)
-                                
-                                Text(model.vote)
-                                    .font(.medium12)
-                                    .foregroundColor(.white100)
-                            }
+                        switch model.accessory {
+                        case let .vote(vote):
+                            voteAccessoryView(vote: vote)
+                        case let .date(day, month):
+                            dateAccessoryView(day: day, month: month)
                         }
                     }
                 )
@@ -72,6 +61,42 @@ struct ShowView: View {
             tapAction(model.id)
         }
     }
+    
+    func voteAccessoryView(vote: String) -> some View {
+        ZStack {
+            Rectangle()
+                .frame(width: 42, height: 18)
+                .cornerRadius(8, corners: [.topLeft, .bottomRight])
+                .foregroundColor(.text100)
+            HStack(spacing: 4) {
+                Image(systemName: "star.fill")
+                    .resizable()
+                    .frame(width: 10, height: 10)
+                    .foregroundColor(.yellowSoft)
+                Text(vote)
+                    .font(.medium12)
+                    .foregroundColor(.white100)
+            }
+        }
+    }
+    
+    func dateAccessoryView(day: String, month: String) -> some View {
+        ZStack {
+            Rectangle()
+                .frame(width: 40, height: 34)
+                .cornerRadius(8, corners: [.topLeft, .bottomRight])
+                .foregroundColor(.text100)
+            
+            VStack(spacing: 0) {
+                Text(day)
+                    .font(.bold13Rounded)
+                    .foregroundColor(.white100)
+                Text(month)
+                    .font(.regular11)
+                    .foregroundColor(.white100)
+            }
+        }
+    }
 }
 
 // MARK: - Model
@@ -81,15 +106,29 @@ extension ShowView {
         var id: Int = 0
         var posterPath: String = ""
         var name: String = ""
-        var vote: String = ""
+        var accessory: Accessory = .vote("")
+        
+        enum Accessory: Equatable, Hashable {
+            case vote(String)
+            case date(day: String, month: String)
+        }
     }
 }
 
 struct ShowView_Previews: PreviewProvider {
     static var previews: some View {
-        ShowView(model: .init(
-            posterPath: "/7vjaCdMw15FEbXyLQTVa04URsPm.jpg",
-            name: "Леденящие душу приключения Сабрины",
-            vote: "8.2")) { _ in }
+        HStack {
+            ShowView(model: .init(
+                posterPath: "/7vjaCdMw15FEbXyLQTVa04URsPm.jpg",
+                name: "Леденящие душу приключения Сабрины",
+                accessory: .vote("8.2"))) { _ in }
+                .frame(width: 100, height: 150)
+            
+            ShowView(model: .init(
+                posterPath: "/7vjaCdMw15FEbXyLQTVa04URsPm.jpg",
+                name: "Леденящие душу приключения Сабрины",
+                accessory: .date(day: "09", month: "Дек"))) { _ in }
+                .frame(width: 100, height: 150)
+        }
     }
 }

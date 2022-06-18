@@ -34,7 +34,7 @@ final class ShowDetailsViewInteractor {
                     broadcastYears: show.broadcastYears,
                     vote: show.vote,
                     voteCount: show.voteCount,
-                    inProduction: show.inProduction ?? true,
+                    status: show.status?.modelStatus ?? .ongoing,
                     isLiked: true,
                     detailsInfo: .init(
                         tags: show.genres?.compactMap { $0.name } ?? [],
@@ -78,7 +78,8 @@ final class ShowDetailsViewInteractor {
                             id: $0.id,
                             posterPath: $0.posterPath ?? "",
                             name: $0.name ?? "",
-                            vote: STNumberFormatter.format($0.vote ?? 0, format: .vote))
+                            accessory: .vote(STNumberFormatter.format($0.vote ?? 0, format: .vote))
+                        )
                     }
                 
                 DispatchQueue.main.async { [weak self] in
@@ -117,6 +118,17 @@ private extension ShowDetailsViewInteractor {
                         format: .full),
                     overview: episode.overview ?? "")
             }
+        }
+    }
+}
+
+private extension DetailedShow.Status {
+    var modelStatus: ShowDetailsView.Model.Status {
+        switch self {
+        case .ongoing: return .ongoing
+        case .ended: return .ended
+        case .inProduction: return .inProduction
+        case .unknown: return .ongoing
         }
     }
 }

@@ -34,10 +34,17 @@ struct ShowsListView: View {
                         searchView
                         filterButton
                     }
-                    
                     GeometryReader { geometry in
                         ScrollView(showsIndicators: false) {
-                            popularShows(geometry: geometry)
+                            if model.chosenTab == .popular {
+                                if model.filter.isEmpty {
+                                    popularShows(geometry: geometry)
+                                } else {
+                                    filterShows(geometry: geometry)
+                                }
+                            } else {
+                                upcomingShows(geometry: geometry)
+                            }
                             STSpacer(height: 16)
                             ProgressView()
                             STSpacer(height: 8)
@@ -63,7 +70,10 @@ struct ShowsListView: View {
     
     func tabView(for tab: Model.Tab) -> some View {
         Button {
-            model.chosenTab = tab
+            interactor.didSelectTab(tab)
+            if tab == .soon, model.upcomingShows.isEmpty {
+                interactor.getUpcoming()
+            }
         } label: {
             Text(tab.name)
                 .font(.regular15)
@@ -121,6 +131,57 @@ struct ShowsListView: View {
     }
     
     func popularShows(geometry: GeometryProxy) -> some View {
+        gridView(geometry: geometry) {
+            ForEach(model.popularShows, id: \.self) { model in
+                ShowView(model: model) { showID in
+                    appState.routing.value.showDetails.showID = showID
+                    detailsShown = true
+                }
+            }
+            Rectangle()
+                .frame(width: 0, height: 0)
+                .foregroundColor(.clear)
+                .onAppear {
+                    interactor.getMorePopular()
+                }
+        }
+    }
+    
+    func filterShows(geometry: GeometryProxy) -> some View {
+        gridView(geometry: geometry) {
+            ForEach(model.filterShows, id: \.self) { model in
+                ShowView(model: model) { showID in
+                    appState.routing.value.showDetails.showID = showID
+                    detailsShown = true
+                }
+            }
+            Rectangle()
+                .frame(width: 0, height: 0)
+                .foregroundColor(.clear)
+                .onAppear {
+                    interactor.getMoreShowsByFilter()
+                }
+        }
+    }
+    
+    func upcomingShows(geometry: GeometryProxy) -> some View {
+        gridView(geometry: geometry) {
+            ForEach(model.upcomingShows, id: \.self) { model in
+                ShowView(model: model) { showID in
+                    appState.routing.value.showDetails.showID = showID
+                    detailsShown = true
+                }
+            }
+            Rectangle()
+                .frame(width: 0, height: 0)
+                .foregroundColor(.clear)
+                .onAppear {
+                    interactor.getMoreUpcoming()
+                }
+        }
+    }
+    
+    func gridView<Content: View>(geometry: GeometryProxy, @ViewBuilder content: () -> Content) -> some View {
         let spacing: CGFloat = 14
         let gridWidth = (geometry.size.width - 2 * spacing) / 3
         return LazyVGrid(
@@ -131,20 +192,8 @@ struct ShowsListView: View {
             ],
             alignment: .leading,
             spacing: 16,
-            pinnedViews: []) {
-                ForEach(model.popularShows, id: \.self) { model in
-                    ShowView(model: model) { showID in
-                        appState.routing.value.showDetails.showID = showID
-                        detailsShown = true
-                    }
-                }
-                Rectangle()
-                    .frame(width: 0, height: 0)
-                    .foregroundColor(.clear)
-                    .onAppear {
-                        interactor.getMorePopular()
-                    }
-            }
+            pinnedViews: [],
+            content: content)
     }
 }
 
@@ -162,12 +211,15 @@ private extension ShowsListView {
                 }
             VStack(spacing: 0) {
                 Spacer()
-                FilterView(
-                    onClose: {
-                        filterIsShown = false
-                        after(timeout: 0.3) { filterActive = false }
-                    }
-                )
+                FilterView(model: model.filter, onConfirm: { model in
+                    interactor.filterSelected(model)
+                    interactor.getShowsByFilter()
+                    filterIsShown = false
+                    after(timeout: 0.3) { filterActive = false }
+                }, onClose: {
+                    filterIsShown = false
+                    after(timeout: 0.3) { filterActive = false }
+                })
                 .offset(y: filterIsShown ? 0 : 500)
                 .animation(.easeInOut, value: filterIsShown)
             }
@@ -190,6 +242,8 @@ extension ShowsListView {
         var chosenTab: Tab = .popular
         var popularShows: [ShowView.Model] = []
         var filter: FilterView.Model = .init()
+        var filterShows: [ShowView.Model] = []
+        var upcomingShows: [ShowView.Model] = []
         
         enum Tab {
             case popular

@@ -8,6 +8,7 @@
 import SwiftUI
 
 extension Font {
+    static let regular11: Font = .system(size: 11, weight: .regular, design: .default)
     static let regular12: Font = .system(size: 12, weight: .regular, design: .default)
     static let regular13: Font = .system(size: 13, weight: .regular, design: .default)
     static let regular15: Font = .system(size: 15, weight: .regular, design: .default)
@@ -26,4 +27,6 @@ extension Font {
     static let semibold20: Font = .system(size: 20, weight: .semibold, design: .default)
     
     static let medium17Rounded: Font = .system(size: 17, weight: .medium, design: .rounded)
+    
+    static let bold13Rounded: Font = .system(size: 13, weight: .bold, design: .rounded)
 }
