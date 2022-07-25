@@ -12,11 +12,18 @@ final class ShowDetailsViewInteractor {
     
     @InjectedObject var appState: AppState
     @Injected var tvService: ITVService
+    @Injected var coreDataStorage: ICoreDataStorage
+    @Injected var imageService: IImageService
     
     private(set) var showID: Int = 0
     
     deinit {
         appState.service.value.shownDetailsIDs.remove(showID)
+    }
+    
+    init() {
+        showID = appState.routing[\.showDetails.showID]
+        appState.service.value.shownDetailsIDs.insert(showID)
     }
     
     func viewAppeared() {
@@ -27,6 +34,8 @@ final class ShowDetailsViewInteractor {
             do {
                 let show = try await tvService.getDetails(for: showID)
                 let episodesInfo = await getEpisodesInfo(for: show)
+                let shows = coreDataStorage.get(object: PlainShow.self)
+                let isLiked = shows.contains(where: { $0.id == showID })
                 let model = ShowDetailsView.Model(
                     isLoaded: true,
                     posterPath: show.posterPath ?? "",
@@ -35,7 +44,7 @@ final class ShowDetailsViewInteractor {
                     vote: show.vote,
                     voteCount: show.voteCount,
                     status: show.status?.modelStatus ?? .ongoing,
-                    isLiked: true,
+                    isLiked: isLiked,
                     detailsInfo: .init(
                         tags: show.genres?.compactMap { $0.name } ?? [],
                         overview: show.overview ?? ""),
@@ -56,6 +65,22 @@ final class ShowDetailsViewInteractor {
     }
     
     func didTapLikeButton() {
+        if appState.info.value.showDetails[showID]?.isLiked == true {
+            if let show = coreDataStorage.get(object: PlainShow.self).first(where: { $0.id == showID }) {
+                coreDataStorage.remove(object: show)
+            }
+            appState.info.value.shows.userShows.removeAll(where: { $0.id == showID })
+        } else {
+            if let show = tvService.cachedShow(for: showID) {
+                coreDataStorage.save(object: show)
+
+                Task {
+                    let image = try await imageService.loadImage(path: show.posterPath ?? "", width: 500).wrapInImage()
+                    appState.info.value.shows.userShows.append(.init(id: showID, image: image))
+                }
+            }
+        }
+        
         appState.info.value.showDetails[showID]?.isLiked.toggle()
     }
     
@@ -128,6 +153,7 @@ private extension DetailedShow.Status {
         case .ongoing: return .ongoing
         case .ended: return .ended
         case .inProduction: return .inProduction
+        case .planned: return .planned
         case .unknown: return .ongoing
         }
     }

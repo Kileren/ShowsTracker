@@ -13,6 +13,7 @@ extension Resolver: ResolverRegistering {
         register { AppState() }.scope(.application)
         registerMainDependencies()
         registerNetworkServices()
+        registerStorages()
     }
 }
 

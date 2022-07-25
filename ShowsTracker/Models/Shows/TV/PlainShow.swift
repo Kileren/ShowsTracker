@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreData
 
 struct PlainShow: Codable {
     let name: String?
@@ -71,5 +72,77 @@ extension PlainShow {
             genres: [10765, 10759, 37, 18],
             originalLanguage: "en"
         )
+    }
+}
+
+extension PlainShow: ManagedObjectEncodable {
+    typealias ManagedObject = PlainShowMO
+    
+    func encode(in context: NSManagedObjectContext) {
+        let show = PlainShowMO(context: context)
+        show.name = name
+        show.originalName = originalName
+        show.vote = vote ?? 0
+        show.posterPath = posterPath
+        show.popularity = popularity ?? 0
+        show.id = Int64(id)
+        show.backdropPath = backdropPath
+        show.overview = overview
+        show.airDate = airDate
+        show.countries = countries
+        show.genres = genres
+        show.originalLanguage = originalLanguage
+    }
+    
+    func moModel(in context: NSManagedObjectContext) -> PlainShowMO {
+        let show = PlainShowMO(context: context)
+        show.name = name
+        show.originalName = originalName
+        show.vote = vote ?? 0
+        show.posterPath = posterPath
+        show.popularity = popularity ?? 0
+        show.id = Int64(id)
+        show.backdropPath = backdropPath
+        show.overview = overview
+        show.airDate = airDate
+        show.countries = countries
+        show.genres = genres
+        show.originalLanguage = originalLanguage
+        return show
+    }
+}
+
+extension PlainShowMO: ManagedObjectDecodable {
+    typealias Object = PlainShow
+    
+    func decode() -> PlainShow {
+        PlainShow(
+            name: name,
+            originalName: originalName,
+            vote: vote,
+            posterPath: posterPath,
+            popularity: popularity,
+            id: Int(id),
+            backdropPath: backdropPath,
+            overview: overview,
+            airDate: airDate,
+            countries: countries,
+            genres: genres,
+            originalLanguage: originalLanguage)
+    }
+    
+    func change(with object: PlainShow, in context: NSManagedObjectContext) {
+        name = object.name
+        originalName = object.originalName
+        vote = object.vote ?? 0
+        posterPath = object.posterPath
+        popularity = object.popularity ?? 0
+        id = Int64(object.id)
+        backdropPath = object.backdropPath
+        overview = object.overview
+        airDate = object.airDate
+        countries = object.countries
+        genres = object.genres
+        originalLanguage = object.originalLanguage
     }
 }

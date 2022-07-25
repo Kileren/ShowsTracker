@@ -36,15 +36,17 @@ struct ShowsListView: View {
                     }
                     GeometryReader { geometry in
                         ScrollView(showsIndicators: false) {
-                            if model.chosenTab == .popular {
-                                if model.filter.isEmpty {
-                                    popularShows(geometry: geometry)
-                                } else {
-                                    filterShows(geometry: geometry)
-                                }
-                            } else {
-                                upcomingShows(geometry: geometry)
+                            switch model.currentRepresentation {
+                            case .popular:
+                                showsView(geometry: geometry)
+                            case .upcoming:
+                                showsView(geometry: geometry)
+                            case .filter:
+                                showsView(geometry: geometry)
+                            case .search:
+                                showsView(geometry: geometry)
                             }
+                            
                             STSpacer(height: 16)
                             ProgressView()
                             STSpacer(height: 8)
@@ -71,7 +73,7 @@ struct ShowsListView: View {
     func tabView(for tab: Model.Tab) -> some View {
         Button {
             interactor.didSelectTab(tab)
-            if tab == .soon, model.upcomingShows.isEmpty {
+            if tab == .soon, model.shows.isEmpty {
                 interactor.getUpcoming()
             }
         } label: {
@@ -130,9 +132,9 @@ struct ShowsListView: View {
         }
     }
     
-    func popularShows(geometry: GeometryProxy) -> some View {
+    func showsView(geometry: GeometryProxy) -> some View {
         gridView(geometry: geometry) {
-            ForEach(model.popularShows, id: \.self) { model in
+            ForEach(model.shows, id: \.self) { model in
                 ShowView(model: model) { showID in
                     appState.routing.value.showDetails.showID = showID
                     detailsShown = true
@@ -143,40 +145,12 @@ struct ShowsListView: View {
                 .foregroundColor(.clear)
                 .onAppear {
                     interactor.getMorePopular()
-                }
-        }
-    }
-    
-    func filterShows(geometry: GeometryProxy) -> some View {
-        gridView(geometry: geometry) {
-            ForEach(model.filterShows, id: \.self) { model in
-                ShowView(model: model) { showID in
-                    appState.routing.value.showDetails.showID = showID
-                    detailsShown = true
-                }
-            }
-            Rectangle()
-                .frame(width: 0, height: 0)
-                .foregroundColor(.clear)
-                .onAppear {
-                    interactor.getMoreShowsByFilter()
-                }
-        }
-    }
-    
-    func upcomingShows(geometry: GeometryProxy) -> some View {
-        gridView(geometry: geometry) {
-            ForEach(model.upcomingShows, id: \.self) { model in
-                ShowView(model: model) { showID in
-                    appState.routing.value.showDetails.showID = showID
-                    detailsShown = true
-                }
-            }
-            Rectangle()
-                .frame(width: 0, height: 0)
-                .foregroundColor(.clear)
-                .onAppear {
-                    interactor.getMoreUpcoming()
+                    switch model.currentRepresentation {
+                    case .popular: interactor.getMorePopular()
+                    case .filter: interactor.getMoreShowsByFilter()
+                    case .upcoming: interactor.getMoreUpcoming()
+                    case .search: Logger.log(message: "Load more shows by search")
+                    }
                 }
         }
     }
@@ -240,10 +214,16 @@ extension ShowsListView {
     struct Model: Equatable {
         var isLoaded: Bool = false
         var chosenTab: Tab = .popular
-        var popularShows: [ShowView.Model] = []
         var filter: FilterView.Model = .init()
-        var filterShows: [ShowView.Model] = []
-        var upcomingShows: [ShowView.Model] = []
+        var currentRepresentation: Representation = .popular
+        var shows: [ShowView.Model] = []
+        
+        enum Representation: Equatable {
+            case popular
+            case filter
+            case upcoming
+            case search
+        }
         
         enum Tab {
             case popular

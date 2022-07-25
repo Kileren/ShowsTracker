@@ -18,14 +18,15 @@ protocol ITVService {
     func getMoreByFilter(_ filter: DiscoverTarget.Filter) async throws -> [PlainShow]
     func getUpcoming() async throws -> [PlainShow]
     func getMoreUpcoming() async throws -> [PlainShow]
+    func cachedShow(for showId: Int) -> PlainShow?
 }
 
 final class TVService {
     
-    private let tvProvider = MoyaProvider<TVTarget>(stubClosure: { _ in .delayed(seconds: 1) })
-//    private let tvProvider = MoyaProvider<TVTarget>()
-    private let discoverProvider = MoyaProvider<DiscoverTarget>(stubClosure: { _ in .delayed(seconds: 1) })
-//    private let discoverProvider = MoyaProvider<DiscoverTarget>()
+//    private let tvProvider = MoyaProvider<TVTarget>(stubClosure: { _ in .delayed(seconds: 1) })
+    private let tvProvider = MoyaProvider<TVTarget>()
+//    private let discoverProvider = MoyaProvider<DiscoverTarget>(stubClosure: { _ in .delayed(seconds: 1) })
+    private let discoverProvider = MoyaProvider<DiscoverTarget>()
     
     private var cachedPopularShows: [PlainShow] = []
     private var popularShowsPage: Int = 1
@@ -116,6 +117,12 @@ extension TVService: ITVService {
         } catch {
             throw error
         }
+    }
+    
+    func cachedShow(for showId: Int) -> PlainShow? {
+        cachedPopularShows.first(where: { $0.id == showId }) ??
+        cachedFilteredShows.reduce([]) { $0 + $1.value }.first(where: { $0.id == showId }) ??
+        cachedUpcomingShows.first(where: { $0.id == showId })
     }
 }
 

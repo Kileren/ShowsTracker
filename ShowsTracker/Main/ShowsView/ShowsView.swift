@@ -218,8 +218,7 @@ struct ShowsView: View {
     
     func backgroundImage(geometry: GeometryProxy) -> some View {
         let index = max(min(Int(scrollProgress.rounded()), model.userShows.count - 1), 0)
-        let show = model.userShows[index]
-        let image = imageService.cachedImage(for: show.posterPath)?.wrapInImage() ?? Image("")
+        let image = model.userShows[index].image
         let opacity = 1 - abs(scrollProgress - CGFloat(index)) * 1.25
         
         return image
@@ -354,7 +353,6 @@ extension ShowsView {
         
         struct UserShow: Equatable {
             var id: Int = 0
-            var posterPath: String = ""
             var image: Image = Image("")
         }
         

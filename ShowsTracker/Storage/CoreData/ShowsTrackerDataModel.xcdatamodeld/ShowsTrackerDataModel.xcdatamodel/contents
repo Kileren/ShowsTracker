@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19141.11" systemVersion="20F71" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="PlainShowMO" representedClassName="PlainShowMO" syncable="YES" codeGenerationType="class"/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21C52" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="PlainShowMO" representedClassName="PlainShowMO" syncable="YES" codeGenerationType="class">
+        <attribute name="airDate" optional="YES" attributeType="String"/>
+        <attribute name="backdropPath" optional="YES" attributeType="String"/>
+        <attribute name="countries" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String]"/>
+        <attribute name="genres" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[Int]"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="originalLanguage" optional="YES" attributeType="String"/>
+        <attribute name="originalName" optional="YES" attributeType="String"/>
+        <attribute name="overview" optional="YES" attributeType="String"/>
+        <attribute name="popularity" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="posterPath" optional="YES" attributeType="String"/>
+        <attribute name="vote" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <fetchedProperty name="fetchedProperty" optional="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="PlainShowMO"/>
+        </fetchedProperty>
+        <fetchedProperty name="fetchedProperty1" optional="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="PlainShowMO"/>
+        </fetchedProperty>
+    </entity>
     <elements>
-        <element name="PlainShowMO" positionX="-63" positionY="-18" width="128" height="29"/>
+        <element name="PlainShowMO" positionX="302.21875" positionY="-128.390625" width="128" height="245"/>
     </elements>
 </model>

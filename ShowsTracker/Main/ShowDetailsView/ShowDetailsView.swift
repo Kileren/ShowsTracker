@@ -138,7 +138,7 @@ struct ShowDetailsView: View {
             switch model.status {
             case .ongoing: return ("Продолжается", .greenHard)
             case .ended: return ("Закончен", .redSoft)
-            case .inProduction: return ("В производстве", .yellowSoft)
+            case .inProduction, .planned: return ("В производстве", .yellowSoft)
             }
         }
         let (name, color) = args
@@ -414,7 +414,7 @@ extension ShowDetailsView {
         var vote = ""
         var voteCount = ""
         var status: Status = .inProduction
-        var isLiked = true
+        var isLiked = false
         var selectedInfoTab: InfoTab = .episodes
         var detailsInfo = DetailsInfo()
         var episodesInfo = EpisodesInfo()
@@ -424,6 +424,7 @@ extension ShowDetailsView {
             case ongoing
             case ended
             case inProduction
+            case planned
         }
         
         enum InfoTab: String {

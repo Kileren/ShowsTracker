@@ -19,7 +19,7 @@ final class CoreDataStorage: ICoreDataStorage {
     
     func save<T: ManagedObjectEncodable>(object: T) {
         if let existingObject = getManagedObject(for: object), let newValue = object as? T.ManagedObject.Object {
-            existingObject.change(with: newValue)
+            existingObject.change(with: newValue, in: managedObjectContext)
         } else {
             object.encode(in: managedObjectContext)
         }
@@ -92,13 +92,13 @@ final class CoreDataStorage: ICoreDataStorage {
     }()
     
     lazy var managedObjectModel: NSManagedObjectModel = {
-        let modelURL = Bundle.main.url(forResource: "MoneyTracker", withExtension: "momd")
+        let modelURL = Bundle.main.url(forResource: "ShowsTrackerDataModel", withExtension: "momd")
         return NSManagedObjectModel(contentsOf: modelURL!)!
     }()
     
     lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
-        let url = self.applicationDocumentaryDirectory.appendingPathComponent("FinanceAppCoreData.sqlite")
+        let url = self.applicationDocumentaryDirectory.appendingPathComponent("ShowsTrackerDataModel.sqlite")
         var failureReason = "There was an error creating or loading the application's saved data"
         do {
             try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: nil)
@@ -107,7 +107,7 @@ final class CoreDataStorage: ICoreDataStorage {
             dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data"
             dict[NSLocalizedFailureErrorKey] = failureReason
             dict[NSUnderlyingErrorKey] = error as NSError
-            let wrappedError = NSError(domain: "FinApp", code: 1000, userInfo: dict)
+            let wrappedError = NSError(domain: "ShowsTracker", code: 1000, userInfo: dict)
             NSLog("Unresolved error \(wrappedError), \(wrappedError.userInfo)")
             abort()
         }

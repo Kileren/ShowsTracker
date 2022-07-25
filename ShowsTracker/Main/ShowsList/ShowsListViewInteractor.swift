@@ -15,6 +15,11 @@ final class ShowsListViewInteractor {
     @Injected private var searchService: ISearchService
     @Injected private var genresService: IGenresService
     
+    private var popularShows: [ShowView.Model] = []
+    private var upcomingShows: [ShowView.Model] = []
+    private var filterShows: [ShowView.Model] = []
+    private var searchedShows: [ShowView.Model] = []
+    
     func viewAppeared() {
         Task {
             do {
@@ -27,10 +32,12 @@ final class ShowsListViewInteractor {
                         accessory: .vote(STNumberFormatter.format($0.vote ?? 0, format: .vote))
                     )
                 }
+                self.popularShows = popularShows
                 let model = ShowsListView.Model(
                     isLoaded: true,
                     chosenTab: .popular,
-                    popularShows: popularShows)
+                    currentRepresentation: .popular,
+                    shows: popularShows)
                 self.setModel(model)
             } catch {
                 Logger.log(warning: "Popular shows not loaded and not handled")
@@ -41,7 +48,12 @@ final class ShowsListViewInteractor {
     func searchShows(query: String) {
         Task {
             do {
-                let shows = try await searchService.searchTVShows(query: query)
+                let shows = try await searchService.searchTVShows(query: query).map {
+                    ShowView.Model(withVoteFrom: $0)
+                }
+                searchedShows = shows
+                setNewRepresentation(.search, with: shows)
+                addShows(shows)
             } catch {
                 Logger.log(warning: "Shows not loaded after search and not handled")
             }
@@ -54,7 +66,8 @@ final class ShowsListViewInteractor {
                 let shows = try await tvService.getMorePopular().map {
                     ShowView.Model(withVoteFrom: $0)
                 }
-                addPopularShows(shows)
+                popularShows.append(contentsOf: shows)
+                addShows(shows)
             } catch {
                 Logger.log(warning: "Additional popular shows not loaded and not handled")
             }
@@ -75,7 +88,8 @@ final class ShowsListViewInteractor {
                 let shows = try await tvService.getByFilter(.init(from: filterModel)).map {
                     ShowView.Model(withVoteFrom: $0)
                 }
-                setFilterShows(shows)
+                filterShows = shows
+                addShows(shows)
             } catch {
                 Logger.log(warning: "Filter shows not loaded and not handled")
             }
@@ -89,7 +103,8 @@ final class ShowsListViewInteractor {
                 let shows = try await tvService.getMoreByFilter(.init(from: filterModel)).map {
                     ShowView.Model(withVoteFrom: $0)
                 }
-                addFilterShows(shows)
+                filterShows.append(contentsOf: shows)
+                addShows(shows)
             } catch {
                 Logger.log(warning: "More filter shows not loaded and not handled")
             }
@@ -98,10 +113,17 @@ final class ShowsListViewInteractor {
     
     func filterSelected(_ filter: FilterView.Model) {
         appState.info[\.showsList.filter] = filter
+        setNewRepresentation(.filter, with: [])
     }
     
     func didSelectTab(_ tab: ShowsListView.Model.Tab) {
         appState.info[\.showsList.chosenTab] = tab
+        switch tab {
+        case .popular:
+            setNewRepresentation(.popular, with: popularShows)
+        case .soon:
+            setNewRepresentation(.upcoming, with: upcomingShows)
+        }
     }
     
     func getUpcoming() {
@@ -110,7 +132,8 @@ final class ShowsListViewInteractor {
                 let shows = try await tvService.getUpcoming().map {
                     ShowView.Model(withDateFrom: $0)
                 }
-                addUpcomingShows(shows)
+                upcomingShows = shows
+                addShows(shows)
             } catch {
                 Logger.log(warning: "Upcoming shows not loaded and not handled")
             }
@@ -123,7 +146,8 @@ final class ShowsListViewInteractor {
                 let shows = try await tvService.getMoreUpcoming().map {
                     ShowView.Model(withDateFrom: $0)
                 }
-                addUpcomingShows(shows)
+                upcomingShows.append(contentsOf: shows)
+                addShows(shows)
             } catch {
                 Logger.log(warning: "Upcoming shows not loaded and not handled")
             }
@@ -140,23 +164,14 @@ private extension ShowsListViewInteractor {
     }
     
     @MainActor
-    func addPopularShows(_ shows: [ShowView.Model]) {
-        appState.info[\.showsList.popularShows].append(contentsOf: shows)
+    func setNewRepresentation(_ representation: ShowsListView.Model.Representation, with shows: [ShowView.Model]) {
+        appState.info[\.showsList.currentRepresentation] = representation
+        appState.info[\.showsList.shows] = shows
     }
     
     @MainActor
-    func setFilterShows(_ shows: [ShowView.Model]) {
-        appState.info[\.showsList.filterShows] = shows
-    }
-    
-    @MainActor
-    func addFilterShows(_ shows: [ShowView.Model]) {
-        appState.info[\.showsList.filterShows].append(contentsOf: shows)
-    }
-    
-    @MainActor
-    func addUpcomingShows(_ shows: [ShowView.Model]) {
-        appState.info[\.showsList.upcomingShows].append(contentsOf: shows)
+    func addShows(_ shows: [ShowView.Model]) {
+        appState.info[\.showsList.shows].append(contentsOf: shows)
     }
 }
 

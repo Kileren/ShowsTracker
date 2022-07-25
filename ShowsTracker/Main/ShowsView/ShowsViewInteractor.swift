@@ -15,6 +15,7 @@ final class ShowsViewInteractor: ObservableObject {
     private let appState: AppState
     @Injected private var imageService: IImageService
     @Injected private var tvService: ITVService
+    @Injected private var coreDataStorage: ICoreDataStorage
     
     init(appState: AppState) {
         self.appState = appState
@@ -22,16 +23,18 @@ final class ShowsViewInteractor: ObservableObject {
     
     func viewAppeared() {
         Task {
-            let witcherImage = try await imageService.loadImage(path: "/7vjaCdMw15FEbXyLQTVa04URsPm.jpg", width: 500).wrapInImage()
-            let mandalorianImage = try await imageService.loadImage(path: "/sWgBv7LV2PRoQgkxwlibdGXKz1S.jpg", width: 500).wrapInImage()
+            let savedShows = coreDataStorage.get(object: PlainShow.self)
+            var userShows: [ShowsView.Model.UserShow] = []
+            for show in savedShows {
+                // TODO: make concurrent loading
+                let image = try await imageService.loadImage(path: show.posterPath ?? "", width: 500).wrapInImage()
+                userShows.append(.init(id: show.id, image: image))
+            }
             
             var model = ShowsView.Model(
                 isUserShowsLoaded: true,
                 isPopularShowsLoaded: false,
-                userShows: [
-                    .init(id: 71912, posterPath: "/7vjaCdMw15FEbXyLQTVa04URsPm.jpg", image: witcherImage),
-                    .init(id: 82856, posterPath: "/sWgBv7LV2PRoQgkxwlibdGXKz1S.jpg", image: mandalorianImage)
-                ],
+                userShows: userShows,
                 popularShows: [])
             
             await setModel(model)
