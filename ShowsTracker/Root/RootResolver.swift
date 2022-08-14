@@ -10,17 +10,8 @@ import Foundation
 
 extension Resolver: ResolverRegistering {
     public static func registerAllServices() {
-        register { AppState() }.scope(.application)
         registerMainDependencies()
         registerNetworkServices()
         registerStorages()
     }
 }
-
-#if DEBUG
-extension Resolver {
-    static func registerPreview() {
-        register { AppState() }.scope(.application)
-    }
-}
-#endif

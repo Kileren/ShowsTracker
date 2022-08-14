@@ -21,13 +21,15 @@ struct LoadableImageView: View {
     private let path: String
     private let width: Int
     
-    @State var image: Image?
+    private var isImageLoaded: Binding<Bool>?
+    @State private var image: Image?
     
     // MARK: - Lifecycle
     
-    init(path: String, width: Int = 500) {
+    init(path: String, width: Int = 500, isImageLoaded: Binding<Bool>? = nil) {
         self.path = path
         self.width = width
+        self.isImageLoaded = isImageLoaded
     }
     
     // MARK: - UI
@@ -40,6 +42,7 @@ struct LoadableImageView: View {
         } else {
             Rectangle()
                 .foregroundColor(.separators)
+                .frame(minHeight: 150)
                 .redacted(reason: .shimmer)
                 .onAppear {
                     obtainImage()
@@ -56,6 +59,7 @@ private extension LoadableImageView {
             do {
                 let loadedImage = try await imageService.loadImage(path: path, width: width)
                 image = Image(uiImage: loadedImage)
+                isImageLoaded?.wrappedValue = true
             } catch {
                 Logger.log(message: "Image not loaded and not handled")
             }
@@ -65,8 +69,6 @@ private extension LoadableImageView {
 
 struct LoadableImageView_Previews: PreviewProvider {
     static var previews: some View {
-        Resolver.registerPreview()
-        
         return LoadableImageView(path: "")
     }
 }

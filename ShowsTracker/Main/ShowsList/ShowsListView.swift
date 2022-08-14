@@ -11,20 +11,17 @@ import Resolver
 
 struct ShowsListView: View {
     
-    @InjectedObject private var appState: AppState
-    @Injected private var interactor: ShowsListViewInteractor
+    @InjectedObject private var viewModel: ShowsListViewModel
+    @ObservedObject private var sheetNavigator = SheetNavigator()
     
-    @State private var model: Model = .init()
     @State private var searchedText: String = ""
     
     @State private var filterActive: Bool = false
     @State private var filterIsShown: Bool = false
     
-    @State private var detailsShown: Bool = false
-    
     var body: some View {
         Group {
-            if model.isLoaded {
+            if viewModel.model.isLoaded {
                 VStack(spacing: 32) {
                     HStack(spacing: 32) {
                         tabView(for: .popular)
@@ -36,7 +33,7 @@ struct ShowsListView: View {
                     }
                     GeometryReader { geometry in
                         ScrollView(showsIndicators: false) {
-                            switch model.currentRepresentation {
+                            switch viewModel.model.currentRepresentation {
                             case .popular:
                                 showsView(geometry: geometry)
                             case .upcoming:
@@ -65,25 +62,24 @@ struct ShowsListView: View {
                 filterView
             }
         }
-        .onAppear { interactor.viewAppeared() }
-        .onReceive(modelUpdate) { model = $0 }
-        .sheet(isPresented: $detailsShown) { ShowDetailsView() }
+        .onAppear { viewModel.viewAppeared() }
+        .sheet(isPresented: $sheetNavigator.showSheet) { sheetNavigator.sheetView() }
     }
     
     func tabView(for tab: Model.Tab) -> some View {
         Button {
-            interactor.didSelectTab(tab)
-            if tab == .soon, model.shows.isEmpty {
-                interactor.getUpcoming()
+            viewModel.didSelectTab(tab)
+            if tab == .soon, viewModel.model.shows.isEmpty {
+                viewModel.getUpcoming()
             }
         } label: {
             Text(tab.name)
                 .font(.regular15)
-                .foregroundColor(model.chosenTab == tab ? .white100 : .text100)
+                .foregroundColor(viewModel.model.chosenTab == tab ? .white100 : .text100)
                 .frame(height: 16)
                 .background(
                     RoundedRectangle(cornerRadius: 16)
-                        .foregroundColor(model.chosenTab == tab ? .bay : .clear)
+                        .foregroundColor(viewModel.model.chosenTab == tab ? .bay : .clear)
                         .padding(.horizontal, -12)
                         .padding(.vertical, -8)
                 )
@@ -109,7 +105,7 @@ struct ShowsListView: View {
                 )
                     .onSubmit {
                         if !searchedText.isEmpty {
-                            interactor.searchShows(query: searchedText)
+                            viewModel.searchShows(query: searchedText)
                         }
                     }
             }
@@ -123,32 +119,32 @@ struct ShowsListView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 8)
                     .frame(width: 32, height: 32)
-                    .foregroundColor(model.filter.isEmpty ? .white100 : .bay)
+                    .foregroundColor(viewModel.model.filter.isEmpty ? .white100 : .bay)
                 Image(systemName: "slider.horizontal.3")
                     .resizable()
                     .frame(width: 20, height: 17)
-                    .foregroundColor(model.filter.isEmpty ? .bay : .white100)
+                    .foregroundColor(viewModel.model.filter.isEmpty ? .bay : .white100)
             }
         }
     }
     
     func showsView(geometry: GeometryProxy) -> some View {
         gridView(geometry: geometry) {
-            ForEach(model.shows, id: \.self) { model in
+            ForEach(viewModel.model.shows, id: \.self) { model in
                 ShowView(model: model) { showID in
-                    appState.routing.value.showDetails.showID = showID
-                    detailsShown = true
+                    sheetNavigator.sheetDestination = .showDetails(showID: showID)
+                    sheetNavigator.showSheet = true
                 }
             }
             Rectangle()
                 .frame(width: 0, height: 0)
                 .foregroundColor(.clear)
                 .onAppear {
-                    interactor.getMorePopular()
-                    switch model.currentRepresentation {
-                    case .popular: interactor.getMorePopular()
-                    case .filter: interactor.getMoreShowsByFilter()
-                    case .upcoming: interactor.getMoreUpcoming()
+                    viewModel.getMorePopular()
+                    switch viewModel.model.currentRepresentation {
+                    case .popular: viewModel.getMorePopular()
+                    case .filter: viewModel.getMoreShowsByFilter()
+                    case .upcoming: viewModel.getMoreUpcoming()
                     case .search: Logger.log(message: "Load more shows by search")
                     }
                 }
@@ -185,9 +181,9 @@ private extension ShowsListView {
                 }
             VStack(spacing: 0) {
                 Spacer()
-                FilterView(model: model.filter, onConfirm: { model in
-                    interactor.filterSelected(model)
-                    interactor.getShowsByFilter()
+                FilterView(model: viewModel.model.filter, onConfirm: { model in
+                    viewModel.filterSelected(model)
+                    viewModel.getShowsByFilter()
                     filterIsShown = false
                     after(timeout: 0.3) { filterActive = false }
                 }, onClose: {
@@ -201,12 +197,6 @@ private extension ShowsListView {
         .onAppear {
             filterIsShown = true
         }
-    }
-}
-
-extension ShowsListView {
-    var modelUpdate: AnyPublisher<Model, Never> {
-        appState.info.updates(for: \.showsList)
     }
 }
 
@@ -235,6 +225,28 @@ extension ShowsListView {
                 case .soon: return "Скоро"
                 }
             }
+        }
+    }
+}
+
+// MARK: - Sheet Navigator
+
+private class SheetNavigator: ObservableObject {
+    
+    @Published var showSheet = false
+    var sheetDestination: SheetDestination = .none
+    
+    enum SheetDestination {
+        case none
+        case showDetails(showID: Int)
+    }
+    
+    func sheetView() -> AnyView {
+        switch sheetDestination {
+        case .none:
+            return AnyView(Text(""))
+        case .showDetails(let showID):
+            return AnyView(ShowDetailsView(showID: showID))
         }
     }
 }

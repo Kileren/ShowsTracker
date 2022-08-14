@@ -11,8 +11,8 @@ import Resolver
 
 struct FilterView: View {
     
-    @State private var lowerYear = Model.originalMinYear
-    @State private var upperYear = Model.originalMaxYear
+    @State private var lowerYear: Int
+    @State private var upperYear: Int
     
     @State private var genresViewIsActive: Bool = false
     @State private var genresViewIsShown: Bool = false
@@ -29,6 +29,8 @@ struct FilterView: View {
     
     init(model: Model, onConfirm: @escaping (Model) -> Void, onClose: @escaping () -> Void) {
         self.model = model
+        self.lowerYear = model.minYear
+        self.upperYear = model.maxYear
         self.onConfirm = onConfirm
         self.onClose = onClose
     }

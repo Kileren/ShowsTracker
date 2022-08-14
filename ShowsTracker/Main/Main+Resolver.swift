@@ -9,8 +9,8 @@ import Resolver
 
 extension Resolver {
     static func registerMainDependencies() {
-        register { ShowsViewInteractor(appState: resolve()) }
-        register { ShowDetailsViewInteractor() }
-        register { ShowsListViewInteractor() }
+        register { ShowsViewModel() }
+        register { ShowsListViewModel() }
+        register { ShowDetailsViewModel() }
     }
 }

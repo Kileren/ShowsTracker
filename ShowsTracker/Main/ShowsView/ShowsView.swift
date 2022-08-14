@@ -13,39 +13,33 @@ struct ShowsView: View {
     
     // MARK: - Injected
     
-    @InjectedObject var appState: AppState
-    @InjectedObject var interactor: ShowsViewInteractor
-    @Injected var imageService: IImageService
+    @Injected private var imageService: IImageService
+    @InjectedObject private var viewModel: ShowsViewModel
+    @ObservedObject private var sheetNavigator = SheetNavigator()
     
     // MARK: - State
     
     @State private var index: Int = 0
     @State private var scrollProgress: CGFloat = 0
     
-    @State private var model: Model = .init()
-    @State private var routing: Routing = .init()
-    private var routingBinding: Binding<Routing> {
-        $routing.dispatched(to: appState.routing, \.shows)
-    }
-    
     // MARK: - View
     
     var body: some View {
         GeometryReader { geometry in
-            if model.isUserShowsLoaded {
+            if viewModel.model.isUserShowsLoaded {
                 ScrollView(.vertical, showsIndicators: false) {
                     ZStack(alignment: .top) {
                         blurBackground(geometry: geometry)
                         
                         VStack(spacing: 32) {
-                            if !model.userShows.isEmpty {
+                            if !viewModel.model.userShows.isEmpty {
                                 currentShows(geometry: geometry)
                                 pageDotsView(geometry: geometry)
                             } else {
                                 emptyShowsViews(geometry: geometry)
                             }
                             
-                            if model.isPopularShowsLoaded {
+                            if viewModel.model.isPopularShowsLoaded {
                                 popular(geometry: geometry)
                             } else {
                                 skeletonForPopular(geometry: geometry)
@@ -59,11 +53,13 @@ struct ShowsView: View {
         }
         .background(Color.backgroundLight)
         .edgesIgnoringSafeArea(.all)
-        .onAppear { interactor.viewAppeared() }
-        .onReceive(modelUpdate) { model = $0 }
-        .onReceive(routingUpdates) { routing = $0 }
-        .sheet(isPresented: routingBinding.detailsShown) { ShowDetailsView() }
-        .sheet(isPresented: routingBinding.showsListShown) { ShowsListView() }
+        .onAppear { viewModel.viewAppeared() }
+        .sheet(isPresented: $sheetNavigator.showSheet) {
+            viewModel.reload()
+        } content: {
+            sheetNavigator.sheetView()
+        }
+
     }
     
     func skeletonLoader(geometry: GeometryProxy) -> some View {
@@ -123,7 +119,7 @@ struct ShowsView: View {
     
     func blurBackground(geometry: GeometryProxy) -> some View {
         ZStack(alignment: .top, content: {
-            if !model.userShows.isEmpty {
+            if !viewModel.model.userShows.isEmpty {
                 backgroundImage(geometry: geometry)
             }
             backgroundImageGradient(geometry: geometry)
@@ -135,11 +131,12 @@ struct ShowsView: View {
     }
     
     func currentShows(geometry: GeometryProxy) -> some View {
-        let content = model.userShows.enumerated().map {
+        let content = viewModel.model.userShows.enumerated().map {
             WatchingShowView(
                 image: $0.element.image,
                 index: $0.offset,
-                showId: $0.element.id)
+                showId: $0.element.id,
+                sheetNavigator: sheetNavigator)
         }
         
         return PagingScrollView(
@@ -205,8 +202,8 @@ struct ShowsView: View {
     
     @ViewBuilder
     func pageDotsView(geometry: GeometryProxy) -> some View {
-        if model.userShows.count > 1 {
-            PageDotsView(numberOfPages: model.userShows.count,
+        if viewModel.model.userShows.count > 1 {
+            PageDotsView(numberOfPages: viewModel.model.userShows.count,
                          currentIndex: index)
                 .frame(width: geometry.size.width, height: 12, alignment: .center)
         } else {
@@ -217,8 +214,8 @@ struct ShowsView: View {
     }
     
     func backgroundImage(geometry: GeometryProxy) -> some View {
-        let index = max(min(Int(scrollProgress.rounded()), model.userShows.count - 1), 0)
-        let image = model.userShows[index].image
+        let index = max(min(Int(scrollProgress.rounded()), viewModel.model.userShows.count - 1), 0)
+        let image = viewModel.model.userShows[index].image
         let opacity = 1 - abs(scrollProgress - CGFloat(index)) * 1.25
         
         return image
@@ -254,7 +251,8 @@ struct ShowsView: View {
                     .foregroundColor(.text100)
                 Spacer()
                 Button {
-                    appState.routing[\.shows.showsListShown] = true
+                    sheetNavigator.sheetDestination = .showsList
+                    sheetNavigator.showSheet = true
                 } label: {
                     Text(Strings.more)
                         .font(.medium13)
@@ -263,13 +261,13 @@ struct ShowsView: View {
             }
             
             popularShows(geometry: geometry, content: { width, height in
-                ForEach(model.popularShows, id: \.id) { show in
+                ForEach(viewModel.model.popularShows, id: \.id) { show in
                     LoadableImageView(path: show.posterPath, width: 200)
                         .frame(width: width, height: height)
                         .cornerRadius(DesignConst.smallCornerRadius)
                         .onTapGesture {
-                            appState.routing[\.showDetails.showID] = show.id
-                            appState.routing[\.shows.detailsShown] = true
+                            sheetNavigator.sheetDestination = .showDetails(showID: show.id)
+                            sheetNavigator.showSheet = true
                         }
                 }
             })
@@ -306,29 +304,16 @@ fileprivate struct WatchingShowView: View, Identifiable, Indexable {
     var index: Int
     var showId: Int
     
-    @InjectedObject var appState: AppState
+    @ObservedObject var sheetNavigator: SheetNavigator
     
     var body: some View {
         image
             .resizable()
             .cornerRadius(DesignConst.normalCornerRadius)
             .onTapGesture {
-                appState.routing[\.showDetails.showID] = showId
-                appState.routing[\.shows.detailsShown] = true
+                sheetNavigator.sheetDestination = .showDetails(showID: showId)
+                sheetNavigator.showSheet = true
             }
-    }
-}
-
-// MARK: - State Updates
-
-extension ShowsView {
-    
-    var modelUpdate: AnyPublisher<Model, Never> {
-        appState.info.updates(for: \.shows)
-    }
-    
-    var routingUpdates: AnyPublisher<Routing, Never> {
-        appState.routing.updates(for: \.shows)
     }
 }
 
@@ -363,6 +348,31 @@ extension ShowsView {
     }
 }
 
+// MARK: - Sheet Navigator
+
+private class SheetNavigator: ObservableObject {
+    
+    @Published var showSheet = false
+    var sheetDestination: SheetDestination = .none
+    
+    enum SheetDestination {
+        case none
+        case showDetails(showID: Int)
+        case showsList
+    }
+    
+    func sheetView() -> AnyView {
+        switch sheetDestination {
+        case .none:
+            return AnyView(Text(""))
+        case .showDetails(let showID):
+            return AnyView(ShowDetailsView(showID: showID))
+        case .showsList:
+            return AnyView(ShowsListView())
+        }
+    }
+}
+
 fileprivate extension CGFloat {
     static let topCurrentShowsOffset: CGFloat = 80
 }
@@ -371,45 +381,8 @@ fileprivate extension CGFloat {
 
 struct ShowsView_Previews: PreviewProvider {
     static var previews: some View {
-        Resolver.registerPreview()
-        Resolver.registerViewPreview()
-        
         return ShowsView()
 //            .previewDevice(PreviewDevice(rawValue: "iPhone SE (2nd generation)"))
 //            .previewDisplayName("iPhone SE (2nd generation)")
-    }
-}
-
-#if DEBUG
-fileprivate extension Resolver {
-    static func registerViewPreview() {
-        register { ShowsViewInteractor(appState: resolve()) }
-    }
-}
-#endif
-
-extension View {
-    /// Navigate to a new view.
-    /// - Parameters:
-    ///   - view: View to navigate to.
-    ///   - binding: Only navigates when this condition is `true`.
-    func navigate<NewView: View>(to view: NewView, when binding: Binding<Bool>) -> some View {
-        NavigationView {
-            ZStack {
-                self
-                    .navigationBarTitle("")
-                    .navigationBarHidden(true)
-
-                NavigationLink(
-                    destination: view
-                        .navigationBarTitle("")
-                        .navigationBarHidden(true),
-                    isActive: binding
-                ) {
-                    EmptyView()
-                }
-            }
-        }
-        .navigationViewStyle(.stack)
     }
 }

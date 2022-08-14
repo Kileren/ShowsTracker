@@ -1,34 +1,25 @@
 //
-//  ShowDetailsViewInteractor.swift
+//  ShowDetailsViewModel.swift
 //  ShowsTracker
 //
-//  Created by Sergey Bogachev on 30.05.2021.
+//  Created by Sergey Bogachev on 25.07.2022.
 //
 
 import SwiftUI
 import Resolver
 
-final class ShowDetailsViewInteractor {
+final class ShowDetailsViewModel: ObservableObject {
     
-    @InjectedObject var appState: AppState
+    @Published var model: ShowDetailsView.Model = .init()
+    
     @Injected var tvService: ITVService
     @Injected var coreDataStorage: ICoreDataStorage
     @Injected var imageService: IImageService
     
-    private(set) var showID: Int = 0
+    private var showID: Int = 0
     
-    deinit {
-        appState.service.value.shownDetailsIDs.remove(showID)
-    }
-    
-    init() {
-        showID = appState.routing[\.showDetails.showID]
-        appState.service.value.shownDetailsIDs.insert(showID)
-    }
-    
-    func viewAppeared() {
-        showID = appState.routing[\.showDetails.showID]
-        appState.service.value.shownDetailsIDs.insert(showID)
+    func viewAppeared(withShowID showID: Int) {
+        self.showID = showID
         
         Task {
             do {
@@ -53,43 +44,38 @@ final class ShowDetailsViewInteractor {
                         selectedSeason: min(1, show.numberOfSeasons ?? 0),
                         episodesPerSeasons: episodesInfo)
                 )
-                
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.appState.info[\.showDetails[self.showID]] = model
-                }
+                await set(model: model)
             } catch {
                 Logger.log(warning: "Detailed show not loaded and not handled")
             }
         }
     }
     
+    @MainActor
+    func set(model: ShowDetailsView.Model) {
+        self.model = model
+    }
+    
     func didTapLikeButton() {
-        if appState.info.value.showDetails[showID]?.isLiked == true {
+        if model.isLiked {
             if let show = coreDataStorage.get(object: PlainShow.self).first(where: { $0.id == showID }) {
                 coreDataStorage.remove(object: show)
             }
-            appState.info.value.shows.userShows.removeAll(where: { $0.id == showID })
+            model.isLiked = false
         } else {
             if let show = tvService.cachedShow(for: showID) {
                 coreDataStorage.save(object: show)
-
-                Task {
-                    let image = try await imageService.loadImage(path: show.posterPath ?? "", width: 500).wrapInImage()
-                    appState.info.value.shows.userShows.append(.init(id: showID, image: image))
-                }
             }
+            model.isLiked = true
         }
-        
-        appState.info.value.showDetails[showID]?.isLiked.toggle()
     }
     
     func didChangeInfoTab(to tab: ShowDetailsView.Model.InfoTab) {
-        appState.info.value.showDetails[showID]?.selectedInfoTab = tab
+        model.selectedInfoTab = tab
     }
     
     func didSelectSeason(_ season: Int) {
-        appState.info.value.showDetails[showID]?.episodesInfo.selectedSeason = season
+        model.episodesInfo.selectedSeason = season
     }
     
     func loadSimilarShows() {
@@ -97,7 +83,6 @@ final class ShowDetailsViewInteractor {
             do {
                 let similarShows = try await tvService.getSimilar(for: showID)
                 let similarShowsViewModels = similarShows
-                    .filter { !appState.service.value.shownDetailsIDs.contains($0.id) }
                     .map {
                         ShowView.Model(
                             id: $0.id,
@@ -106,13 +91,7 @@ final class ShowDetailsViewInteractor {
                             accessory: .vote(STNumberFormatter.format($0.vote ?? 0, format: .vote))
                         )
                     }
-                
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.appState.info.value.showDetails[self.showID]?.similarShowsInfo = .init(
-                        isLoaded: true,
-                        models: similarShowsViewModels)
-                }
+                await set(similarShows: similarShowsViewModels)
             } catch {
                 Logger.log(warning: "Similar show not loaded and not handled", error: error)
             }
@@ -120,8 +99,7 @@ final class ShowDetailsViewInteractor {
     }
 }
 
-private extension ShowDetailsViewInteractor {
-    
+private extension ShowDetailsViewModel {
     func getEpisodesInfo(for show: DetailedShow) async -> [[ShowDetailsView.Model.EpisodesInfo.Episode]] {
         var seasonsDetails: [SeasonDetails] = []
         guard let seasonsCount = show.seasons?.count, seasonsCount > 0 else { return [] }
@@ -144,6 +122,11 @@ private extension ShowDetailsViewInteractor {
                     overview: episode.overview ?? "")
             }
         }
+    }
+    
+    @MainActor
+    func set(similarShows: [ShowView.Model]) {
+        model.similarShowsInfo = .init(isLoaded: true, models: similarShows)
     }
 }
 

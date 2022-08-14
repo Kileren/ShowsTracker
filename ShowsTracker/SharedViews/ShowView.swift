@@ -13,6 +13,7 @@ struct ShowView: View {
     private let tapAction: (Int) -> Void
     
     @State private var isTextTruncated = false
+    @State private var isImageLoaded = false
     
     init(model: Model, tapAction: @escaping (Int) -> Void) {
         self.model = model
@@ -21,24 +22,26 @@ struct ShowView: View {
     
     var body: some View {
         VStack(spacing: 4) {
-            LoadableImageView(path: model.posterPath)
+            LoadableImageView(path: model.posterPath, isImageLoaded: $isImageLoaded)
                 .mask(RoundedRectangle(cornerRadius: 8))
-                .overlay(
-                    ZStack(alignment: .bottomTrailing) {
-                        LinearGradient(
-                            gradient: Gradient(colors: [.black, .clear]),
-                            startPoint: .bottom,
-                            endPoint: .center)
-                            .mask(RoundedRectangle(cornerRadius: 8))
-                        
-                        switch model.accessory {
-                        case let .vote(vote):
-                            voteAccessoryView(vote: vote)
-                        case let .date(day, month):
-                            dateAccessoryView(day: day, month: month)
+                .overlay {
+                    if isImageLoaded {
+                        ZStack(alignment: .bottomTrailing) {
+                            LinearGradient(
+                                gradient: Gradient(colors: [.black, .clear]),
+                                startPoint: .bottom,
+                                endPoint: .center)
+                                .mask(RoundedRectangle(cornerRadius: 8))
+                            
+                            switch model.accessory {
+                            case let .vote(vote):
+                                voteAccessoryView(vote: vote)
+                            case let .date(day, month):
+                                dateAccessoryView(day: day, month: month)
+                            }
                         }
                     }
-                )
+                }
             
             ZStack(alignment: .bottom) {
                 TruncableText(text: Text(model.name), lineLimit: 2) {

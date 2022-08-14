@@ -11,11 +11,12 @@ import Resolver
 
 struct ShowDetailsView: View {
     
-    @InjectedObject var appState: AppState
-    @Injected var interactor: ShowDetailsViewInteractor
+    // MARK: - Dependencies
     
-    @State private var model: Model = Model()
-    @State private var detailsShown: Bool = false
+    @InjectedObject private var viewModel: ShowDetailsViewModel
+    @ObservedObject private var sheetNavigator: SheetNavigator = SheetNavigator()
+    
+    // MARK: - State
     
     @AnimatedState(
         value: false,
@@ -23,9 +24,13 @@ struct ShowDetailsView: View {
     ) private var episodeDetailsShown: Bool
     @State private var episodeDetails = ""
     
+    var showID: Int
+    
+    // MARK: - Body
+    
     var body: some View {
         GeometryReader { geometry in
-            if model.isLoaded {
+                if viewModel.model.isLoaded {
                 ZStack(alignment: .top) {
                     blurBackground(geometry: geometry)
                     overlayView(geometry: geometry)
@@ -40,9 +45,10 @@ struct ShowDetailsView: View {
                 ShowDetailsSkeletonView()
             }
         }
-        .onAppear { interactor.viewAppeared() }
-        .onReceive(modelUpdates) { self.model = $0 }
-        .sheet(isPresented: $detailsShown) { ShowDetailsView() }
+        .onAppear { viewModel.viewAppeared(withShowID: showID) }
+        .sheet(isPresented: $sheetNavigator.showSheet) {
+            sheetNavigator.sheetView()
+        }
         .overlay {
             if episodeDetailsShown {
                 episodeDetailsView
@@ -60,7 +66,7 @@ struct ShowDetailsView: View {
     }
     
     func imageView(geometry: GeometryProxy) -> some View {
-        LoadableImageView(path: model.posterPath, width: 500)
+        LoadableImageView(path: viewModel.model.posterPath, width: 500)
             .frame(width: geometry.size.width * 0.3,
                    height: geometry.size.width * 0.45)
             .cornerRadius(DesignConst.normalCornerRadius)
@@ -72,10 +78,10 @@ struct ShowDetailsView: View {
             HStack {
                 Spacer()
                 VStack(spacing: 4) {
-                    Text(model.name)
+                    Text(viewModel.model.name)
                         .font(.medium28)
                         .foregroundColor(.text100)
-                    Text(model.broadcastYears)
+                    Text(viewModel.model.broadcastYears)
                         .font(.regular15)
                         .foregroundColor(.text60)
                 }
@@ -96,13 +102,13 @@ struct ShowDetailsView: View {
                 infoTabs
                 spacer(height: 16)
                 
-                switch model.selectedInfoTab {
-                case .episodes where model.episodesInfo.numberOfSeasons > 0: episodesInfo
+                switch viewModel.model.selectedInfoTab {
+                case .episodes where viewModel.model.episodesInfo.numberOfSeasons > 0: episodesInfo
                 case .episodes:
                     Rectangle().foregroundColor(.clear)
                 case .details:
                     detailsInfo
-                case .similar where !model.similarShowsInfo.isLoaded:
+                case .similar where !viewModel.model.similarShowsInfo.isLoaded:
                     Text("Loading")
                 case .similar:
                     GeometryReader { geometry in
@@ -123,11 +129,11 @@ struct ShowDetailsView: View {
                     .resizable()
                     .frame(width: 12, height: 12)
                     .foregroundColor(.yellowSoft)
-                Text(model.vote)
+                Text(viewModel.model.vote)
                     .font(.medium17Rounded)
                     .foregroundColor(.yellowSoft)
             }
-            Text(model.voteCount)
+            Text(viewModel.model.voteCount)
                 .font(.medium13)
                 .foregroundColor(.text40)
         }
@@ -135,7 +141,7 @@ struct ShowDetailsView: View {
     
     var statusView: some View {
         var args: (String, Color) {
-            switch model.status {
+            switch viewModel.model.status {
             case .ongoing: return ("Продолжается", .greenHard)
             case .ended: return ("Закончен", .redSoft)
             case .inProduction, .planned: return ("В производстве", .yellowSoft)
@@ -155,9 +161,9 @@ struct ShowDetailsView: View {
     
     var likeView: some View {
         Button {
-            interactor.didTapLikeButton()
+            viewModel.didTapLikeButton()
         } label: {
-            Image(systemName: model.isLiked ? "heart.fill" : "heart")
+            Image(systemName: viewModel.model.isLiked ? "heart.fill" : "heart")
                 .resizable()
                 .frame(width: 32, height: 32)
                 .foregroundColor(.bay)
@@ -175,7 +181,7 @@ struct ShowDetailsView: View {
     }
     
     func backgroundImage(geometry: GeometryProxy) -> some View {
-        LoadableImageView(path: model.posterPath, width: 500)
+        LoadableImageView(path: viewModel.model.posterPath, width: 500)
             .frame(width: geometry.size.width,
                    height: geometry.size.width * 1.335,
                    alignment: .top)
@@ -212,19 +218,19 @@ struct ShowDetailsView: View {
     
     func infoTab(for tab: Model.InfoTab) -> some View {
         Button {
-            if model.selectedInfoTab != tab {
-                interactor.didChangeInfoTab(to: tab)
+            if viewModel.model.selectedInfoTab != tab {
+                viewModel.didChangeInfoTab(to: tab)
             }
-            if tab == .similar, !model.similarShowsInfo.isLoaded {
-                interactor.loadSimilarShows()
+            if tab == .similar, !viewModel.model.similarShowsInfo.isLoaded {
+                viewModel.loadSimilarShows()
             }
         } label: {
             VStack(alignment: .leading, spacing: 4) {
                 Text(tab.rawValue)
                     .font(.medium20)
-                    .foregroundColor(model.selectedInfoTab == tab ? .bay : .text60)
+                    .foregroundColor(viewModel.model.selectedInfoTab == tab ? .bay : .text60)
                 
-                if model.selectedInfoTab == tab {
+                if viewModel.model.selectedInfoTab == tab {
                     RoundedRectangle(cornerRadius: 1)
                         .size(width: 32, height: 2)
                         .foregroundColor(.bay)
@@ -240,13 +246,13 @@ struct ShowDetailsView: View {
                     .font(.regular17)
                     .foregroundColor(.text60)
                 
-                ForEach(1...model.episodesInfo.numberOfSeasons, id: \.self) { season in
+                ForEach(1...viewModel.model.episodesInfo.numberOfSeasons, id: \.self) { season in
                     Button {
-                        interactor.didSelectSeason(season)
+                        viewModel.didSelectSeason(season)
                     } label: {
                         Text("\(season)")
                             .font(.regular17)
-                            .foregroundColor(model.episodesInfo.selectedSeason == season ? .bay : .text60)
+                            .foregroundColor(viewModel.model.episodesInfo.selectedSeason == season ? .bay : .text60)
                     }
                 }
             }
@@ -254,7 +260,7 @@ struct ShowDetailsView: View {
             ScrollView(showsIndicators: false) {
                 HStack {
                     VStack(alignment: .leading, spacing: 16) {
-                        ForEach(model.episodesInfo.episodesPerSeasons[model.episodesInfo.selectedSeason - 1], id: \.self) {
+                        ForEach(viewModel.model.episodesInfo.episodesPerSeasons[viewModel.model.episodesInfo.selectedSeason - 1], id: \.self) {
                             episodeInfo(episode: $0)
                         }
                     }
@@ -294,7 +300,7 @@ struct ShowDetailsView: View {
                     .font(.semibold17)
                     .foregroundColor(.text100)
                 ScrollView(.vertical, showsIndicators: false) {
-                    Text(model.detailsInfo.overview)
+                    Text(viewModel.model.detailsInfo.overview)
                         .font(.regular17)
                         .foregroundColor(.text100)
                 }
@@ -305,7 +311,7 @@ struct ShowDetailsView: View {
     var tagsView: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 26) {
-                ForEach(model.detailsInfo.tags, id: \.self) {
+                ForEach(viewModel.model.detailsInfo.tags, id: \.self) {
                     tagView(for: $0)
                 }
                 Spacer()
@@ -339,10 +345,10 @@ struct ShowDetailsView: View {
             alignment: .leading,
             spacing: 16,
             pinnedViews: []) {
-                ForEach(model.similarShowsInfo.models, id: \.self) { model in
+                ForEach(viewModel.model.similarShowsInfo.models, id: \.self) { model in
                     ShowView(model: model) { showID in
-                        appState.routing.value.showDetails.showID = showID
-                        detailsShown = true
+                        sheetNavigator.sheetDestination = .showDetails(showID: showID)
+                        sheetNavigator.showSheet = true
                     }
                 }
             }
@@ -382,20 +388,27 @@ struct ShowDetailsView: View {
     }
 }
 
-// MARK: - State Updates
+// MARK: - Sheet Navigator
 
-extension ShowDetailsView {
+private class SheetNavigator: ObservableObject {
     
-    var modelUpdates: AnyPublisher<Model, Never> {
-        let showID = interactor.showID == 0 ? appState.routing.value.showDetails.showID : interactor.showID
-        if appState.info[\.showDetails[showID]] == nil {
-            appState.info[\.showDetails[showID]] = .init()
+    @Published var showSheet = false
+    var sheetDestination: SheetDestination = .none
+    
+    enum SheetDestination {
+        case none
+        case showDetails(showID: Int)
+    }
+    
+    func sheetView() -> AnyView {
+        switch sheetDestination {
+        case .none:
+            return AnyView(Text(""))
+        case .showDetails(let showID):
+            return AnyView(ShowDetailsView(showID: showID))
         }
-        return appState.info.updates(for: \.showDetails[showID])
     }
 }
-
-// MARK: - Routing
 
 extension ShowDetailsView {
     struct Routing: Equatable {
@@ -468,17 +481,6 @@ extension ShowDetailsView {
 
 struct ShowDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        Resolver.registerPreview()
-        Resolver.registerViewPreview()
-        
-        return ShowDetailsView()
+        ShowDetailsView(showID: 0)
     }
 }
-
-#if DEBUG
-fileprivate extension Resolver {
-    static func registerViewPreview() {
-        register { ShowDetailsViewInteractor() }
-    }
-}
-#endif

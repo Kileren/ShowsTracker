@@ -1,16 +1,17 @@
 //
-//  ShowsListViewInteractor.swift
+//  ShowsListViewModel.swift
 //  ShowsTracker
 //
-//  Created by Sergey Bogachev on 09.05.2022.
+//  Created by Sergey Bogachev on 28.07.2022.
 //
 
 import SwiftUI
 import Resolver
 
-final class ShowsListViewInteractor {
+final class ShowsListViewModel: ObservableObject {
     
-    @InjectedObject private var appState: AppState
+    @Published var model: ShowsListView.Model = .init()
+    
     @Injected private var tvService: ITVService
     @Injected private var searchService: ISearchService
     @Injected private var genresService: IGenresService
@@ -19,7 +20,7 @@ final class ShowsListViewInteractor {
     private var upcomingShows: [ShowView.Model] = []
     private var filterShows: [ShowView.Model] = []
     private var searchedShows: [ShowView.Model] = []
-    
+
     func viewAppeared() {
         Task {
             do {
@@ -38,7 +39,7 @@ final class ShowsListViewInteractor {
                     chosenTab: .popular,
                     currentRepresentation: .popular,
                     shows: popularShows)
-                self.setModel(model)
+                await self.setModel(model)
             } catch {
                 Logger.log(warning: "Popular shows not loaded and not handled")
             }
@@ -52,8 +53,8 @@ final class ShowsListViewInteractor {
                     ShowView.Model(withVoteFrom: $0)
                 }
                 searchedShows = shows
-                setNewRepresentation(.search, with: shows)
-                addShows(shows)
+                await setNewRepresentation(.search, with: shows)
+                await addShows(shows)
             } catch {
                 Logger.log(warning: "Shows not loaded after search and not handled")
             }
@@ -67,7 +68,7 @@ final class ShowsListViewInteractor {
                     ShowView.Model(withVoteFrom: $0)
                 }
                 popularShows.append(contentsOf: shows)
-                addShows(shows)
+                await addShows(shows)
             } catch {
                 Logger.log(warning: "Additional popular shows not loaded and not handled")
             }
@@ -75,21 +76,21 @@ final class ShowsListViewInteractor {
     }
     
     func preloadGenres() async {
-        guard appState.service.value.genres.isEmpty,
-              let genres = try? await genresService.getTVGenres() else { return }
-        
-        appState.service[\.genres] = genres
+//        guard appState.service.value.genres.isEmpty,
+//              let genres = try? await genresService.getTVGenres() else { return }
+//
+//        appState.service[\.genres] = genres
     }
     
     func getShowsByFilter() {
         Task {
             do {
-                let filterModel = appState.info[\.showsList.filter]
+                let filterModel = model.filter
                 let shows = try await tvService.getByFilter(.init(from: filterModel)).map {
                     ShowView.Model(withVoteFrom: $0)
                 }
                 filterShows = shows
-                addShows(shows)
+                await addShows(shows)
             } catch {
                 Logger.log(warning: "Filter shows not loaded and not handled")
             }
@@ -97,27 +98,29 @@ final class ShowsListViewInteractor {
     }
     
     func getMoreShowsByFilter() {
-        Task {        
+        Task {
             do {
-                let filterModel = appState.info[\.showsList.filter]
+                let filterModel = model.filter
                 let shows = try await tvService.getMoreByFilter(.init(from: filterModel)).map {
                     ShowView.Model(withVoteFrom: $0)
                 }
                 filterShows.append(contentsOf: shows)
-                addShows(shows)
+                await addShows(shows)
             } catch {
                 Logger.log(warning: "More filter shows not loaded and not handled")
             }
         }
     }
     
+    @MainActor
     func filterSelected(_ filter: FilterView.Model) {
-        appState.info[\.showsList.filter] = filter
+        model.filter = filter
         setNewRepresentation(.filter, with: [])
     }
     
+    @MainActor
     func didSelectTab(_ tab: ShowsListView.Model.Tab) {
-        appState.info[\.showsList.chosenTab] = tab
+        model.chosenTab = tab
         switch tab {
         case .popular:
             setNewRepresentation(.popular, with: popularShows)
@@ -133,7 +136,7 @@ final class ShowsListViewInteractor {
                     ShowView.Model(withDateFrom: $0)
                 }
                 upcomingShows = shows
-                addShows(shows)
+                await addShows(shows)
             } catch {
                 Logger.log(warning: "Upcoming shows not loaded and not handled")
             }
@@ -147,7 +150,7 @@ final class ShowsListViewInteractor {
                     ShowView.Model(withDateFrom: $0)
                 }
                 upcomingShows.append(contentsOf: shows)
-                addShows(shows)
+                await addShows(shows)
             } catch {
                 Logger.log(warning: "Upcoming shows not loaded and not handled")
             }
@@ -157,21 +160,21 @@ final class ShowsListViewInteractor {
 
 // MARK: - Private
 
-private extension ShowsListViewInteractor {
+private extension ShowsListViewModel {
     @MainActor
     func setModel(_ model: ShowsListView.Model) {
-        appState.info[\.showsList] = model
+        self.model = model
     }
     
     @MainActor
     func setNewRepresentation(_ representation: ShowsListView.Model.Representation, with shows: [ShowView.Model]) {
-        appState.info[\.showsList.currentRepresentation] = representation
-        appState.info[\.showsList.shows] = shows
+        model.currentRepresentation = representation
+        model.shows = shows
     }
     
     @MainActor
     func addShows(_ shows: [ShowView.Model]) {
-        appState.info[\.showsList.shows].append(contentsOf: shows)
+        model.shows.append(contentsOf: shows)
     }
 }
 
@@ -218,3 +221,4 @@ private extension DiscoverTarget.SortType {
         }
     }
 }
+

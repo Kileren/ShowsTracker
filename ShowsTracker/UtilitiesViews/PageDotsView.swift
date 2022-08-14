@@ -29,7 +29,7 @@ struct PageDotsView: View {
     
     var body: some View {
         HStack(spacing: circleSpacing) {
-            ForEach(0..<numberOfPages) { index in
+            ForEach(0..<numberOfPages, id: \.self) { index in
                 if shouldShowIndex(index) {
                     Circle()
                         .fill(currentIndex == index ? primaryColor : secondaryColor)

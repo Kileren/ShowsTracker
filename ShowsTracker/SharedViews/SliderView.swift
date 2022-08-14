@@ -11,6 +11,7 @@ struct SliderView: View {
     
     private static let leftStickStartXLocation: CGFloat = .horizontalPadding
     private static let rightStickStartXLocation: CGFloat = UIScreen.main.bounds.width - 14 - .circleSide
+    private static let fullWidth = Self.rightStickStartXLocation - Self.leftStickStartXLocation - .circleSide
     
     @State private var leftStickLocation = CGPoint(x: leftStickStartXLocation, y: .circleSide / 2)
     @State private var rightStickLocation = CGPoint(x: rightStickStartXLocation, y: .circleSide / 2)
@@ -68,6 +69,12 @@ struct SliderView: View {
         .frame(height: 36)
         .onChange(of: leftStickLocation) { newValue in onLeftStickLocationChanged(newValue) }
         .onChange(of: rightStickLocation) { newValue in onRightStickLocationChanged(newValue) }
+        .onAppear {
+            let leftStickStartOffset = CGFloat(lowerValue - minValue) / CGFloat(maxValue - minValue) * Self.fullWidth
+            let rightStickStartOffset = CGFloat(maxValue - upperValue) / CGFloat(maxValue - minValue) * Self.fullWidth
+            leftStickLocation.x = leftStickStartOffset + Self.leftStickStartXLocation
+            rightStickLocation.x = Self.rightStickStartXLocation - rightStickStartOffset
+        }
     }
     
     var leftStickView: some View {
@@ -143,10 +150,9 @@ private extension SliderView {
     }
     
     func onLeftStickLocationChanged(_ newValue: CGPoint) {
-        let fullWidth = Self.rightStickStartXLocation - Self.leftStickStartXLocation - .circleSide
         let translatedNewValue = newValue.x - Self.leftStickStartXLocation
         let numberOfValues = maxValue - minValue + 1
-        let progress = translatedNewValue / fullWidth
+        let progress = translatedNewValue / Self.fullWidth
         if progress == 0 {
             lowerValue = minValue
         } else if progress == 1 {
@@ -158,10 +164,9 @@ private extension SliderView {
     }
     
     func onRightStickLocationChanged(_ newValue: CGPoint) {
-        let fullWidth = Self.rightStickStartXLocation - Self.leftStickStartXLocation - .circleSide
         let translatedNewValue = Self.rightStickStartXLocation - newValue.x
         let numberOfValues = maxValue - minValue + 1
-        let progress = translatedNewValue / fullWidth
+        let progress = translatedNewValue / Self.fullWidth
         if progress == 0 {
             upperValue = maxValue
         } else if progress == 1 {

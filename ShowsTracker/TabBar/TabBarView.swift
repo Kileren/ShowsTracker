@@ -11,8 +11,6 @@ import Resolver
 
 struct TabBarView: View {
 
-    @InjectedObject var appState: AppState
-
     @Environment(\.isPreview) var isPreview
 
     let geometry: GeometryProxy
@@ -30,7 +28,6 @@ struct TabBarView: View {
             }
             .frame(width: geometry.size.width, height: 60)
             .background(Color.white100)
-            .onReceive(modelUpdates) { model = $0 }
         }
     }
 
@@ -51,7 +48,7 @@ struct TabBarView: View {
 
     func button(for value: Model.Tab) -> some View {
         Button {
-            appState.info.value.tabBar.selectedTab = value
+            model.selectedTab = value
         } label: {
             Image(value.imageName)
                 .resizable()
@@ -66,14 +63,6 @@ struct TabBarView: View {
 private extension TabBarView {
     var spacing: CGFloat {
         (geometry.size.width - 2 * Constants.horizontalPadding - CGFloat(Constants.numberOfItems) * Constants.iconSize.width) / CGFloat((Constants.numberOfItems - 1))
-    }
-}
-
-// MARK: - State Updates
-
-extension TabBarView {
-    var modelUpdates: AnyPublisher<Model, Never> {
-        appState.info.updates(for: \.tabBar)
     }
 }
 
@@ -113,8 +102,6 @@ private extension TabBarView {
 
 struct TabBarView_Previews: PreviewProvider {
     static var previews: some View {
-        Resolver.registerPreview()
-
         return GeometryReader { reader in
             TabBarView(geometry: reader)
         }
