@@ -47,6 +47,17 @@ final class ShowsListViewModel: ObservableObject {
     }
     
     func searchShows(query: String) {
+        guard !query.isEmpty else {
+            Task {
+                if model.chosenTab == .soon {
+                    await setNewRepresentation(.upcoming, with: upcomingShows)
+                } else {
+                    await setNewRepresentation(.popular, with: popularShows)
+                }
+            }
+            return
+        }
+        
         Task {
             do {
                 let shows = try await searchService.searchTVShows(query: query).map {
@@ -83,6 +94,17 @@ final class ShowsListViewModel: ObservableObject {
     }
     
     func getShowsByFilter() {
+        guard !model.filter.isEmpty else {
+            Task {
+                if model.chosenTab == .soon {
+                    await setNewRepresentation(.upcoming, with: upcomingShows)
+                } else {
+                    await setNewRepresentation(.popular, with: popularShows)
+                }
+            }
+            return
+        }
+        
         Task {
             do {
                 let filterModel = model.filter
@@ -90,7 +112,7 @@ final class ShowsListViewModel: ObservableObject {
                     ShowView.Model(withVoteFrom: $0)
                 }
                 filterShows = shows
-                await addShows(shows)
+                await setNewRepresentation(.filter, with: shows)
             } catch {
                 Logger.log(warning: "Filter shows not loaded and not handled")
             }
@@ -170,6 +192,10 @@ private extension ShowsListViewModel {
     func setNewRepresentation(_ representation: ShowsListView.Model.Representation, with shows: [ShowView.Model]) {
         model.currentRepresentation = representation
         model.shows = shows
+        
+        withAnimation {
+            model.tabIsVisible = representation == .popular || representation == .upcoming
+        }
     }
     
     @MainActor

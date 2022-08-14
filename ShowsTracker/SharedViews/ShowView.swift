@@ -10,13 +10,15 @@ import SwiftUI
 struct ShowView: View {
     
     private let model: Model
+    private let itemWidth: CGFloat
     private let tapAction: (Int) -> Void
     
     @State private var isTextTruncated = false
     @State private var isImageLoaded = false
     
-    init(model: Model, tapAction: @escaping (Int) -> Void) {
+    init(model: Model, itemWidth: CGFloat, tapAction: @escaping (Int) -> Void) {
         self.model = model
+        self.itemWidth = itemWidth
         self.tapAction = tapAction
     }
     
@@ -42,6 +44,7 @@ struct ShowView: View {
                         }
                     }
                 }
+                .frame(width: itemWidth, height: itemWidth * 1.5)
             
             ZStack(alignment: .bottom) {
                 TruncableText(text: Text(model.name), lineLimit: 2) {
@@ -124,13 +127,13 @@ struct ShowView_Previews: PreviewProvider {
             ShowView(model: .init(
                 posterPath: "/7vjaCdMw15FEbXyLQTVa04URsPm.jpg",
                 name: "Леденящие душу приключения Сабрины",
-                accessory: .vote("8.2"))) { _ in }
+                accessory: .vote("8.2")), itemWidth: 100) { _ in }
                 .frame(width: 100, height: 150)
             
             ShowView(model: .init(
                 posterPath: "/7vjaCdMw15FEbXyLQTVa04URsPm.jpg",
                 name: "Леденящие душу приключения Сабрины",
-                accessory: .date(day: "09", month: "Дек"))) { _ in }
+                accessory: .date(day: "09", month: "Дек")), itemWidth: 100) { _ in }
                 .frame(width: 100, height: 150)
         }
     }

@@ -16,9 +16,9 @@ protocol IImageService {
 
 final class ImageService {
     
-    private let provider = MoyaProvider<ImageTarget>(stubClosure: { _ in isPreview ? .immediate : .never })
-//    private let provider = MoyaProvider<ImageTarget>(stubClosure: { _ in .immediate })
-//    private let provider = MoyaProvider<ImageTarget>()
+//    private let provider = MoyaProvider<ImageTarget>(stubClosure: { _ in isPreview ? .immediate : .never })
+//    private let provider = MoyaProvider<ImageTarget>(stubClosure: { _ in .delayed(seconds: 3) })
+    private let provider = MoyaProvider<ImageTarget>()
     
     private var cache: [String: UIImage] = [:]
 }
@@ -30,6 +30,8 @@ extension ImageService: IImageService {
             return image
         }
         
+        guard !path.isEmpty else { return UIImage(named: "noImage")! }
+        
         let result = await provider.request(target: .image(path: path, width: width))
         
         switch result {
@@ -40,7 +42,7 @@ extension ImageService: IImageService {
                 return image
             }
             Logger.log(warning: "Couldn't parse image", response: response)
-            return UIImage(named: "TheMandalorian")!
+            return UIImage(named: "noImage")!
         case .failure(let error):
             Logger.log(error: error)
             throw error

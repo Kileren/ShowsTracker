@@ -80,7 +80,7 @@ extension TVService: ITVService {
         }
         cachedFilteredShows[filter] = []
         filteredShowsPage[filter] = 1
-        return try await getMorePopular()
+        return try await getMoreByFilter(filter)
     }
     
     func getMoreByFilter(_ filter: DiscoverTarget.Filter) async throws -> [PlainShow] {

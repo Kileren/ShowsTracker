@@ -23,9 +23,11 @@ struct ShowsListView: View {
         Group {
             if viewModel.model.isLoaded {
                 VStack(spacing: 32) {
-                    HStack(spacing: 32) {
-                        tabView(for: .popular)
-                        tabView(for: .soon)
+                    if viewModel.model.tabIsVisible {
+                        HStack(spacing: 32) {
+                            tabView(for: .popular)
+                            tabView(for: .soon)
+                        }
                     }
                     HStack(spacing: 16) {
                         searchView
@@ -104,9 +106,7 @@ struct ShowsListView: View {
                     prompt: Text("Поиск").font(.regular17).foregroundColor(.text40)
                 )
                     .onSubmit {
-                        if !searchedText.isEmpty {
-                            viewModel.searchShows(query: searchedText)
-                        }
+                        viewModel.searchShows(query: searchedText)
                     }
             }
         }
@@ -129,9 +129,9 @@ struct ShowsListView: View {
     }
     
     func showsView(geometry: GeometryProxy) -> some View {
-        gridView(geometry: geometry) {
+        gridView(geometry: geometry) { itemWidth in
             ForEach(viewModel.model.shows, id: \.self) { model in
-                ShowView(model: model) { showID in
+                ShowView(model: model, itemWidth: itemWidth) { showID in
                     sheetNavigator.sheetDestination = .showDetails(showID: showID)
                     sheetNavigator.showSheet = true
                 }
@@ -151,19 +151,18 @@ struct ShowsListView: View {
         }
     }
     
-    func gridView<Content: View>(geometry: GeometryProxy, @ViewBuilder content: () -> Content) -> some View {
+    func gridView<Content: View>(geometry: GeometryProxy, @ViewBuilder content: (_ itemWidth: CGFloat) -> Content) -> some View {
         let spacing: CGFloat = 14
-        let gridWidth = (geometry.size.width - 2 * spacing) / 3
+        let itemWidth = (geometry.size.width - 2 * spacing) / 3
         return LazyVGrid(
             columns: [
-                GridItem(.fixed(gridWidth), spacing: spacing, alignment: .topLeading),
-                GridItem(.fixed(gridWidth), spacing: spacing, alignment: .topLeading),
-                GridItem(.fixed(gridWidth), spacing: spacing, alignment: .topLeading)
+                GridItem(.fixed(itemWidth), spacing: spacing, alignment: .topLeading),
+                GridItem(.fixed(itemWidth), spacing: spacing, alignment: .topLeading),
+                GridItem(.fixed(itemWidth), spacing: spacing, alignment: .topLeading)
             ],
             alignment: .leading,
             spacing: 16,
-            pinnedViews: [],
-            content: content)
+            pinnedViews: []) { content(itemWidth) }
     }
 }
 
@@ -207,6 +206,7 @@ extension ShowsListView {
         var filter: FilterView.Model = .init()
         var currentRepresentation: Representation = .popular
         var shows: [ShowView.Model] = []
+        var tabIsVisible: Bool = true
         
         enum Representation: Equatable {
             case popular

@@ -335,18 +335,18 @@ struct ShowDetailsView: View {
     
     func similarInfo(geometry: GeometryProxy) -> some View {
         let spacing: CGFloat = 14
-        let gridWidth = (geometry.size.width - 2 * spacing) / 3
+        let itemWidth = (geometry.size.width - 2 * spacing) / 3
         return LazyVGrid(
             columns: [
-                GridItem(.fixed(gridWidth), spacing: spacing, alignment: .topLeading),
-                GridItem(.fixed(gridWidth), spacing: spacing, alignment: .topLeading),
-                GridItem(.fixed(gridWidth), spacing: spacing, alignment: .topLeading)
+                GridItem(.fixed(itemWidth), spacing: spacing, alignment: .topLeading),
+                GridItem(.fixed(itemWidth), spacing: spacing, alignment: .topLeading),
+                GridItem(.fixed(itemWidth), spacing: spacing, alignment: .topLeading)
             ],
             alignment: .leading,
             spacing: 16,
             pinnedViews: []) {
                 ForEach(viewModel.model.similarShowsInfo.models, id: \.self) { model in
-                    ShowView(model: model) { showID in
+                    ShowView(model: model, itemWidth: itemWidth) { showID in
                         sheetNavigator.sheetDestination = .showDetails(showID: showID)
                         sheetNavigator.showSheet = true
                     }
