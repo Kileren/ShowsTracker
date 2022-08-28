@@ -13,7 +13,7 @@ struct STSpacer: View {
     let width: CGFloat?
     let color: Color
     
-    init(height: CGFloat, width: CGFloat? = 0, color: Color = .clear) {
+    init(height: CGFloat = 0, width: CGFloat? = 0, color: Color = .clear) {
         self.height = height
         self.width = width
         self.color = color

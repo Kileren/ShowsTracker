@@ -31,26 +31,11 @@ struct ShowsListView: View {
                     }
                     HStack(spacing: 16) {
                         searchView
-                        filterButton
-                    }
-                    GeometryReader { geometry in
-                        ScrollView(showsIndicators: false) {
-                            switch viewModel.model.currentRepresentation {
-                            case .popular:
-                                showsView(geometry: geometry)
-                            case .upcoming:
-                                showsView(geometry: geometry)
-                            case .filter:
-                                showsView(geometry: geometry)
-                            case .search:
-                                showsView(geometry: geometry)
-                            }
-                            
-                            STSpacer(height: 16)
-                            ProgressView()
-                            STSpacer(height: 8)
+                        if viewModel.model.filterButtonIsVisible {
+                            filterButton
                         }
                     }
+                    contentView
                 }
             } else {
                 ShowsListSkeletonView()
@@ -108,6 +93,26 @@ struct ShowsListView: View {
                     .onSubmit {
                         viewModel.searchShows(query: searchedText)
                     }
+                
+                if !searchedText.isEmpty {
+                    Button {
+                        searchedText = ""
+                        if viewModel.model.currentRepresentation == .search {
+                            viewModel.searchShows(query: "")
+                        }
+                    } label: {
+                        Text("Очистить")
+                            .font(.medium12)
+                            .foregroundColor(.text40)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .frame(height: 24)
+                                    .foregroundColor(.graySimple)
+                                    .padding(.horizontal, -8)
+                            )
+                    }
+                    STSpacer(width: 8)
+                }
             }
         }
     }
@@ -128,9 +133,36 @@ struct ShowsListView: View {
         }
     }
     
+    var contentView: some View {
+        GeometryReader { geometry in
+            ScrollViewReader { scrollReader in
+                ScrollView(showsIndicators: false) {
+                    Rectangle().frame(width: 0, height: 0).id("topView")
+                    
+                    if !viewModel.model.shows.isEmpty {
+                        showsView(geometry: geometry)
+                    }
+                    
+                    STSpacer(height: 16)
+                    ProgressView()
+                        .frame(width: geometry.size.width)
+                    STSpacer(height: 8)
+                }
+                .onChange(of: viewModel.model.currentRepresentation) { representation in
+                    let timeout: TimeInterval = representation == .filter || representation == .search ? 0.1 : 0.05
+                    after(timeout: timeout) {
+                        withAnimation {
+                            scrollReader.scrollTo("topView")
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     func showsView(geometry: GeometryProxy) -> some View {
         gridView(geometry: geometry) { itemWidth in
-            ForEach(viewModel.model.shows, id: \.self) { model in
+            ForEach(viewModel.model.shows, id: \.id) { model in
                 ShowView(model: model, itemWidth: itemWidth) { showID in
                     sheetNavigator.sheetDestination = .showDetails(showID: showID)
                     sheetNavigator.showSheet = true
@@ -151,7 +183,7 @@ struct ShowsListView: View {
         }
     }
     
-    func gridView<Content: View>(geometry: GeometryProxy, @ViewBuilder content: (_ itemWidth: CGFloat) -> Content) -> some View {
+    func gridView<Content: View>(geometry: GeometryProxy, @ViewBuilder content: @escaping (_ itemWidth: CGFloat) -> Content) -> some View {
         let spacing: CGFloat = 14
         let itemWidth = (geometry.size.width - 2 * spacing) / 3
         return LazyVGrid(
@@ -203,10 +235,11 @@ extension ShowsListView {
     struct Model: Equatable {
         var isLoaded: Bool = false
         var chosenTab: Tab = .popular
-        var filter: FilterView.Model = .init()
+        var filter: FilterView.Model = .empty
         var currentRepresentation: Representation = .popular
         var shows: [ShowView.Model] = []
         var tabIsVisible: Bool = true
+        var filterButtonIsVisible: Bool = true
         
         enum Representation: Equatable {
             case popular

@@ -38,7 +38,7 @@ extension ImageService: IImageService {
         case .success(let response):
             if let image = await image(from: response.data) {
                 cache[path] = image
-                Logger.log(imageResponse: response)
+//                Logger.log(imageResponse: response)
                 return image
             }
             Logger.log(warning: "Couldn't parse image", response: response)

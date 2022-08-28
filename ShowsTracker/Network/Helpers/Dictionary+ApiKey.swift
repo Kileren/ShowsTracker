@@ -11,6 +11,7 @@ extension Dictionary where Key == String, Value == Any {
     var withApiKey: [String: Any] {
         var dict = self
         dict["api_key"] = ""
+        dict["language"] = "ru-RU"
         return dict
     }
 }

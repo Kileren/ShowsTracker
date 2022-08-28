@@ -330,6 +330,7 @@ extension FilterView {
             sorting == .popularity
         }
         
+        static let empty = Model()
         static var originalMinYear = 1950
         static var originalMaxYear = (Calendar.current.dateComponents([.year], from: .now).year ?? 2025) + 3
     }
@@ -337,7 +338,7 @@ extension FilterView {
 
 struct FilterView_Previews: PreviewProvider {
     static var previews: some View {
-        FilterView(model: .init()) { _ in
+        FilterView(model: .empty) { _ in
             // Confirm button tapped
         } onClose: {
             // View closed

@@ -37,7 +37,9 @@ extension TVTarget: TargetType {
     
     var task: Task {
         switch self {
-        case .details, .seasonDetails, .popular:
+        case .popular(let page):
+            return .requestParameters(parameters: ["page": page].withApiKey, encoding: URLEncoding.queryString)
+        case .details, .seasonDetails:
             return .requestParameters(parameters: [:].withApiKey, encoding: URLEncoding.queryString)
         case .similar(let id):
             return .requestParameters(parameters: ["tv_id": id].withApiKey, encoding: URLEncoding.queryString)

@@ -20,6 +20,8 @@ final class ShowsListViewModel: ObservableObject {
     private var upcomingShows: [ShowView.Model] = []
     private var filterShows: [ShowView.Model] = []
     private var searchedShows: [ShowView.Model] = []
+    
+    private var tasks: [TaskType: (task: Task<(), Never>?, inProgress: Bool)] = Dictionary(uniqueKeysWithValues: TaskType.allCases.map { ($0, (nil, false)) })
 
     func viewAppeared() {
         Task {
@@ -55,25 +57,36 @@ final class ShowsListViewModel: ObservableObject {
                     await setNewRepresentation(.popular, with: popularShows)
                 }
             }
+            tasks[.search]?.task?.cancel()
+            tasks[.search] = (nil, false)
             return
         }
         
-        Task {
+        if tasks[.search]?.inProgress == true {
+            tasks[.search]?.task?.cancel()
+            tasks[.search] = (nil, false)
+        }
+        
+        let task = Task {
             do {
                 let shows = try await searchService.searchTVShows(query: query).map {
                     ShowView.Model(withVoteFrom: $0)
                 }
+                try Task.checkCancellation()
                 searchedShows = shows
                 await setNewRepresentation(.search, with: shows)
-                await addShows(shows)
             } catch {
                 Logger.log(warning: "Shows not loaded after search and not handled")
             }
+            tasks[.search] = (nil, false)
         }
+        tasks[.search] = (task, true)
     }
     
     func getMorePopular() {
-        Task {
+        guard tasks[.morePopular]?.inProgress == false else { return }
+        
+        let task = Task {
             do {
                 let shows = try await tvService.getMorePopular().map {
                     ShowView.Model(withVoteFrom: $0)
@@ -83,7 +96,9 @@ final class ShowsListViewModel: ObservableObject {
             } catch {
                 Logger.log(warning: "Additional popular shows not loaded and not handled")
             }
+            tasks[.morePopular] = (nil, false)
         }
+        tasks[.morePopular] = (task, true)
     }
     
     func preloadGenres() async {
@@ -102,10 +117,17 @@ final class ShowsListViewModel: ObservableObject {
                     await setNewRepresentation(.popular, with: popularShows)
                 }
             }
+            tasks[.showsByFilter]?.task?.cancel()
+            tasks[.showsByFilter] = (nil, false)
             return
         }
         
-        Task {
+        if tasks[.showsByFilter]?.inProgress == true {
+            tasks[.showsByFilter]?.task?.cancel()
+            tasks[.showsByFilter] = (nil, false)
+        }
+        
+        let task = Task {
             do {
                 let filterModel = model.filter
                 let shows = try await tvService.getByFilter(.init(from: filterModel)).map {
@@ -116,11 +138,15 @@ final class ShowsListViewModel: ObservableObject {
             } catch {
                 Logger.log(warning: "Filter shows not loaded and not handled")
             }
+            tasks[.showsByFilter] = (nil, false)
         }
+        tasks[.showsByFilter] = (task, true)
     }
     
     func getMoreShowsByFilter() {
-        Task {
+        guard tasks[.moreShowsByFilter]?.inProgress == false else { return }
+        
+        let task = Task {
             do {
                 let filterModel = model.filter
                 let shows = try await tvService.getMoreByFilter(.init(from: filterModel)).map {
@@ -131,7 +157,9 @@ final class ShowsListViewModel: ObservableObject {
             } catch {
                 Logger.log(warning: "More filter shows not loaded and not handled")
             }
+            tasks[.moreShowsByFilter] = (nil, false)
         }
+        tasks[.moreShowsByFilter] = (task, true)
     }
     
     @MainActor
@@ -152,7 +180,9 @@ final class ShowsListViewModel: ObservableObject {
     }
     
     func getUpcoming() {
-        Task {
+        guard tasks[.upcoming]?.inProgress == false else { return }
+
+        let task = Task {
             do {
                 let shows = try await tvService.getUpcoming().map {
                     ShowView.Model(withDateFrom: $0)
@@ -162,11 +192,15 @@ final class ShowsListViewModel: ObservableObject {
             } catch {
                 Logger.log(warning: "Upcoming shows not loaded and not handled")
             }
+            tasks[.upcoming] = (nil, false)
         }
+        tasks[.upcoming] = (task, true)
     }
     
     func getMoreUpcoming() {
-        Task {
+        guard tasks[.moreUpcoming]?.inProgress == false else { return }
+        
+        let task = Task {
             do {
                 let shows = try await tvService.getMoreUpcoming().map {
                     ShowView.Model(withDateFrom: $0)
@@ -176,7 +210,9 @@ final class ShowsListViewModel: ObservableObject {
             } catch {
                 Logger.log(warning: "Upcoming shows not loaded and not handled")
             }
+            tasks[.moreUpcoming] = (nil, false)
         }
+        tasks[.moreUpcoming] = (task, true)
     }
 }
 
@@ -190,11 +226,26 @@ private extension ShowsListViewModel {
     
     @MainActor
     func setNewRepresentation(_ representation: ShowsListView.Model.Representation, with shows: [ShowView.Model]) {
+        guard model.currentRepresentation != representation else {
+            model.shows = shows
+            return
+        }
+        
         model.currentRepresentation = representation
         model.shows = shows
         
-        withAnimation {
+        withAnimation(.easeInOut(duration: Const.animationDuration), animateCompletion: true) {
+            // Tab with popular and upcoming shows should be visible only if search or filter is inactive
             model.tabIsVisible = representation == .popular || representation == .upcoming
+        } completion: { [weak self] in
+            if representation == .search {
+                // If current representation is search then filter shouldn't be visible and current filter should be resetted
+                self?.model.filterButtonIsVisible = false
+                self?.model.filter = .empty
+            } else {
+                // Filter button should be visible on any representation except search
+                self?.model.filterButtonIsVisible = true
+            }
         }
     }
     
@@ -204,12 +255,30 @@ private extension ShowsListViewModel {
     }
 }
 
+// MARK: - Models
+
+private extension ShowsListViewModel {
+    enum TaskType: CaseIterable {
+        case search
+        case morePopular
+        case showsByFilter
+        case moreShowsByFilter
+        case upcoming
+        case moreUpcoming
+    }
+}
+
+// MARK: - Extension
+
 private extension ShowView.Model {
     init(withVoteFrom plainShow: PlainShow) {
         self.id = plainShow.id
         self.posterPath = plainShow.posterPath ?? ""
         self.name = plainShow.name ?? ""
-        self.accessory = .vote(STNumberFormatter.format(plainShow.vote ?? 0, format: .vote))
+        
+        let voteValue = plainShow.vote ?? 0
+        let vote = voteValue > 0 ? STNumberFormatter.format(voteValue, format: .vote) : "-"
+        self.accessory = .vote(vote)
     }
     
     init(withDateFrom plainShow: PlainShow) {
@@ -248,3 +317,8 @@ private extension DiscoverTarget.SortType {
     }
 }
 
+private extension ShowsListViewModel {
+    enum Const {
+        static let animationDuration: TimeInterval = 0.25
+    }
+}
