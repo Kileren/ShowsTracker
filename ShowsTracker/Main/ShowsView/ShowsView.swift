@@ -179,23 +179,12 @@ struct ShowsView: View {
             }
             .padding(.bottom, 55 + geometry.size.width * 0.15)
             
-//            ZStack {
-//                RoundedRectangle(cornerRadius: 15)
-//                    .frame(width: geometry.size.width * 0.4,
-//                           height: 30)
-//                    .foregroundColor(.bay)
-//
-//                Text(Strings.add)
-//                    .font(.regular15)
-//                    .foregroundColor(.white100)
-//            }
-//            .padding(.bottom, 24)
-            
-            STButton(title: Strings.add,
-                     style: .small(width: .fit),
-                     geometry: geometry) {
-                print("Add button tapped")
-            }
+            STButton(
+                title: Strings.add,
+                style: .small(width: .fit),
+                geometry: geometry) {
+                    sheetNavigator.sheetDestination = .showsList
+                }
                 .padding(.bottom, 24)
         }
     }
@@ -252,7 +241,6 @@ struct ShowsView: View {
                 Spacer()
                 Button {
                     sheetNavigator.sheetDestination = .showsList
-                    sheetNavigator.showSheet = true
                 } label: {
                     Text(Strings.more)
                         .font(.medium13)
@@ -267,7 +255,6 @@ struct ShowsView: View {
                         .cornerRadius(DesignConst.smallCornerRadius)
                         .onTapGesture {
                             sheetNavigator.sheetDestination = .showDetails(showID: show.id)
-                            sheetNavigator.showSheet = true
                         }
                 }
             })
@@ -312,7 +299,6 @@ fileprivate struct WatchingShowView: View, Identifiable, Indexable {
             .cornerRadius(DesignConst.normalCornerRadius)
             .onTapGesture {
                 sheetNavigator.sheetDestination = .showDetails(showID: showId)
-                sheetNavigator.showSheet = true
             }
     }
 }
@@ -353,7 +339,11 @@ extension ShowsView {
 private class SheetNavigator: ObservableObject {
     
     @Published var showSheet = false
-    var sheetDestination: SheetDestination = .none
+    var sheetDestination: SheetDestination = .none {
+        didSet {
+            showSheet = true
+        }
+    }
     
     enum SheetDestination {
         case none

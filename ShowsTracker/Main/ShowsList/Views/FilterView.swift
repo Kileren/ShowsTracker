@@ -46,7 +46,7 @@ struct FilterView: View {
                 genresSelectorView
                 languageSelectorView
                 sortView
-                confirmButton
+                confirmButton.modifier(HorizontalAlignment())
                 STSpacer(height: 8)
             }
             .padding(.horizontal, 16)

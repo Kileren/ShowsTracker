@@ -28,11 +28,17 @@ struct STButton: View {
     let geometry: GeometryProxy
     let action: () -> Void
     
+    @State private var scale: CGFloat = 1
+    
     // MARK: - Views
     
     var body: some View {
-        text
-            .onTapGesture(perform: action)
+        Button {
+            action()
+        } label: {
+            text
+        }
+        .buttonStyle(ScaleButtonStyle())
     }
     
     @ViewBuilder

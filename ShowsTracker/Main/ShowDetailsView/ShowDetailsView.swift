@@ -348,7 +348,6 @@ struct ShowDetailsView: View {
                 ForEach(viewModel.model.similarShowsInfo.models, id: \.self) { model in
                     ShowView(model: model, itemWidth: itemWidth) { showID in
                         sheetNavigator.sheetDestination = .showDetails(showID: showID)
-                        sheetNavigator.showSheet = true
                     }
                 }
             }
@@ -393,7 +392,11 @@ struct ShowDetailsView: View {
 private class SheetNavigator: ObservableObject {
     
     @Published var showSheet = false
-    var sheetDestination: SheetDestination = .none
+    var sheetDestination: SheetDestination = .none {
+        didSet {
+            showSheet = true
+        }
+    }
     
     enum SheetDestination {
         case none

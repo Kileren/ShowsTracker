@@ -54,6 +54,8 @@
 		8C3994762620DBCE005BD7DB /* PlainShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3994752620DBCE005BD7DB /* PlainShow.swift */; };
 		8C3994782620DCCD005BD7DB /* Data+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3994772620DCCD005BD7DB /* Data+Image.swift */; };
 		8C4605DA28B7410B00ADCB0C /* STAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C4605D928B7410B00ADCB0C /* STAnimation.swift */; };
+		8C4605DD28BB71CE00ADCB0C /* ScaleButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C4605DC28BB71CE00ADCB0C /* ScaleButtonStyle.swift */; };
+		8C4605DF28BB85D800ADCB0C /* HorizontalAlignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C4605DE28BB85D800ADCB0C /* HorizontalAlignment.swift */; };
 		8C496FA725C47DAE000282C5 /* PagingScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C496FA625C47DAE000282C5 /* PagingScrollView.swift */; };
 		8C518F3C2662B27800EE6C4F /* Redactable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C518F3B2662B27800EE6C4F /* Redactable.swift */; };
 		8C518F3E2662B28B00EE6C4F /* Redactable+Shimmered.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C518F3D2662B28B00EE6C4F /* Redactable+Shimmered.swift */; };
@@ -141,6 +143,8 @@
 		8C3994752620DBCE005BD7DB /* PlainShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainShow.swift; sourceTree = "<group>"; };
 		8C3994772620DCCD005BD7DB /* Data+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Image.swift"; sourceTree = "<group>"; };
 		8C4605D928B7410B00ADCB0C /* STAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAnimation.swift; sourceTree = "<group>"; };
+		8C4605DC28BB71CE00ADCB0C /* ScaleButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleButtonStyle.swift; sourceTree = "<group>"; };
+		8C4605DE28BB85D800ADCB0C /* HorizontalAlignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalAlignment.swift; sourceTree = "<group>"; };
 		8C496FA625C47DAE000282C5 /* PagingScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagingScrollView.swift; sourceTree = "<group>"; };
 		8C518F3B2662B27800EE6C4F /* Redactable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redactable.swift; sourceTree = "<group>"; };
 		8C518F3D2662B28B00EE6C4F /* Redactable+Shimmered.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Redactable+Shimmered.swift"; sourceTree = "<group>"; };
@@ -356,6 +360,14 @@
 			path = Genres;
 			sourceTree = "<group>";
 		};
+		8C4605DB28BB71C700ADCB0C /* Styles */ = {
+			isa = PBXGroup;
+			children = (
+				8C4605DC28BB71CE00ADCB0C /* ScaleButtonStyle.swift */,
+			);
+			path = Styles;
+			sourceTree = "<group>";
+		};
 		8C496FA525C47D8D000282C5 /* SharedViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -373,6 +385,7 @@
 			children = (
 				8C518F3A2662B26B00EE6C4F /* Redactable */,
 				8CDCCEFB28429A96006EC106 /* Dragging.swift */,
+				8C4605DE28BB85D800ADCB0C /* HorizontalAlignment.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -597,6 +610,7 @@
 		8CFADF0825C7207C00597413 /* Design */ = {
 			isa = PBXGroup;
 			children = (
+				8C4605DB28BB71C700ADCB0C /* Styles */,
 				8C518F392662B26300EE6C4F /* Modifiers */,
 				8CFADF0925C7208800597413 /* Colors.swift */,
 				8CE2693D25CEE5040045903F /* DesignConst.swift */,
@@ -740,6 +754,7 @@
 				8C518F412663F76C00EE6C4F /* ShowDetailsView.swift in Sources */,
 				8C156D472841F86E0049DDD1 /* Genre.swift in Sources */,
 				8C156D0028152E7B0049DDD1 /* ProcessInfo+isPreview.swift in Sources */,
+				8C4605DF28BB85D800ADCB0C /* HorizontalAlignment.swift in Sources */,
 				8CE2694125CEE7A20045903F /* ShowView.swift in Sources */,
 				8CF52873267DE2F500351915 /* JSONReader.swift in Sources */,
 				8C006338285E578600893ECB /* Storages+Resolver.swift in Sources */,
@@ -759,6 +774,7 @@
 				8CD2004627A311D300F61C6D /* EnvironmentValues+isPreview.swift in Sources */,
 				8C156CFC281528A90049DDD1 /* TVService.swift in Sources */,
 				8CD6C1DD25C327D3004CF261 /* ShowsTrackerApp.swift in Sources */,
+				8C4605DD28BB71CE00ADCB0C /* ScaleButtonStyle.swift in Sources */,
 				8C156CE82811C79B0049DDD1 /* SearchService.swift in Sources */,
 				8C518F3C2662B27800EE6C4F /* Redactable.swift in Sources */,
 				8CFAD6A925C872250090DC4F /* PageDotsView.swift in Sources */,

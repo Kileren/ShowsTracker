@@ -165,7 +165,6 @@ struct ShowsListView: View {
             ForEach(viewModel.model.shows, id: \.id) { model in
                 ShowView(model: model, itemWidth: itemWidth) { showID in
                     sheetNavigator.sheetDestination = .showDetails(showID: showID)
-                    sheetNavigator.showSheet = true
                 }
             }
             Rectangle()
@@ -267,7 +266,11 @@ extension ShowsListView {
 private class SheetNavigator: ObservableObject {
     
     @Published var showSheet = false
-    var sheetDestination: SheetDestination = .none
+    var sheetDestination: SheetDestination = .none {
+        didSet {
+            showSheet = true
+        }
+    }
     
     enum SheetDestination {
         case none
