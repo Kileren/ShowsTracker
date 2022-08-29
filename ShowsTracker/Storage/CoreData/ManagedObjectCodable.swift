@@ -11,13 +11,10 @@ protocol ManagedObjectEncodable: Equatable {
     associatedtype ManagedObject: NSManagedObject & ManagedObjectDecodable
     
     var id: Int { get }
-    
-    func encode(in context: NSManagedObjectContext)
 }
 
 protocol ManagedObjectDecodable {
     associatedtype Object: ManagedObjectEncodable
     
-    func decode() -> Object
-    func change(with object: Object, in context: NSManagedObjectContext)
+    var object: Object { get set }
 }

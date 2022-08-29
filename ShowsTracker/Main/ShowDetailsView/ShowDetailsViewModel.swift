@@ -25,7 +25,7 @@ final class ShowDetailsViewModel: ObservableObject {
             do {
                 let show = try await tvService.getDetails(for: showID)
                 let episodesInfo = await getEpisodesInfo(for: show)
-                let shows = coreDataStorage.get(object: PlainShow.self)
+                let shows = coreDataStorage.get(objectsOfType: PlainShow.self)
                 let isLiked = shows.contains(where: { $0.id == showID })
                 let model = ShowDetailsView.Model(
                     isLoaded: true,
@@ -58,9 +58,7 @@ final class ShowDetailsViewModel: ObservableObject {
     
     func didTapLikeButton() {
         if model.isLiked {
-            if let show = coreDataStorage.get(object: PlainShow.self).first(where: { $0.id == showID }) {
-                coreDataStorage.remove(object: show)
-            }
+            coreDataStorage.remove(objectOfType: PlainShow.self, id: showID)
             model.isLiked = false
         } else {
             if let show = tvService.cachedShow(for: showID) {

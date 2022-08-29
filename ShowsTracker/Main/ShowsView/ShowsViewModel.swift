@@ -57,7 +57,7 @@ private extension ShowsViewModel {
 private extension ShowsViewModel {
     
     func getUserShows() async -> [ShowsView.Model.UserShow] {
-        let savedShows = coreDataStorage.get(object: PlainShow.self)
+        let savedShows = coreDataStorage.get(objectsOfType: PlainShow.self)
         var userShows: [ShowsView.Model.UserShow] = []
         for show in savedShows {
             // TODO: make concurrent loading

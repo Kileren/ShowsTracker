@@ -9,32 +9,32 @@ import Foundation
 import CoreData
 
 protocol ICoreDataStorage {
-    func get<T: ManagedObjectEncodable>(object: T.Type) -> [T]
+    func get<T: ManagedObjectEncodable>(objectsOfType type: T.Type) -> [T]
     func save<T: ManagedObjectEncodable>(object: T)
-    func remove<T: ManagedObjectEncodable>(object: T)
+    func remove<T: ManagedObjectEncodable>(objectOfType type: T.Type, id: Int)
 }
 
 // TODO: Убрать force unwrap
 final class CoreDataStorage: ICoreDataStorage {
     
     func save<T: ManagedObjectEncodable>(object: T) {
-        if let existingObject = getManagedObject(for: object), let newValue = object as? T.ManagedObject.Object {
-            existingObject.change(with: newValue, in: managedObjectContext)
+        if var existingObject = getManagedObject(for: T.self, id: object.id) {
+            existingObject.object = object as! T.ManagedObject.Object
         } else {
-            object.encode(in: managedObjectContext)
+            var objectToSave = T.ManagedObject(context: managedObjectContext)
+            objectToSave.object = object as! T.ManagedObject.Object
         }
-        
         self.saveContext()
     }
     
-    func get<T: ManagedObjectEncodable>(object: T.Type) -> [T] {
+    func get<T: ManagedObjectEncodable>(objectsOfType type: T.Type) -> [T] {
         var result: [T] = []
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "\(object.ManagedObject.self)")
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "\(type.ManagedObject.self)")
         do {
             let results = try managedObjectContext.fetch(request)
             results.forEach {
                 if let t = $0 as? T.ManagedObject {
-                    let decodedObject = t.decode()
+                    let decodedObject = t.object
                     if let typedObject = decodedObject as? T {
                         result.append(typedObject)
                     }
@@ -46,34 +46,20 @@ final class CoreDataStorage: ICoreDataStorage {
         return result
     }
     
-    func remove<T: ManagedObjectEncodable>(object: T) {
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "\(T.ManagedObject.self)")
-        do {
-            let results = try managedObjectContext.fetch(request)
-            results.forEach {
-                if let t = $0 as? T.ManagedObject {
-                    let decodedObject = t.decode()
-                    if let typedObject = decodedObject as? T {
-                        if typedObject.id == object.id {
-                            managedObjectContext.delete(t)
-                        }
-                    }
-                }
-            }
-        } catch {
-            print(error)
+    func remove<T: ManagedObjectEncodable>(objectOfType type: T.Type, id: Int) {
+        if let object = getManagedObject(for: type, id: id) {
+            managedObjectContext.delete(object)
         }
         self.saveContext()
     }
     
-    fileprivate func getManagedObject<T: ManagedObjectEncodable>(for object: T) -> T.ManagedObject? {
+    fileprivate func getManagedObject<T: ManagedObjectEncodable>(for objectOfType: T.Type, id: Int) -> T.ManagedObject? {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "\(T.ManagedObject.self)")
         do {
             let results = try managedObjectContext.fetch(request)
             for result in results {
                 if let t = result as? T.ManagedObject {
-                    let decodedObject = t.decode()
-                    if decodedObject.id == object.id {
+                    if t.object.id == id {
                         return t
                     }
                 }
