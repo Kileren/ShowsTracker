@@ -10,7 +10,7 @@ import Moya
 import UIKit
 
 protocol IImageService {
-    func loadImage(path: String, width: Int) async throws -> UIImage
+    func loadImage(path: String) async throws -> UIImage
     func cachedImage(for path: String) -> UIImage?
 }
 
@@ -25,14 +25,14 @@ final class ImageService {
 
 extension ImageService: IImageService {
     
-    func loadImage(path: String, width: Int) async throws -> UIImage {
+    func loadImage(path: String) async throws -> UIImage {
         if let image = cache[path] {
             return image
         }
         
         guard !path.isEmpty else { return UIImage(named: "noImage")! }
         
-        let result = await provider.request(target: .image(path: path, width: width))
+        let result = await provider.request(target: .image(path: path, width: 500))
         
         switch result {
         case .success(let response):

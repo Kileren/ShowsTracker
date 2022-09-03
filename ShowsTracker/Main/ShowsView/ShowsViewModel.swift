@@ -50,7 +50,16 @@ private extension ShowsViewModel {
     
     @MainActor
     func setUserShows(_ shows: [ShowsView.Model.UserShow]) {
-        model.userShows = shows
+        let currentShowsCount = model.userShows.count
+        let animationIsNeeded = currentShowsCount < 2 || (currentShowsCount == 2 && shows.count == 1)
+        
+        if animationIsNeeded {
+            withAnimation(.easeInOut(duration: 0.25)) {
+                model.userShows = shows
+            }
+        } else {
+            model.userShows = shows
+        }
     }
 }
 
@@ -61,7 +70,7 @@ private extension ShowsViewModel {
         var userShows: [ShowsView.Model.UserShow] = []
         for show in savedShows {
             // TODO: make concurrent loading
-            let image = (try? await imageService.loadImage(path: show.posterPath ?? "", width: 500).wrapInImage()) ?? Image("")
+            let image = (try? await imageService.loadImage(path: show.posterPath ?? "").wrapInImage()) ?? Image("")
             userShows.append(.init(id: show.id, image: image))
         }
         return userShows

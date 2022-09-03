@@ -34,7 +34,9 @@ struct ShowsView: View {
                         VStack(spacing: 32) {
                             if !viewModel.model.userShows.isEmpty {
                                 currentShows(geometry: geometry)
-                                pageDotsView(geometry: geometry)
+                                if viewModel.model.userShows.count > 1 {
+                                    pageDotsView(geometry: geometry)
+                                }
                             } else {
                                 emptyShowsViews(geometry: geometry)
                             }
@@ -191,15 +193,9 @@ struct ShowsView: View {
     
     @ViewBuilder
     func pageDotsView(geometry: GeometryProxy) -> some View {
-        if viewModel.model.userShows.count > 1 {
-            PageDotsView(numberOfPages: viewModel.model.userShows.count,
-                         currentIndex: index)
-                .frame(width: geometry.size.width, height: 12, alignment: .center)
-        } else {
-            Rectangle()
-                .foregroundColor(.clear)
-                .frame(width: 0, height: 0)
-        }
+        PageDotsView(numberOfPages: viewModel.model.userShows.count,
+                     currentIndex: index)
+            .frame(width: geometry.size.width, height: 12, alignment: .center)
     }
     
     func backgroundImage(geometry: GeometryProxy) -> some View {
@@ -250,7 +246,7 @@ struct ShowsView: View {
             
             popularShows(geometry: geometry, content: { width, height in
                 ForEach(viewModel.model.popularShows, id: \.id) { show in
-                    LoadableImageView(path: show.posterPath, width: 200)
+                    LoadableImageView(path: show.posterPath)
                         .frame(width: width, height: height)
                         .cornerRadius(DesignConst.smallCornerRadius)
                         .onTapGesture {

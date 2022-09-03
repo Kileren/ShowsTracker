@@ -22,6 +22,11 @@ struct ShowDetailsView: View {
         value: false,
         animation: .easeInOut(duration: 0.25)
     ) private var episodeDetailsShown: Bool
+    @AnimatedTemporaryState(
+        value: "",
+        duration: 1.5,
+        animation: .easeInOut(duration: 0.25)
+    ) private var temporaryError: String
     @State private var episodeDetails = ""
     
     var showID: Int
@@ -30,7 +35,7 @@ struct ShowDetailsView: View {
     
     var body: some View {
         GeometryReader { geometry in
-                if viewModel.model.isLoaded {
+            if viewModel.model.isLoaded {
                 ZStack(alignment: .top) {
                     blurBackground(geometry: geometry)
                     overlayView(geometry: geometry)
@@ -52,8 +57,11 @@ struct ShowDetailsView: View {
         .overlay {
             if episodeDetailsShown {
                 episodeDetailsView
+            } else if !temporaryError.isEmpty {
+                detailsEmptyError
             }
         }
+        .allowsHitTesting(temporaryError.isEmpty)
     }
     
     func overlayView(geometry: GeometryProxy) -> some View {
@@ -66,9 +74,10 @@ struct ShowDetailsView: View {
     }
     
     func imageView(geometry: GeometryProxy) -> some View {
-        LoadableImageView(path: viewModel.model.posterPath, width: 500)
+        LoadableImageView(path: viewModel.model.posterPath)
             .frame(width: geometry.size.width * 0.3,
                    height: geometry.size.width * 0.45)
+            .clipped()
             .cornerRadius(DesignConst.normalCornerRadius)
             .padding(.top, 40)
     }
@@ -181,7 +190,7 @@ struct ShowDetailsView: View {
     }
     
     func backgroundImage(geometry: GeometryProxy) -> some View {
-        LoadableImageView(path: viewModel.model.posterPath, width: 500)
+        LoadableImageView(path: viewModel.model.posterPath)
             .frame(width: geometry.size.width,
                    height: geometry.size.width * 1.335,
                    alignment: .top)
@@ -218,12 +227,7 @@ struct ShowDetailsView: View {
     
     func infoTab(for tab: Model.InfoTab) -> some View {
         Button {
-            if viewModel.model.selectedInfoTab != tab {
-                viewModel.didChangeInfoTab(to: tab)
-            }
-            if tab == .similar, !viewModel.model.similarShowsInfo.isLoaded {
-                viewModel.loadSimilarShows()
-            }
+            viewModel.didSelectInfoTab(to: tab)
         } label: {
             VStack(alignment: .leading, spacing: 4) {
                 Text(tab.rawValue)
@@ -287,8 +291,12 @@ struct ShowDetailsView: View {
             }
         }
         .onTapGesture {
-            episodeDetails = episode.overview
-            episodeDetailsShown = true
+            if !episode.overview.isEmpty {
+                episodeDetails = episode.overview
+                episodeDetailsShown = true
+            } else {
+                temporaryError = "Описания для данного эпизода пока нет"
+            }
         }
     }
     
@@ -306,6 +314,24 @@ struct ShowDetailsView: View {
                 }
             }
         }
+    }
+    
+    var detailsEmptyError: some View {
+        RoundedRectangle(cornerRadius: 32)
+            .frame(width: 240, height: 200)
+            .foregroundColor(.separators)
+            .overlay {
+                VStack(spacing: 16) {
+                    Image(systemName: "x.circle.fill")
+                        .resizable()
+                        .frame(width: 64, height: 64)
+                        .foregroundColor(.text100)
+                    Text("Описание для данного эпизода пока отсутствует")
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.text100)
+                        .font(.regular17)
+                }
+            }
     }
     
     var tagsView: some View {

@@ -23,7 +23,6 @@ struct TabBarView: View {
             selectedView
             HStack(alignment: .center, spacing: spacing) {
                 button(for: .shows)
-                button(for: .movies)
                 button(for: .profile)
             }
             .frame(width: geometry.size.width, height: 60)

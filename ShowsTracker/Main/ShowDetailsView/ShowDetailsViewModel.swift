@@ -68,32 +68,18 @@ final class ShowDetailsViewModel: ObservableObject {
         }
     }
     
-    func didChangeInfoTab(to tab: ShowDetailsView.Model.InfoTab) {
-        model.selectedInfoTab = tab
+    func didSelectInfoTab(to tab: ShowDetailsView.Model.InfoTab) {
+        if model.selectedInfoTab != tab {
+            model.selectedInfoTab = tab
+        }
+        
+        if tab == .similar, !model.similarShowsInfo.isLoaded {
+            loadSimilarShows()
+        }
     }
     
     func didSelectSeason(_ season: Int) {
         model.episodesInfo.selectedSeason = season
-    }
-    
-    func loadSimilarShows() {
-        Task {
-            do {
-                let similarShows = try await tvService.getSimilar(for: showID)
-                let similarShowsViewModels = similarShows
-                    .map {
-                        ShowView.Model(
-                            id: $0.id,
-                            posterPath: $0.posterPath ?? "",
-                            name: $0.name ?? "",
-                            accessory: .vote(STNumberFormatter.format($0.vote ?? 0, format: .vote))
-                        )
-                    }
-                await set(similarShows: similarShowsViewModels)
-            } catch {
-                Logger.log(warning: "Similar show not loaded and not handled", error: error)
-            }
-        }
     }
 }
 
@@ -118,6 +104,26 @@ private extension ShowDetailsViewModel {
                         episode.airDate ?? "",
                         format: .full),
                     overview: episode.overview ?? "")
+            }
+        }
+    }
+    
+    func loadSimilarShows() {
+        Task {
+            do {
+                let similarShows = try await tvService.getSimilar(for: showID)
+                let similarShowsViewModels = similarShows
+                    .map {
+                        ShowView.Model(
+                            id: $0.id,
+                            posterPath: $0.posterPath ?? "",
+                            name: $0.name ?? "",
+                            accessory: .vote(STNumberFormatter.format($0.vote ?? 0, format: .vote))
+                        )
+                    }
+                await set(similarShows: similarShowsViewModels)
+            } catch {
+                Logger.log(warning: "Similar show not loaded and not handled", error: error)
             }
         }
     }

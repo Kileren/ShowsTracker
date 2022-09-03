@@ -19,16 +19,14 @@ struct LoadableImageView: View {
     // MARK: - State
     
     private let path: String
-    private let width: Int
     
     private var isImageLoaded: Binding<Bool>?
     @State private var image: Image?
     
     // MARK: - Lifecycle
     
-    init(path: String, width: Int = 500, isImageLoaded: Binding<Bool>? = nil) {
+    init(path: String, isImageLoaded: Binding<Bool>? = nil) {
         self.path = path
-        self.width = width
         self.isImageLoaded = isImageLoaded
     }
     
@@ -57,7 +55,7 @@ private extension LoadableImageView {
     private func obtainImage() {
         Task {
             do {
-                let loadedImage = try await imageService.loadImage(path: path, width: width)
+                let loadedImage = try await imageService.loadImage(path: path)
                 image = Image(uiImage: loadedImage)
                 isImageLoaded?.wrappedValue = true
             } catch {
