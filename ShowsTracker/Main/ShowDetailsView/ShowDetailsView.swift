@@ -31,6 +31,8 @@ struct ShowDetailsView: View {
     
     var showID: Int
     
+    @State private var contentOffset: CGFloat = 0
+    
     // MARK: - Body
     
     var body: some View {
@@ -38,18 +40,44 @@ struct ShowDetailsView: View {
             if viewModel.model.isLoaded {
                 ZStack(alignment: .top) {
                     blurBackground(geometry: geometry)
-                    overlayView(geometry: geometry)
                     
-                    VStack(spacing: 0) {
-                        imageView(geometry: geometry)
-                        spacer(height: 12)
-                        mainInfoView
+                    TrackableScrollView(showIndicators: false, contentOffset: $contentOffset) { geometry in
+                        ZStack(alignment: .top) {
+                            overlayView(geometry: geometry)
+                            
+                            VStack(spacing: 12) {
+                                Color.clear
+                                    .frame(height: imageWidthHeight(for: geometry).height)
+                                    .padding(.top, 40)
+                                mainInfoView(geometry: geometry)
+                                Spacer()
+                            }
+                            .frame(minHeight: geometry.size.height)
+                            
+                            blurBackground(geometry: geometry)
+                                .foregroundColor(.yellowSoft)
+                                .mask {
+                                    Rectangle()
+                                        .frame(width: geometry.size.width, height: Const.minSpacingFromTopToOverlay)
+                                    Spacer()
+                                }
+                                .offset(y: contentOffset)
+                                .allowsHitTesting(false)
+                            
+                            imageView(geometry: geometry)
+                        }
+                    }
+                    .readSize { size in
+                        print("------------------------")
+                        print(size)
+                        print(geometry.size.height)
                     }
                 }
             } else {
                 ShowDetailsSkeletonView()
             }
         }
+        .edgesIgnoringSafeArea(.all)
         .onAppear { viewModel.viewAppeared(withShowID: showID) }
         .sheet(isPresented: $sheetNavigator.showSheet) {
             sheetNavigator.sheetView()
@@ -65,54 +93,90 @@ struct ShowDetailsView: View {
     }
     
     func overlayView(geometry: GeometryProxy) -> some View {
-        Rectangle()
-            .cornerRadius(DesignConst.normalCornerRadius,
-                          corners: [.topLeft, .topRight])
-            .foregroundColor(.white100)
-            .ignoresSafeArea(edges: .bottom)
-            .padding(.top, geometry.size.width * 0.42 + 8)
+        VStack(spacing: 0) {
+            spacer(height: spacingFromTopToOverlay(geometry: geometry))
+            Rectangle()
+                .cornerRadius(DesignConst.normalCornerRadius,
+                              corners: [.topLeft, .topRight])
+                .foregroundColor(.white100)
+                .ignoresSafeArea(edges: .bottom)
+                .offset(y: offsetForOverlay(geometry: geometry))
+        }
     }
     
     func imageView(geometry: GeometryProxy) -> some View {
-        LoadableImageView(path: viewModel.model.posterPath)
-            .frame(width: geometry.size.width * 0.3,
-                   height: geometry.size.width * 0.45)
+        let (width, height) = imageWidthHeight(for: geometry)
+        return LoadableImageView(path: viewModel.model.posterPath)
+            .frame(width: width, height: height)
             .clipped()
             .cornerRadius(DesignConst.normalCornerRadius)
             .padding(.top, 40)
+            .scaleEffect(scaleForImage(geometry: geometry), anchor: .bottom)
+            .offset(y: offsetForImage(geometry: geometry))
+    }
+}
+
+// MARK: - Background
+
+private extension ShowDetailsView {
+    func blurBackground(geometry: GeometryProxy) -> some View {
+        ZStack(alignment: Alignment(horizontal: .center, vertical: .top), content: {
+            backgroundImage(geometry: geometry)
+            backgroundImageGradient(geometry: geometry)
+        })
+        .background(
+            Color.backgroundLight.edgesIgnoringSafeArea(.all)
+        )
+        .mask {
+            // Fixes scroll background on devices without safe area
+            VStack {
+                Rectangle()
+                    .frame(width: geometry.size.width, height: geometry.size.height * 0.8)
+                Spacer()
+            }
+        }
     }
     
-    var mainInfoView: some View {
+    func backgroundImage(geometry: GeometryProxy) -> some View {
+        LoadableImageView(path: viewModel.model.posterPath)
+            .frame(width: geometry.size.width,
+                   height: geometry.size.width * 1.335,
+                   alignment: .top)
+            .ignoresSafeArea(edges: .top)
+            .blur(radius: 15)
+            .scaleEffect(1.1, anchor: .center)
+    }
+    
+    func backgroundImageGradient(geometry: GeometryProxy) -> some View {
+        Rectangle()
+            .frame(width: geometry.size.width,
+                   height: geometry.size.width * 1.45,
+                   alignment: .top)
+            .foregroundColor(.clear)
+            .background(
+                LinearGradient(
+                    gradient: Gradient(colors: [.backgroundLight, Color.backgroundLight.opacity(0)]),
+                    startPoint: .bottom,
+                    endPoint: .top))
+            .ignoresSafeArea(edges: .top)
+    }
+}
+
+// MARK: - Main Info
+
+private extension ShowDetailsView {
+    
+    func mainInfoView(geometry: GeometryProxy) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack {
-                Spacer()
-                VStack(spacing: 4) {
-                    Text(viewModel.model.name)
-                        .font(.medium28)
-                        .foregroundColor(.text100)
-                    Text(viewModel.model.broadcastYears)
-                        .font(.regular15)
-                        .foregroundColor(.text60)
-                }
-                Spacer()
-            }
-            spacer(height: 16)
-            HStack {
-                Spacer()
-                ratingView
-                Spacer()
-                statusView
-                Spacer()
-                likeView
-                Spacer()
-            }
+            infoView(geometry: geometry)
             spacer(height: 24)
             Group {
-                infoTabs
+                infoTabs(geometry: geometry)
                 spacer(height: 16)
                 
                 switch viewModel.model.selectedInfoTab {
-                case .episodes where viewModel.model.episodesInfo.numberOfSeasons > 0: episodesInfo
+                case .episodes where viewModel.model.episodesInfo.numberOfSeasons > 0:
+                    episodesInfo
                 case .episodes:
                     Rectangle().foregroundColor(.clear)
                 case .details:
@@ -120,14 +184,44 @@ struct ShowDetailsView: View {
                 case .similar where !viewModel.model.similarShowsInfo.isLoaded:
                     Text("Loading")
                 case .similar:
-                    GeometryReader { geometry in
-                        ScrollView(showsIndicators: false) {
-                            similarInfo(geometry: geometry)
-                        }
-                    }
+                    similarInfo(geometry: geometry)
                 }
             }
-            .padding(.horizontal, 24)
+            .padding(.horizontal, Const.horizontalPadding)
+        }
+        .padding(.bottom, 24)
+    }
+    
+    func infoView(geometry: GeometryProxy) -> some View {
+        VStack(spacing: 16) {
+            titleView
+                .opacity(opacityForTitle(geometry: geometry))
+            statusView
+                .opacity(opacityForStatus(geometry: geometry))
+        }
+    }
+    
+    var titleView: some View {
+        VStack(spacing: 4) {
+            Text(viewModel.model.name)
+                .font(.medium28)
+                .foregroundColor(.text100)
+            Text(viewModel.model.broadcastYears)
+                .font(.regular15)
+                .foregroundColor(.text60)
+        }
+        .frame(height: 56)
+    }
+    
+    var statusView: some View {
+        HStack {
+            Spacer()
+            ratingView
+            Spacer()
+            ongoingStatusView
+            Spacer()
+            likeView
+            Spacer()
         }
     }
     
@@ -148,7 +242,7 @@ struct ShowDetailsView: View {
         }
     }
     
-    var statusView: some View {
+    var ongoingStatusView: some View {
         var args: (String, Color) {
             switch viewModel.model.status {
             case .ongoing: return ("Продолжается", .greenHard)
@@ -179,41 +273,7 @@ struct ShowDetailsView: View {
         }
     }
     
-    func blurBackground(geometry: GeometryProxy) -> some View {
-        ZStack(alignment: Alignment(horizontal: .center, vertical: .top), content: {
-            backgroundImage(geometry: geometry)
-            backgroundImageGradient(geometry: geometry)
-        })
-        .background(
-            Color.backgroundLight.edgesIgnoringSafeArea(.all)
-        )
-    }
-    
-    func backgroundImage(geometry: GeometryProxy) -> some View {
-        LoadableImageView(path: viewModel.model.posterPath)
-            .frame(width: geometry.size.width,
-                   height: geometry.size.width * 1.335,
-                   alignment: .top)
-            .ignoresSafeArea(edges: .top)
-            .blur(radius: 15)
-            .scaleEffect(1.1, anchor: .center)
-    }
-    
-    func backgroundImageGradient(geometry: GeometryProxy) -> some View {
-        Rectangle()
-            .frame(width: geometry.size.width,
-                   height: geometry.size.width * 1.45,
-                   alignment: .top)
-            .foregroundColor(.clear)
-            .background(
-                LinearGradient(
-                    gradient: Gradient(colors: [.backgroundLight, Color.backgroundLight.opacity(0)]),
-                    startPoint: .bottom,
-                    endPoint: .top))
-            .ignoresSafeArea(edges: .top)
-    }
-    
-    var infoTabs: some View {
+    func infoTabs(geometry: GeometryProxy) -> some View {
         let tabs: [Model.InfoTab] = [.episodes, .details, .similar]
         return HStack(alignment: .top, spacing: 20) {
             ForEach(tabs, id: \.self) { tab in
@@ -222,7 +282,17 @@ struct ShowDetailsView: View {
             }
             Spacer()
         }
-        .frame(height: 32)
+        .frame(height: Const.infoTabsHeight)
+        .background {
+            if offsetForInfoTabs(geometry: geometry) > 0 {
+                Rectangle()
+                    .foregroundColor(.white)
+                    .frame(height: 1000)
+                    .padding(.bottom, 1000 - Const.infoTabsHeight - 8)
+            }
+        }
+        .offset(y: offsetForInfoTabs(geometry: geometry))
+        .zIndex(1)
     }
     
     func infoTab(for tab: Model.InfoTab) -> some View {
@@ -242,7 +312,11 @@ struct ShowDetailsView: View {
             }
         }
     }
-    
+}
+
+// MARK: - Episode Info
+
+private extension ShowDetailsView {
     var episodesInfo: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(spacing: 8) {
@@ -261,15 +335,13 @@ struct ShowDetailsView: View {
                 }
             }
             
-            ScrollView(showsIndicators: false) {
-                HStack {
-                    VStack(alignment: .leading, spacing: 16) {
-                        ForEach(viewModel.model.episodesInfo.episodesPerSeasons[viewModel.model.episodesInfo.selectedSeason - 1], id: \.self) {
-                            episodeInfo(episode: $0)
-                        }
+            HStack {
+                VStack(alignment: .leading, spacing: 16) {
+                    ForEach(viewModel.model.episodesInfo.episodesPerSeasons[viewModel.model.episodesInfo.selectedSeason - 1], id: \.self) {
+                        episodeInfo(episode: $0)
                     }
-                    Spacer()
                 }
+                Spacer()
             }
         }
     }
@@ -361,7 +433,7 @@ struct ShowDetailsView: View {
     
     func similarInfo(geometry: GeometryProxy) -> some View {
         let spacing: CGFloat = 14
-        let itemWidth = (geometry.size.width - 2 * spacing) / 3
+        let itemWidth = (geometry.size.width - 2 * spacing - 2 * Const.horizontalPadding) / 3
         return LazyVGrid(
             columns: [
                 GridItem(.fixed(itemWidth), spacing: spacing, alignment: .topLeading),
@@ -405,11 +477,81 @@ struct ShowDetailsView: View {
         }
         .ignoresSafeArea()
     }
+}
+
+// MARK: - Calculations & Helpers
+
+private extension ShowDetailsView {
+    func offsetForOverlay(geometry: GeometryProxy) -> CGFloat {
+        let maxSpacingFromTopToOverlay = spacingFromTopToOverlay(geometry: geometry)
+        if (maxSpacingFromTopToOverlay - Const.minSpacingFromTopToOverlay - contentOffset) > 0 {
+            return 0
+        } else {
+            return contentOffset - (maxSpacingFromTopToOverlay - Const.minSpacingFromTopToOverlay)
+        }
+    }
+    
+    func scaleForImage(geometry: GeometryProxy) -> CGFloat {
+        min(1, max(0.5, 1 - contentOffset / spacingFromTopToOverlay(geometry: geometry)))
+    }
+    
+    func offsetForImage(geometry: GeometryProxy) -> CGFloat {
+        let imageHeight = imageWidthHeight(for: geometry).height
+        let scale = scaleForImage(geometry: geometry)
+        let maxOffset = spacingFromTopToOverlay(geometry: geometry) - imageHeight * scale
+        return contentOffset <= maxOffset ? 0 : contentOffset - maxOffset
+    }
+    
+    func spacingFromTopToOverlay(geometry: GeometryProxy) -> CGFloat {
+        geometry.size.width * 0.42 + 8
+    }
+    
+    func imageWidthHeight(for geometry: GeometryProxy) -> (width: CGFloat, height: CGFloat) {
+        (geometry.size.width * 0.3, geometry.size.width * 0.45)
+    }
+    
+    func opacityForTitle(geometry: GeometryProxy) -> CGFloat {
+        let offsetForOverlay = offsetForOverlay(geometry: geometry)
+        if offsetForOverlay.isZero {
+            return 1
+        } else {
+            return min(1, 1 - offsetForOverlay / 10)
+        }
+    }
+    
+    func opacityForStatus(geometry: GeometryProxy) -> CGFloat {
+        let offsetForOverlay = offsetForOverlay(geometry: geometry)
+        let distanceToTitle = Const.spacingBeetwenTitleAndStatus + Const.titleHeight
+        let offset = offsetForOverlay - distanceToTitle
+        if offset <= 0 {
+            return 1
+        } else {
+            return min(1, max(1 - offset / 10, 0))
+        }
+    }
+    
+    func offsetForInfoTabs(geometry: GeometryProxy) -> CGFloat {
+        let offsetForOverlay = offsetForOverlay(geometry: geometry)
+        let distanceToImage = Const.spacingBeetwenTitleAndStatus + Const.spacingBelowInfoTabs + Const.titleHeight + Const.infoTabsHeight
+        let offset = offsetForOverlay - distanceToImage
+        return max(0, offset)
+    }
     
     func spacer(height: CGFloat) -> some View {
-        Rectangle()
-            .frame(height: height)
-            .foregroundColor(.clear)
+        Color.clear.frame(height: height)
+    }
+}
+
+// MARK: - Constants
+
+private extension ShowDetailsView {
+    enum Const {
+        static let horizontalPadding: CGFloat = 24
+        static let minSpacingFromTopToOverlay: CGFloat = 75
+        static let spacingBeetwenTitleAndStatus: CGFloat = 16
+        static let spacingBelowInfoTabs: CGFloat = 24
+        static let titleHeight: CGFloat = 56
+        static let infoTabsHeight: CGFloat = 32
     }
 }
 

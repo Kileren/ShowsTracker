@@ -61,7 +61,6 @@ struct ShowsView: View {
         } content: {
             sheetNavigator.sheetView()
         }
-
     }
     
     func skeletonLoader(geometry: GeometryProxy) -> some View {

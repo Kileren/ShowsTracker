@@ -70,7 +70,9 @@ final class ShowDetailsViewModel: ObservableObject {
     
     func didSelectInfoTab(to tab: ShowDetailsView.Model.InfoTab) {
         if model.selectedInfoTab != tab {
-            model.selectedInfoTab = tab
+            withAnimation(.easeIn) {
+                model.selectedInfoTab = tab
+            }
         }
         
         if tab == .similar, !model.similarShowsInfo.isLoaded {
