@@ -52,7 +52,7 @@ struct FilterView: View {
             .padding(.horizontal, 16)
             .background {
                 Rectangle()
-                    .foregroundColor(.white)
+                    .foregroundColor(.backgroundLight)
                     .cornerRadius(16, corners: [.topLeft, .topRight])
                     .ignoresSafeArea(edges: .bottom)
                     .padding(.bottom, min(viewOffset, 0))
@@ -194,17 +194,8 @@ struct FilterView: View {
             VStack(spacing: 0) {
                 Spacer()
                 GenresView(
-                    tags: [
-                        .init(id: 0, text: "Боевик и Приключения"),
-                        .init(id: 0, text: "Вестерн"),
-                        .init(id: 0, text: "Война и политика"),
-                        .init(id: 0, text: "Детектив"),
-                        .init(id: 0, text: "Детский"),
-                        .init(id: 0, text: "Документальный"),
-                        .init(id: 0, text: "Драма"),
-                        .init(id: 0, text: "Комедия")
-                    ],
-                    selectedTags: model.selectedGenres) {
+                    genres: model.allGenres,
+                    selectedGenres: model.selectedGenres) {
                         genresViewIsShown = false
                         after(timeout: 0.3) { genresViewIsActive = false }
                     } onConfirm: { selectedGenres in
@@ -304,7 +295,8 @@ extension FilterView {
     struct Model: Equatable {
         var minYear = originalMinYear
         var maxYear = originalMaxYear
-        var selectedGenres: Set<GenresView.Model.Tag> = []
+        var allGenres: [Genre] = []
+        var selectedGenres: Set<Genre> = []
         var selectedOriginalLanguage: LangCode? = nil
         var sorting: Sorting = .popularity
         

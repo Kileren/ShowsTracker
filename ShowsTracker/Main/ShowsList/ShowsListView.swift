@@ -42,6 +42,7 @@ struct ShowsListView: View {
                     .padding(.top, -8)
             }
         }
+        .foregroundColor(.backgroundLight)
         .padding(.horizontal, 24)
         .padding(.top, 28)
         .overlay {
@@ -84,15 +85,17 @@ struct ShowsListView: View {
                     .resizable()
                     .frame(width: 16, height: 16)
                     .padding(.leading, 16)
+                    .foregroundColor(.text100)
                 
                 TextField(
                     "",
                     text: $searchedText,
                     prompt: Text("Поиск").font(.regular17).foregroundColor(.text40)
                 )
-                    .onSubmit {
-                        viewModel.searchShows(query: searchedText)
-                    }
+                .foregroundColor(.text100)
+                .onSubmit {
+                    viewModel.searchShows(query: searchedText)
+                }
                 
                 if !searchedText.isEmpty {
                     Button {

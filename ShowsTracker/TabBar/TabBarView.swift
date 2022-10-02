@@ -12,21 +12,21 @@ import Resolver
 struct TabBarView: View {
 
     @Environment(\.isPreview) var isPreview
-
-    let geometry: GeometryProxy
     
     @State private var model: Model = .init()
     private let showsView: ShowsView = ShowsView()
 
     var body: some View {
-        VStack(spacing: 0) {
-            selectedView
-            HStack(alignment: .center, spacing: spacing) {
-                button(for: .shows)
-                button(for: .profile)
+        GeometryReader { geometry in
+            VStack(spacing: 0) {
+                selectedView
+                HStack(alignment: .center, spacing: spacing(geometry: geometry)) {
+                    button(for: .shows)
+                    button(for: .profile)
+                }
+                .frame(width: geometry.size.width, height: 60)
+                .background(Color.white100)
             }
-            .frame(width: geometry.size.width, height: 60)
-            .background(Color.white100)
         }
     }
 
@@ -60,7 +60,7 @@ struct TabBarView: View {
 // MARK: - Helpers
 
 private extension TabBarView {
-    var spacing: CGFloat {
+    func spacing(geometry: GeometryProxy) -> CGFloat {
         (geometry.size.width - 2 * Constants.horizontalPadding - CGFloat(Constants.numberOfItems) * Constants.iconSize.width) / CGFloat((Constants.numberOfItems - 1))
     }
 }
@@ -101,9 +101,7 @@ private extension TabBarView {
 
 struct TabBarView_Previews: PreviewProvider {
     static var previews: some View {
-        return GeometryReader { reader in
-            TabBarView(geometry: reader)
-        }
+        TabBarView()
     }
 }
 

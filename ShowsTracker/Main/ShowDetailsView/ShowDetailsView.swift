@@ -22,12 +22,8 @@ struct ShowDetailsView: View {
         value: false,
         animation: .easeInOut(duration: 0.25)
     ) private var episodeDetailsShown: Bool
-    @AnimatedTemporaryState(
-        value: "",
-        duration: 1.5,
-        animation: .easeInOut(duration: 0.25)
-    ) private var temporaryError: String
     @State private var episodeDetails = ""
+    @State private var episodeDetailsErrorState: FloatingErrorView.State = .hidden
     
     var showID: Int
     
@@ -85,11 +81,14 @@ struct ShowDetailsView: View {
         .overlay {
             if episodeDetailsShown {
                 episodeDetailsView
-            } else if !temporaryError.isEmpty {
-                detailsEmptyError
             }
+            
+            FloatingErrorView(
+                icon: Image(systemName: "xmark.circle.fill"),
+                text: "Описания пока нет",
+                state: $episodeDetailsErrorState
+            )
         }
-        .allowsHitTesting(temporaryError.isEmpty)
     }
     
     func overlayView(geometry: GeometryProxy) -> some View {
@@ -98,7 +97,7 @@ struct ShowDetailsView: View {
             Rectangle()
                 .cornerRadius(DesignConst.normalCornerRadius,
                               corners: [.topLeft, .topRight])
-                .foregroundColor(.white100)
+                .foregroundColor(.backgroundLight)
                 .ignoresSafeArea(edges: .bottom)
                 .offset(y: offsetForOverlay(geometry: geometry))
         }
@@ -367,7 +366,12 @@ private extension ShowDetailsView {
                 episodeDetails = episode.overview
                 episodeDetailsShown = true
             } else {
-                temporaryError = "Описания для данного эпизода пока нет"
+                if episodeDetailsErrorState == .shown {
+                    episodeDetailsErrorState = .hidden
+                }
+                withAnimation(FloatingErrorView.State.animation) {
+                    episodeDetailsErrorState = .shown
+                }
             }
         }
     }
@@ -386,24 +390,6 @@ private extension ShowDetailsView {
                 }
             }
         }
-    }
-    
-    var detailsEmptyError: some View {
-        RoundedRectangle(cornerRadius: 32)
-            .frame(width: 240, height: 200)
-            .foregroundColor(.separators)
-            .overlay {
-                VStack(spacing: 16) {
-                    Image(systemName: "x.circle.fill")
-                        .resizable()
-                        .frame(width: 64, height: 64)
-                        .foregroundColor(.text100)
-                    Text("Описание для данного эпизода пока отсутствует")
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(.text100)
-                        .font(.regular17)
-                }
-            }
     }
     
     var tagsView: some View {

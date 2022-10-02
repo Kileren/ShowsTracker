@@ -9,19 +9,19 @@ import SwiftUI
 
 struct GenresView: View {
     
-    let tags: [Model.Tag]
+    let genres: [Genre]
     let onClose: () -> Void
-    let onConfirm: (Set<Model.Tag>) -> Void
+    let onConfirm: (Set<Genre>) -> Void
     
     @State private var viewOffset: CGFloat = 0
-    @State private var selectedTags: Set<Model.Tag> = []
+    @State private var selectedGenres: Set<Genre> = []
     
-    init(tags: [Model.Tag],
-         selectedTags: Set<Model.Tag>,
+    init(genres: [Genre],
+         selectedGenres: Set<Genre>,
          onClose: @escaping () -> Void,
-         onConfirm: @escaping (Set<Model.Tag>) -> Void) {
-        self.tags = tags
-        self.selectedTags = selectedTags
+         onConfirm: @escaping (Set<Genre>) -> Void) {
+        self.genres = genres
+        self.selectedGenres = selectedGenres
         self.onClose = onClose
         self.onConfirm = onConfirm
     }
@@ -37,7 +37,7 @@ struct GenresView: View {
             STSpacer(height: 0)
         }
         .padding(.horizontal, 16)
-        .animation(.interactiveSpring(), value: selectedTags)
+        .animation(.interactiveSpring(), value: selectedGenres)
         .background {
             Rectangle()
                 .foregroundColor(.white)
@@ -65,7 +65,7 @@ struct GenresView: View {
             HStack {
                 Spacer()
                 Button {
-                    selectedTags = []
+                    selectedGenres = []
                 } label: {
                     Text("Очистить")
                         .font(.regular13)
@@ -77,28 +77,27 @@ struct GenresView: View {
     
     var tagsView: some View {
         VStack(alignment: .leading, spacing: 8) {
-            ForEach(tagsByLines, id: \.self) { line in
+            ForEach(genresByLines, id: \.self) { line in
                 HStack(spacing: 24) {
-                    ForEach(line, id: \.self) { tag in
-                        Text(tag.text)
+                    ForEach(line, id: \.self) { genre in
+                        Text(genre.name ?? "")
                             .font(.regular13)
-                            .foregroundColor(isSelected(tag) ? .white100 : .text100)
+                            .foregroundColor(isSelected(genre) ? .white100 : .text100)
                             .frame(height: 24)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
                                     .frame(height: 24)
-                                    .foregroundColor(isSelected(tag) ? .bay : .separators)
+                                    .foregroundColor(isSelected(genre) ? .bay : .separators)
                                     .padding(.horizontal, -8)
                             )
                             .onTapGesture {
-                                if isSelected(tag) {
-                                    selectedTags.remove(tag)
+                                if isSelected(genre) {
+                                    selectedGenres.remove(genre)
                                 } else {
-                                    selectedTags.insert(tag)
+                                    selectedGenres.insert(genre)
                                 }
                             }
                     }
-                    Spacer()
                 }
             }
         }
@@ -107,7 +106,7 @@ struct GenresView: View {
     
     var confirmButton: some View {
         Button {
-            onConfirm(selectedTags)
+            onConfirm(selectedGenres)
         } label: {
             RoundedRectangle(cornerRadius: 16)
                 .frame(width: 300, height: 50)
@@ -124,24 +123,24 @@ struct GenresView: View {
 // MARK: - Helpers
 
 private extension GenresView {
-    var tagsByLines: [[Model.Tag]] {
+    var genresByLines: [[Genre]] {
         let fontAttr: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 13)]
-        let horizontalOffset: CGFloat = 16
+        let horizontalOffset: CGFloat = 8
         let cellInsets: CGFloat = 16
         let spacing: CGFloat = 8
         let allowedWidth = UIScreen.main.bounds.width - 2 * horizontalOffset
         
-        var result: [[Model.Tag]] = []
-        var currentLine: [Model.Tag] = []
+        var result: [[Genre]] = []
+        var currentLine: [Genre] = []
         var currentFreeSpace = allowedWidth
-        for tag in tags {
-            let cellWidth = (tag.text as NSString).size(withAttributes: fontAttr).width + cellInsets
+        for genre in genres {
+            let cellWidth = ((genre.name ?? "") as NSString).size(withAttributes: fontAttr).width + cellInsets
             if currentFreeSpace > cellWidth {
-                currentLine.append(tag)
+                currentLine.append(genre)
                 currentFreeSpace -= cellWidth + spacing
             } else {
                 result.append(currentLine)
-                currentLine = [tag]
+                currentLine = [genre]
                 currentFreeSpace = allowedWidth - cellWidth - spacing
             }
         }
@@ -151,42 +150,37 @@ private extension GenresView {
         return result
     }
     
-    func isSelected(_ tag: Model.Tag) -> Bool {
-        selectedTags.contains(tag)
-    }
-}
-
-// MARK: - Model
-
-extension GenresView {
-    struct Model: Equatable, Hashable {
-        var tags: [Tag] = []
-        
-        struct Tag: Equatable, Hashable {
-            var id: Int = 0
-            var text: String = ""
-        }
+    func isSelected(_ genre: Genre) -> Bool {
+        selectedGenres.contains(genre)
     }
 }
 
 struct GenresView_Previews: PreviewProvider {
     
-    @State static var selectedTags: Set<GenresView.Model.Tag> = []
+    @State static var selectedTags: Set<Genre> = []
     @State static var isPresented: Bool = true
     
     static var previews: some View {
         GenresView(
-            tags: [
-                .init(id: 0, text: "Боевик и Приключения"),
-                .init(id: 0, text: "Вестерн"),
-                .init(id: 0, text: "Война и политика"),
-                .init(id: 0, text: "Детектив"),
-                .init(id: 0, text: "Детский"),
-                .init(id: 0, text: "Документальный"),
-                .init(id: 0, text: "Драма"),
-                .init(id: 0, text: "Комедия")
+            genres: [
+                .init(id: 10759, name: "Action & Adventure"),
+                .init(id: 16, name: "Animation"),
+                .init(id: 35, name: "Comedy"),
+                .init(id: 80, name: "Crime"),
+                .init(id: 99, name: "Documentary"),
+                .init(id: 18, name: "Drama"),
+                .init(id: 10751, name: "Family"),
+                .init(id: 10762, name: "Kids"),
+                .init(id: 9648, name: "Mystery"),
+                .init(id: 10763, name: "News"),
+                .init(id: 10764, name: "Reality"),
+                .init(id: 10765, name: "Sci-Fi & Fantasy"),
+                .init(id: 10766, name: "Soap"),
+                .init(id: 10767, name: "Talk"),
+                .init(id: 10768, name: "War & Politics"),
+                .init(id: 37, name: "Western")
             ],
-            selectedTags: [],
+            selectedGenres: [],
             onClose: { },
             onConfirm: { _ in }
         )

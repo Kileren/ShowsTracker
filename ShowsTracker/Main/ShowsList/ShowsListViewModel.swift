@@ -26,7 +26,7 @@ final class ShowsListViewModel: ObservableObject {
     func viewAppeared() {
         Task {
             do {
-                await preloadGenres()
+                await preloadGenresIfNeeded()
                 let popularShows = try await tvService.getPopular().map {
                     ShowView.Model(
                         id: $0.id,
@@ -39,6 +39,7 @@ final class ShowsListViewModel: ObservableObject {
                 let model = ShowsListView.Model(
                     isLoaded: true,
                     chosenTab: .popular,
+                    filter: .init(allGenres: genresService.cachedGenres),
                     currentRepresentation: .popular,
                     shows: popularShows)
                 await self.setModel(model)
@@ -101,11 +102,10 @@ final class ShowsListViewModel: ObservableObject {
         tasks[.morePopular] = (task, true)
     }
     
-    func preloadGenres() async {
-//        guard appState.service.value.genres.isEmpty,
-//              let genres = try? await genresService.getTVGenres() else { return }
-//
-//        appState.service[\.genres] = genres
+    func preloadGenresIfNeeded() async {
+        if genresService.cachedGenres.isEmpty {
+            _ = try? await genresService.getTVGenres()
+        }
     }
     
     func getShowsByFilter() {
@@ -300,7 +300,7 @@ private extension ShowView.Model {
 private extension DiscoverTarget.Filter {
     init(from model: FilterView.Model) {
         self.sortType = .init(from: model.sorting)
-        self.genres = Set(model.selectedGenres.map { $0.id })
+        self.genres = Set(model.selectedGenres.map { $0.id ?? 0 })
         self.originalLanguage = model.selectedOriginalLanguage
         self.minAirDate = "\(model.minYear)-01-01"
         self.maxAirDate = "\(model.maxYear)-01-01"
