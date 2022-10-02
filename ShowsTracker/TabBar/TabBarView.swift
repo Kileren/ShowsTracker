@@ -14,7 +14,8 @@ struct TabBarView: View {
     @Environment(\.isPreview) var isPreview
     
     @State private var model: Model = .init()
-    private let showsView: ShowsView = ShowsView()
+    private let showsView = ShowsView()
+    private let settingsView = SettingsView()
 
     var body: some View {
         GeometryReader { geometry in
@@ -40,7 +41,7 @@ struct TabBarView: View {
             case .movies:
                 return AnyView(ShowsView())
             case .profile:
-                return AnyView(ShowsView())
+                return AnyView(settingsView)
             }
         }
     }
