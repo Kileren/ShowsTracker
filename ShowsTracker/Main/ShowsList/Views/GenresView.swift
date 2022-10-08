@@ -59,7 +59,7 @@ struct GenresView: View {
     
     var titleView: some View {
         ZStack {
-            Text("Жанры")
+            Text(Strings.genres)
                 .font(.semibold20)
                 .foregroundColor(.text100)
             HStack {
@@ -67,7 +67,7 @@ struct GenresView: View {
                 Button {
                     selectedGenres = []
                 } label: {
-                    Text("Очистить")
+                    Text(Strings.clear)
                         .font(.regular13)
                         .foregroundColor(.text40)
                 }
@@ -112,7 +112,7 @@ struct GenresView: View {
                 .frame(width: 300, height: 50)
                 .foregroundColor(.bay)
                 .overlay {
-                    Text("Подтвердить")
+                    Text(Strings.confirm)
                         .font(.medium20)
                         .foregroundColor(.white100)
                 }

@@ -110,8 +110,8 @@ struct SettingsCardView_Previews: PreviewProvider {
     static var previews: some View {
         SettingsCardView(
             image: Image("Icons/Settings/cloud"),
-            title: "Синхронизация iCloud",
-            description: "Актуальная информация на всех ваших устройствах") {
+            title: Strings.iCloudSync,
+            description: Strings.actualInfoOnAllDevices) {
                 Text("123")
             }
         .frame(width: 163)

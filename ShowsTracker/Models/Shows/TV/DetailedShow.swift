@@ -251,7 +251,7 @@ extension DetailedShow {
     
     var broadcastYears: String {
         if inProduction == true {
-            return "\(releaseYear) - н.в."
+            return "\(releaseYear) - \(Strings.ourTime)"
         } else {
             return "\(releaseYear) - \(lastEpisodeYear)"
         }

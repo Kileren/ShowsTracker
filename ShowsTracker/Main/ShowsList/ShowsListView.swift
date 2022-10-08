@@ -90,7 +90,7 @@ struct ShowsListView: View {
                 TextField(
                     "",
                     text: $searchedText,
-                    prompt: Text("Поиск").font(.regular17).foregroundColor(.text40)
+                    prompt: Text(Strings.search).font(.regular17).foregroundColor(.text40)
                 )
                 .foregroundColor(.text100)
                 .onSubmit {
@@ -104,7 +104,7 @@ struct ShowsListView: View {
                             viewModel.searchShows(query: "")
                         }
                     } label: {
-                        Text("Очистить")
+                        Text(Strings.clear)
                             .font(.medium12)
                             .foregroundColor(.text40)
                             .background(
@@ -256,8 +256,8 @@ extension ShowsListView {
             
             var name: String {
                 switch self {
-                case .popular: return "Популярное"
-                case .soon: return "Скоро"
+                case .popular: return Strings.popular
+                case .soon: return Strings.soon
                 }
             }
         }

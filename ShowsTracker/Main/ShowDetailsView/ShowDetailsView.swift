@@ -85,7 +85,7 @@ struct ShowDetailsView: View {
             
             FloatingErrorView(
                 icon: Image(systemName: "xmark.circle.fill"),
-                text: "Описания пока нет",
+                text: Strings.noDescription,
                 state: $episodeDetailsErrorState
             )
         }
@@ -244,9 +244,9 @@ private extension ShowDetailsView {
     var ongoingStatusView: some View {
         var args: (String, Color) {
             switch viewModel.model.status {
-            case .ongoing: return ("Продолжается", .greenHard)
-            case .ended: return ("Закончен", .redSoft)
-            case .inProduction, .planned: return ("В производстве", .yellowSoft)
+            case .ongoing: return (Strings.ongoing, .greenHard)
+            case .ended: return (Strings.ended, .redSoft)
+            case .inProduction, .planned: return (Strings.inProduction, .yellowSoft)
             }
         }
         let (name, color) = args
@@ -255,7 +255,7 @@ private extension ShowDetailsView {
             Text(name)
                 .font(.medium15)
                 .foregroundColor(color)
-            Text("Статус")
+            Text(Strings.status)
                 .font(.medium13)
                 .foregroundColor(.text40)
         }
@@ -319,7 +319,7 @@ private extension ShowDetailsView {
     var episodesInfo: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(spacing: 8) {
-                Text("Сезон:")
+                Text(Strings.season)
                     .font(.regular17)
                     .foregroundColor(.text60)
                 
@@ -380,7 +380,7 @@ private extension ShowDetailsView {
         VStack(alignment: .leading, spacing: 16) {
             tagsView
             VStack(alignment: .leading, spacing: 8) {
-                Text("Описание")
+                Text(Strings.description)
                     .font(.semibold17)
                     .foregroundColor(.text100)
                 ScrollView(.vertical, showsIndicators: false) {
@@ -445,7 +445,7 @@ private extension ShowDetailsView {
                 }
             
             VStack(spacing: 16) {
-                Text("Описание")
+                Text(Strings.description)
                     .font(.semibold17)
                     .foregroundColor(.text100)
                 
@@ -604,9 +604,9 @@ extension ShowDetailsView {
             
             var rawValue: String {
                 switch self {
-                case .episodes: return "Эпизоды"
-                case .details: return "Детали"
-                case .similar: return "Похожее"
+                case .episodes: return Strings.episodes
+                case .details: return Strings.details
+                case .similar: return Strings.similar
                 }
             }
         }

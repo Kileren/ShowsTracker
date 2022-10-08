@@ -84,7 +84,7 @@ struct FloatingErrorView_Previews: PreviewProvider {
     static var previews: some View {
         FloatingErrorView(
             icon: Image(systemName: "xmark.circle.fill"),
-            text: "Описания пока нет",
+            text: Strings.noDescription,
             state: $state
         )
     }

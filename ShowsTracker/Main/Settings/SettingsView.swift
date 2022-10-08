@@ -42,7 +42,7 @@ struct SettingsView: View {
 private extension SettingsView {
     var titleView: some View {
         HStack {
-            Text("Настройки")
+            Text(Strings.settings)
                 .font(.medium32Rounded)
                 .foregroundColor(.text100)
             Spacer()
@@ -56,8 +56,8 @@ private extension SettingsView {
     var cloudView: some View {
         SettingsCardView(
             image: Image("Icons/Settings/cloud"),
-            title: "Синхронизация iCloud",
-            description: "Актуальная информация на всех ваших устройствах") {
+            title: Strings.iCloudSync,
+            description: Strings.actualInfoOnAllDevices) {
                 HStack {
                     Toggle(isOn: $cloudIsActive) { }
                         .labelsHidden()
@@ -69,12 +69,12 @@ private extension SettingsView {
     var archiveView: some View {
         SettingsCardView(
             image: Image("Icons/Settings/archive"),
-            title: "Архив",
-            description: "Посмотрите свою историю и отложенные картины") {
+            title: Strings.archive,
+            description: Strings.lookYourHistory) {
                 Button {
                     print("Tap archive view")
                 } label: {
-                    Text("Посмотреть")
+                    Text(Strings.look)
                         .font(.regular11)
                         .foregroundColor(.bay)
                         .frame(height: 24)
@@ -85,8 +85,8 @@ private extension SettingsView {
     var regionView: some View {
         SettingsCardView(
             image: Image("Icons/Settings/global"),
-            title: "Регион",
-            description: "Указанный регион используется при поиске") {
+            title: Strings.region,
+            description: Strings.regionDescription) {
                 Button {
                     print("Tap region view")
                 } label: {
@@ -101,8 +101,8 @@ private extension SettingsView {
     var notificationView: some View {
         SettingsCardView(
             image: Image("Icons/Settings/notification"),
-            title: "Уведомления",
-            description: "Оповещения о выходе новых серий и фильмов") {
+            title: Strings.notificationsTitle,
+            description: Strings.notificationsDescription) {
                 Image("checkmark")
                     .frame(height: 24)
             }
@@ -111,8 +111,8 @@ private extension SettingsView {
     var themeView: some View {
         SettingsCardView(
             image: Image("Icons/Settings/theme"),
-            title: "Тема приложения",
-            description: "Тема интерфейса в приложении") {
+            title: Strings.appThemeTitle,
+            description: Strings.appThemeDescription) {
                 ThemeToggleView(selectedTheme: $selectedTheme)
             }
     }
@@ -120,12 +120,12 @@ private extension SettingsView {
     var aboutAppView: some View {
         SettingsCardView(
             image: Image("Icons/Settings/notification"),
-            title: "О приложении",
-            description: "Основная информация о приложении") {
+            title: Strings.aboutAppTitle,
+            description: Strings.aboutAppDescription) {
                 Button {
                     print("Tap about app view")
                 } label: {
-                    Text("Открыть")
+                    Text(Strings.open)
                         .font(.regular11)
                         .foregroundColor(.bay)
                         .frame(height: 24)

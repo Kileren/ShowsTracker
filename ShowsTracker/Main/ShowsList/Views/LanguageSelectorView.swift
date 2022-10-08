@@ -46,7 +46,7 @@ struct LanguageSelectorView: View {
     
     var titleView: some View {
         ZStack {
-            Text("Язык оригинала")
+            Text(Strings.originalLanguage)
                 .font(.semibold20)
                 .foregroundColor(.text100)
             HStack {
@@ -54,7 +54,7 @@ struct LanguageSelectorView: View {
                 Button {
                     selectedLanguage = nil
                 } label: {
-                    Text("Очистить")
+                    Text(Strings.clear)
                         .font(.regular13)
                         .foregroundColor(.text40)
                 }
@@ -95,7 +95,7 @@ struct LanguageSelectorView: View {
                 .frame(width: 300, height: 50)
                 .foregroundColor(.bay)
                 .overlay {
-                    Text("Подтвердить")
+                    Text(Strings.confirm)
                         .font(.medium20)
                         .foregroundColor(.white100)
                 }

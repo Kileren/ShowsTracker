@@ -81,12 +81,12 @@ struct FilterView: View {
     
     var titleView: some View {
         ZStack {
-            Text("Фильтры")
+            Text(Strings.filters)
                 .font(.semibold20)
                 .foregroundColor(.text100)
             HStack {
                 Spacer()
-                Text("Очистить")
+                Text(Strings.clear)
                     .font(.regular13)
                     .foregroundColor(.text40)
             }
@@ -96,7 +96,7 @@ struct FilterView: View {
     var yearView: some View {
         VStack(spacing: 4) {
             HStack {
-                Text("Год выпуска")
+                Text(Strings.releaseYear)
                     .font(.medium17)
                     .foregroundColor(.text100)
                 Spacer()
@@ -114,7 +114,7 @@ struct FilterView: View {
     
     var genresSelectorView: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Жанры")
+            Text(Strings.genres)
                 .font(.medium17)
                 .foregroundColor(.text100)
             
@@ -126,7 +126,7 @@ struct FilterView: View {
                         RoundedRectangle(cornerRadius: 16)
                             .strokeBorder(Color.bay, lineWidth: 1)
                             .frame(width: 130, height: 32)
-                        Text("Все")
+                        Text(Strings.all)
                             .font(.regular15)
                             .foregroundColor(.bay)
                     } else {
@@ -144,7 +144,7 @@ struct FilterView: View {
     
     var languageSelectorView: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Язык оригинала")
+            Text(Strings.originalLanguage)
                 .font(.medium17)
                 .foregroundColor(.text100)
             
@@ -170,7 +170,7 @@ struct FilterView: View {
                         RoundedRectangle(cornerRadius: 16)
                             .strokeBorder(Color.bay, lineWidth: 1)
                             .frame(width: 130, height: 32)
-                        Text("Любой")
+                        Text(Strings.any)
                             .font(.regular15)
                             .foregroundColor(.bay)
                     }
@@ -242,7 +242,7 @@ struct FilterView: View {
     
     var sortView: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Сортировать по")
+            Text(Strings.sortBy)
                 .font(.medium17)
                 .foregroundColor(.text100)
             sortingCell(for: .popularity)
@@ -281,7 +281,7 @@ struct FilterView: View {
                 .frame(width: 300, height: 50)
                 .foregroundColor(.bay)
                 .overlay {
-                    Text("Подтвердить")
+                    Text(Strings.confirm)
                         .font(.medium20)
                         .foregroundColor(.white100)
                 }
@@ -307,9 +307,9 @@ extension FilterView {
             
             var name: String {
                 switch self {
-                case .popularity: return "Популярности"
-                case .airDate: return "Новизне"
-                case .votes: return "Оценке"
+                case .popularity: return Strings.sortByPopularity
+                case .airDate: return Strings.sortByNovelty
+                case .votes: return Strings.sortByRating
                 }
             }
         }
