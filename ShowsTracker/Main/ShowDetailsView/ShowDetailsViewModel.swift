@@ -58,14 +58,26 @@ final class ShowDetailsViewModel: ObservableObject {
     
     func didTapLikeButton() {
         if model.isLiked {
-            coreDataStorage.remove(objectOfType: PlainShow.self, id: showID)
-            model.isLiked = false
+            model.removeShowAlertIsShown = true
         } else {
             if let show = tvService.cachedShow(for: showID) {
                 coreDataStorage.save(object: show)
             }
             model.isLiked = true
         }
+    }
+    
+    func didTapAddToArchiveButton() {
+        model.isArchived = true
+    }
+    
+    func didTapRemoveButton() {
+        coreDataStorage.remove(objectOfType: PlainShow.self, id: showID)
+        model.isLiked = false
+    }
+    
+    func didTapArchiveButton() {
+        
     }
     
     func didSelectInfoTab(to tab: ShowDetailsView.Model.InfoTab) {

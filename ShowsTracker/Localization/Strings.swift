@@ -52,6 +52,10 @@ enum Strings {
     static let episodes = string(forKey: "episodes")
     static let details = string(forKey: "details")
     static let similar = string(forKey: "similar")
+    static let addToArchive = string(forKey: "addToArchive")
+    static let addToArchiveHint = string(forKey: "addToArchiveHint")
+    static let removeFromFavourites = string(forKey: "removeFromFavourites")
+    static let cancel = string(forKey: "cancel")
     
     static func genrePlural(_ count: Int) -> String {
         let format = NSLocalizedString("genre_plural", tableName: "Localization", comment: "")

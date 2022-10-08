@@ -78,6 +78,19 @@ struct ShowDetailsView: View {
         .sheet(isPresented: $sheetNavigator.showSheet) {
             sheetNavigator.sheetView()
         }
+        .confirmationDialog("", isPresented: $viewModel.model.removeShowAlertIsShown, titleVisibility: .visible, actions: {
+            Button {
+                viewModel.didTapAddToArchiveButton()
+            } label: { Text(Strings.addToArchive) }
+            
+            Button(role: .destructive) {
+                viewModel.didTapRemoveButton()
+            } label: { Text(Strings.removeFromFavourites) }
+            
+            Button(role: .cancel) { } label: { Text(Strings.cancel) }
+        }, message: {
+            Text(Strings.addToArchiveHint)
+        })
         .overlay {
             if episodeDetailsShown {
                 episodeDetailsView
@@ -219,7 +232,11 @@ private extension ShowDetailsView {
             Spacer()
             ongoingStatusView
             Spacer()
-            likeView
+            if viewModel.model.isArchived {
+                archiveView
+            } else {
+                likeView
+            }
             Spacer()
         }
     }
@@ -269,6 +286,16 @@ private extension ShowDetailsView {
                 .resizable()
                 .frame(width: 32, height: 32)
                 .foregroundColor(.bay)
+        }
+    }
+    
+    var archiveView: some View {
+        Button {
+            viewModel.didTapArchiveButton()
+        } label: {
+            Image("Icons/Settings/archive")
+                .resizable()
+                .frame(width: 32, height: 32)
         }
     }
     
@@ -585,10 +612,12 @@ extension ShowDetailsView {
         var voteCount = ""
         var status: Status = .inProduction
         var isLiked = false
+        var isArchived = false
         var selectedInfoTab: InfoTab = .episodes
         var detailsInfo = DetailsInfo()
         var episodesInfo = EpisodesInfo()
         var similarShowsInfo = SimilarShowsInfo()
+        var removeShowAlertIsShown = false
         
         enum Status {
             case ongoing
