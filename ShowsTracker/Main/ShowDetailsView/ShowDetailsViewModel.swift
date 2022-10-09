@@ -25,8 +25,9 @@ final class ShowDetailsViewModel: ObservableObject {
             do {
                 let show = try await tvService.getDetails(for: showID)
                 let episodesInfo = await getEpisodesInfo(for: show)
-                let shows = coreDataStorage.get(objectsOfType: PlainShow.self)
-                let isLiked = shows.contains(where: { $0.id == showID })
+                let shows = coreDataStorage.get(objectsOfType: Shows.self)
+                let likedShows = shows.first?.likedShows ?? []
+                let isLiked = likedShows.contains(where: { $0.id == showID })
                 let model = ShowDetailsView.Model(
                     isLoaded: true,
                     posterPath: show.posterPath ?? "",
@@ -61,7 +62,9 @@ final class ShowDetailsViewModel: ObservableObject {
             model.removeShowAlertIsShown = true
         } else {
             if let show = tvService.cachedShow(for: showID) {
-                coreDataStorage.save(object: show)
+                var shows = self.shows
+                shows.likedShows.append(show)
+                coreDataStorage.save(object: shows)
             }
             model.isLiked = true
         }
@@ -72,7 +75,9 @@ final class ShowDetailsViewModel: ObservableObject {
     }
     
     func didTapRemoveButton() {
-        coreDataStorage.remove(objectOfType: PlainShow.self, id: showID)
+        var shows = self.shows
+        shows.likedShows.removeAll { $0.id == showID }
+        coreDataStorage.save(object: shows)
         model.isLiked = false
     }
     
@@ -145,6 +150,10 @@ private extension ShowDetailsViewModel {
     @MainActor
     func set(similarShows: [ShowView.Model]) {
         model.similarShowsInfo = .init(isLoaded: true, models: similarShows)
+    }
+    
+    var shows: Shows {
+        coreDataStorage.get(objectsOfType: Shows.self).first ?? Shows()
     }
 }
 

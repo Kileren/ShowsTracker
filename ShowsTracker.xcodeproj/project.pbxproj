@@ -70,6 +70,7 @@
 		8C7DD04228E975F0003FE1ED /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7DD04128E975F0003FE1ED /* SettingsView.swift */; };
 		8C7DD04428E97612003FE1ED /* SettingsCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7DD04328E97612003FE1ED /* SettingsCardView.swift */; };
 		8C7DD04828E99567003FE1ED /* ThemeToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7DD04728E99567003FE1ED /* ThemeToggleView.swift */; };
+		8C7DD04A28F1CCDC003FE1ED /* Shows.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7DD04928F1CCDC003FE1ED /* Shows.swift */; };
 		8C854F132619FFF6002F5CC4 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C854F122619FFF6002F5CC4 /* Strings.swift */; };
 		8CA0ECB2262AFABF00EB20D9 /* STButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA0ECB1262AFABF00EB20D9 /* STButton.swift */; };
 		8CB9F5BB25CFB0680095F063 /* TruncableText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB9F5BA25CFB0680095F063 /* TruncableText.swift */; };
@@ -166,6 +167,7 @@
 		8C7DD04128E975F0003FE1ED /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		8C7DD04328E97612003FE1ED /* SettingsCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCardView.swift; sourceTree = "<group>"; };
 		8C7DD04728E99567003FE1ED /* ThemeToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeToggleView.swift; sourceTree = "<group>"; };
+		8C7DD04928F1CCDC003FE1ED /* Shows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shows.swift; sourceTree = "<group>"; };
 		8C854F122619FFF6002F5CC4 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		8CA0ECB1262AFABF00EB20D9 /* STButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STButton.swift; sourceTree = "<group>"; };
 		8CB9F5BA25CFB0680095F063 /* TruncableText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TruncableText.swift; sourceTree = "<group>"; };
@@ -306,6 +308,7 @@
 				8C3994752620DBCE005BD7DB /* PlainShow.swift */,
 				8C156D0B281F02730049DDD1 /* SeasonDetails.swift */,
 				8C156D462841F86E0049DDD1 /* Genre.swift */,
+				8C7DD04928F1CCDC003FE1ED /* Shows.swift */,
 			);
 			path = TV;
 			sourceTree = "<group>";
@@ -812,6 +815,7 @@
 				8C4605DD28BB71CE00ADCB0C /* ScaleButtonStyle.swift in Sources */,
 				8C156CE82811C79B0049DDD1 /* SearchService.swift in Sources */,
 				8C518F3C2662B27800EE6C4F /* Redactable.swift in Sources */,
+				8C7DD04A28F1CCDC003FE1ED /* Shows.swift in Sources */,
 				8CFAD6A925C872250090DC4F /* PageDotsView.swift in Sources */,
 				8C156D1E28202D0F0049DDD1 /* STNumberFormatter.swift in Sources */,
 				8C4605E128C1380A00ADCB0C /* AnimatedTemporaryState.swift in Sources */,

@@ -66,9 +66,9 @@ private extension ShowsViewModel {
 private extension ShowsViewModel {
     
     func getUserShows() async -> [ShowsView.Model.UserShow] {
-        let savedShows = coreDataStorage.get(objectsOfType: PlainShow.self)
+        let likedShows = coreDataStorage.get(objectsOfType: Shows.self).first?.likedShows ?? []
         var userShows: [ShowsView.Model.UserShow] = []
-        for show in savedShows {
+        for show in likedShows {
             // TODO: make concurrent loading
             let image = (try? await imageService.loadImage(path: show.posterPath ?? "").wrapInImage()) ?? Image("")
             userShows.append(.init(id: show.id, image: image))
