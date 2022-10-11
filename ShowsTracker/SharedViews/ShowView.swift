@@ -118,6 +118,20 @@ extension ShowView {
             case vote(String)
             case date(day: String, month: String)
         }
+        
+        init(id: Int = 0, posterPath: String, name: String, accessory: Accessory) {
+            self.id = id
+            self.posterPath = posterPath
+            self.name = name
+            self.accessory = accessory
+        }
+        
+        init(plainShow: PlainShow) {
+            self.id = plainShow.id
+            self.posterPath = plainShow.posterPath ?? ""
+            self.name = plainShow.name ?? ""
+            self.accessory = .vote(STNumberFormatter.format(plainShow.vote ?? 0, format: .vote))
+        }
     }
 }
 

@@ -10,7 +10,7 @@ import Resolver
 
 final class ShowDetailsViewModel: ObservableObject {
     
-    @Published var model: ShowDetailsView.Model = .init()
+    @Published var model: ShowDetailsModel = .init()
     
     @Injected var tvService: ITVService
     @Injected var coreDataStorage: ICoreDataStorage
@@ -27,8 +27,10 @@ final class ShowDetailsViewModel: ObservableObject {
                 let episodesInfo = await getEpisodesInfo(for: show)
                 let shows = coreDataStorage.get(objectsOfType: Shows.self)
                 let likedShows = shows.first?.likedShows ?? []
+                let archivedShows = shows.first?.archivedShows ?? []
                 let isLiked = likedShows.contains(where: { $0.id == showID })
-                let model = ShowDetailsView.Model(
+                let isArchived = archivedShows.contains(where: { $0.id == showID })
+                let model = ShowDetailsModel(
                     isLoaded: true,
                     posterPath: show.posterPath ?? "",
                     name: show.name ?? "",
@@ -37,6 +39,7 @@ final class ShowDetailsViewModel: ObservableObject {
                     voteCount: show.voteCount,
                     status: show.status?.modelStatus ?? .ongoing,
                     isLiked: isLiked,
+                    isArchived: isArchived,
                     detailsInfo: .init(
                         tags: show.genres?.compactMap { $0.name } ?? [],
                         overview: show.overview ?? ""),
@@ -53,7 +56,7 @@ final class ShowDetailsViewModel: ObservableObject {
     }
     
     @MainActor
-    func set(model: ShowDetailsView.Model) {
+    func set(model: ShowDetailsModel) {
         self.model = model
     }
     
@@ -63,29 +66,39 @@ final class ShowDetailsViewModel: ObservableObject {
         } else {
             if let show = tvService.cachedShow(for: showID) {
                 var shows = self.shows
+                shows.archivedShows.removeAll { $0.id == showID }
                 shows.likedShows.append(show)
                 coreDataStorage.save(object: shows)
             }
             model.isLiked = true
+            model.isArchived = false
         }
     }
     
     func didTapAddToArchiveButton() {
+        if let show = tvService.cachedShow(for: showID) {
+            var shows = self.shows
+            shows.likedShows.removeAll { $0.id == showID }
+            shows.archivedShows.append(show)
+            coreDataStorage.save(object: shows)
+        }
         model.isArchived = true
     }
     
     func didTapRemoveButton() {
         var shows = self.shows
         shows.likedShows.removeAll { $0.id == showID }
+        shows.archivedShows.removeAll { $0.id == showID }
         coreDataStorage.save(object: shows)
         model.isLiked = false
+        model.isArchived = false
     }
     
     func didTapArchiveButton() {
-        
+        model.archiveShowAlertIsShown = true
     }
     
-    func didSelectInfoTab(to tab: ShowDetailsView.Model.InfoTab) {
+    func didSelectInfoTab(to tab: ShowDetailsModel.InfoTab) {
         if model.selectedInfoTab != tab {
             withAnimation(.easeIn) {
                 model.selectedInfoTab = tab
@@ -103,7 +116,7 @@ final class ShowDetailsViewModel: ObservableObject {
 }
 
 private extension ShowDetailsViewModel {
-    func getEpisodesInfo(for show: DetailedShow) async -> [[ShowDetailsView.Model.EpisodesInfo.Episode]] {
+    func getEpisodesInfo(for show: DetailedShow) async -> [[ShowDetailsModel.EpisodesInfo.Episode]] {
         var seasonsDetails: [SeasonDetails] = []
         guard let seasonsCount = show.seasons?.count, seasonsCount > 0 else { return [] }
         for season in 1...seasonsCount {
@@ -116,7 +129,7 @@ private extension ShowDetailsViewModel {
         }
         return seasonsDetails.compactMap { seasonDetails in
             seasonDetails.episodes?.compactMap { episode in
-                ShowDetailsView.Model.EpisodesInfo.Episode(
+                ShowDetailsModel.EpisodesInfo.Episode(
                     episodeNumber: episode.episodeNumber ?? 0,
                     name: episode.name ?? "",
                     date: STDateFormatter.format(
@@ -132,14 +145,7 @@ private extension ShowDetailsViewModel {
             do {
                 let similarShows = try await tvService.getSimilar(for: showID)
                 let similarShowsViewModels = similarShows
-                    .map {
-                        ShowView.Model(
-                            id: $0.id,
-                            posterPath: $0.posterPath ?? "",
-                            name: $0.name ?? "",
-                            accessory: .vote(STNumberFormatter.format($0.vote ?? 0, format: .vote))
-                        )
-                    }
+                    .map { ShowView.Model(plainShow: $0) }
                 await set(similarShows: similarShowsViewModels)
             } catch {
                 Logger.log(warning: "Similar show not loaded and not handled", error: error)
@@ -158,7 +164,7 @@ private extension ShowDetailsViewModel {
 }
 
 private extension DetailedShow.Status {
-    var modelStatus: ShowDetailsView.Model.Status {
+    var modelStatus: ShowDetailsModel.Status {
         switch self {
         case .ongoing: return .ongoing
         case .ended: return .ended

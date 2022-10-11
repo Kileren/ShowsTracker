@@ -13,13 +13,17 @@ struct SettingsView: View {
     @State private var selectedTheme: ThemeToggleView.Theme = .auto
     
     var body: some View {
-        ZStack(alignment: .topLeading) {
+        NavigationView {
             VStack {
-                titleView
                 VStack(spacing: 16) {
                     HStack(spacing: 16) {
                         cloudView
-                        archiveView
+                        
+                        NavigationLink {
+                            ArchiveShowsView()
+                        } label: {
+                            archiveView
+                        }
                     }
                     HStack(spacing: 16) {
                         regionView
@@ -32,23 +36,17 @@ struct SettingsView: View {
                 }
                 Spacer()
             }
+            .navigationTitle(Strings.settings)
+            .padding(.horizontal, 16)
+            .padding(.top, 16)
+            .background {
+                Color.backgroundLight.ignoresSafeArea()
+            }
         }
-        .padding(.horizontal, 16)
-        .padding(.top, 24)
-        .background(Color.backgroundLight)
     }
 }
 
 private extension SettingsView {
-    var titleView: some View {
-        HStack {
-            Text(Strings.settings)
-                .font(.medium32Rounded)
-                .foregroundColor(.text100)
-            Spacer()
-        }
-    }
-    
     var cardsView: some View {
         Text("")
     }
@@ -62,6 +60,7 @@ private extension SettingsView {
                     Toggle(isOn: $cloudIsActive) { }
                         .labelsHidden()
                         .tint(.bay)
+                        .frame(height: 20)
                 }
             }
     }
@@ -71,8 +70,8 @@ private extension SettingsView {
             image: Image("Icons/Settings/archive"),
             title: Strings.archive,
             description: Strings.lookYourHistory) {
-                Button {
-                    print("Tap archive view")
+                NavigationLink {
+                    ArchiveShowsView()
                 } label: {
                     Text(Strings.look)
                         .font(.regular11)

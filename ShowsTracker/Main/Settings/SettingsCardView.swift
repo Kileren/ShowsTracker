@@ -69,6 +69,7 @@ private extension SettingsCardView {
             .font(.medium13)
             .foregroundColor(.text100)
             .lineLimit(2)
+            .multilineTextAlignment(.leading)
             .frame(height: 32)
     }
     
@@ -78,6 +79,7 @@ private extension SettingsCardView {
                 .font(.regular10)
                 .foregroundColor(.text40)
                 .lineLimit(2)
+                .multilineTextAlignment(.leading)
             Spacer()
         }
         .frame(height: 32)

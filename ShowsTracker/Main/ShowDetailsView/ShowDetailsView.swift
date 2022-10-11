@@ -78,19 +78,18 @@ struct ShowDetailsView: View {
         .sheet(isPresented: $sheetNavigator.showSheet) {
             sheetNavigator.sheetView()
         }
-        .confirmationDialog("", isPresented: $viewModel.model.removeShowAlertIsShown, titleVisibility: .visible, actions: {
-            Button {
-                viewModel.didTapAddToArchiveButton()
-            } label: { Text(Strings.addToArchive) }
-            
-            Button(role: .destructive) {
-                viewModel.didTapRemoveButton()
-            } label: { Text(Strings.removeFromFavourites) }
-            
-            Button(role: .cancel) { } label: { Text(Strings.cancel) }
-        }, message: {
-            Text(Strings.addToArchiveHint)
-        })
+        .confirmationDialog(
+            "",
+            isPresented: $viewModel.model.removeShowAlertIsShown,
+            titleVisibility: .visible,
+            actions: confirmationDialogRemoveShowButtons,
+            message: { Text(Strings.addToArchiveHint) }
+        )
+        .confirmationDialog(
+            "",
+            isPresented: $viewModel.model.archiveShowAlertIsShown,
+            actions: confirmationDialogArchiveButtons
+        )
         .overlay {
             if episodeDetailsShown {
                 episodeDetailsView
@@ -101,6 +100,22 @@ struct ShowDetailsView: View {
                 text: Strings.noDescription,
                 state: $episodeDetailsErrorState
             )
+        }
+    }
+    
+    func confirmationDialogRemoveShowButtons() -> some View {
+        Group {
+            Button { viewModel.didTapAddToArchiveButton() } label: { Text(Strings.addToArchive) }
+            Button(role: .destructive) { viewModel.didTapRemoveButton() } label: { Text(Strings.removeFromFavourites) }
+            Button(role: .cancel) { } label: { Text(Strings.cancel) }
+        }
+    }
+    
+    func confirmationDialogArchiveButtons() -> some View {
+        Group {
+            Button { viewModel.didTapLikeButton() } label: { Text(Strings.backToFavourites) }
+            Button(role: .destructive) { viewModel.didTapRemoveButton() } label: { Text(Strings.removeFromArchive) }
+            Button(role: .cancel) { } label: { Text(Strings.cancel) }
         }
     }
     
@@ -300,7 +315,7 @@ private extension ShowDetailsView {
     }
     
     func infoTabs(geometry: GeometryProxy) -> some View {
-        let tabs: [Model.InfoTab] = [.episodes, .details, .similar]
+        let tabs: [ShowDetailsModel.InfoTab] = [.episodes, .details, .similar]
         return HStack(alignment: .top, spacing: 20) {
             ForEach(tabs, id: \.self) { tab in
                 infoTab(for: tab)
@@ -321,7 +336,7 @@ private extension ShowDetailsView {
         .zIndex(1)
     }
     
-    func infoTab(for tab: Model.InfoTab) -> some View {
+    func infoTab(for tab: ShowDetailsModel.InfoTab) -> some View {
         Button {
             viewModel.didSelectInfoTab(to: tab)
         } label: {
@@ -372,7 +387,7 @@ private extension ShowDetailsView {
         }
     }
     
-    func episodeInfo(episode: Model.EpisodesInfo.Episode) -> some View {
+    func episodeInfo(episode: ShowDetailsModel.EpisodesInfo.Episode) -> some View {
         HStack(spacing: 24) {
             Text("\(episode.episodeNumber)")
                 .font(.medium32)
@@ -597,71 +612,6 @@ private class SheetNavigator: ObservableObject {
 extension ShowDetailsView {
     struct Routing: Equatable {
         var showID: Int = 0
-    }
-}
-
-// MARK: - Model
-
-extension ShowDetailsView {
-    struct Model: Equatable {
-        var isLoaded = false
-        var posterPath = ""
-        var name = ""
-        var broadcastYears = ""
-        var vote = ""
-        var voteCount = ""
-        var status: Status = .inProduction
-        var isLiked = false
-        var isArchived = false
-        var selectedInfoTab: InfoTab = .episodes
-        var detailsInfo = DetailsInfo()
-        var episodesInfo = EpisodesInfo()
-        var similarShowsInfo = SimilarShowsInfo()
-        var removeShowAlertIsShown = false
-        
-        enum Status {
-            case ongoing
-            case ended
-            case inProduction
-            case planned
-        }
-        
-        enum InfoTab: String {
-            case episodes
-            case details
-            case similar
-            
-            var rawValue: String {
-                switch self {
-                case .episodes: return Strings.episodes
-                case .details: return Strings.details
-                case .similar: return Strings.similar
-                }
-            }
-        }
-        
-        struct DetailsInfo: Equatable {
-            var tags: [String] = []
-            var overview: String = ""
-        }
-        
-        struct EpisodesInfo: Equatable {
-            var numberOfSeasons: Int = 0
-            var selectedSeason = 0
-            var episodesPerSeasons: [[Episode]] = []
-            
-            struct Episode: Equatable, Hashable {
-                var episodeNumber = 0
-                var name = ""
-                var date = ""
-                var overview = ""
-            }
-        }
-        
-        struct SimilarShowsInfo: Equatable {
-            var isLoaded = false
-            var models: [ShowView.Model] = []
-        }
     }
 }
 
