@@ -49,3 +49,4 @@
 "emptyArchive" = "На данный момент\nв архиве пусто";
 "backToFavourites" = "Вернуть в избранное";
 "removeFromArchive" = "Удалить из архива";
+"version" = "Версия";

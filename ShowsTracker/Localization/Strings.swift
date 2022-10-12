@@ -59,6 +59,7 @@ enum Strings {
     static let emptyArchive = string(forKey: "emptyArchive")
     static let backToFavourites = string(forKey: "backToFavourites")
     static let removeFromArchive = string(forKey: "removeFromArchive")
+    static let version = string(forKey: "version")
     
     static func genrePlural(_ count: Int) -> String {
         let format = NSLocalizedString("genre_plural", tableName: "Localization", comment: "")

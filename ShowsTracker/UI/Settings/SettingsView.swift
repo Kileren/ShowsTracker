@@ -9,6 +9,8 @@ import SwiftUI
 
 struct SettingsView: View {
     
+    @ObservedObject private var sheetNavigator = SheetNavigator()
+    
     @State private var cloudIsActive: Bool = true
     @State private var selectedTheme: ThemeToggleView.Theme = .auto
     
@@ -18,12 +20,7 @@ struct SettingsView: View {
                 VStack(spacing: 16) {
                     HStack(spacing: 16) {
                         cloudView
-                        
-                        NavigationLink {
-                            ArchiveShowsView()
-                        } label: {
-                            archiveView
-                        }
+                        archiveView
                     }
                     HStack(spacing: 16) {
                         regionView
@@ -42,6 +39,8 @@ struct SettingsView: View {
             .background {
                 Color.backgroundLight.ignoresSafeArea()
             }
+            .sheet(isPresented: $sheetNavigator.showSheet,
+                   content: sheetNavigator.sheetView)
         }
     }
 }
@@ -66,19 +65,23 @@ private extension SettingsView {
     }
     
     var archiveView: some View {
-        SettingsCardView(
-            image: Image("Icons/Settings/archive"),
-            title: Strings.archive,
-            description: Strings.lookYourHistory) {
-                NavigationLink {
-                    ArchiveShowsView()
-                } label: {
-                    Text(Strings.look)
-                        .font(.regular11)
-                        .foregroundColor(.bay)
-                        .frame(height: 24)
+        NavigationLink {
+            ArchiveShowsView()
+        } label: {
+            SettingsCardView(
+                image: Image("Icons/Settings/archive"),
+                title: Strings.archive,
+                description: Strings.lookYourHistory) {
+                    NavigationLink {
+                        ArchiveShowsView()
+                    } label: {
+                        Text(Strings.look)
+                            .font(.regular11)
+                            .foregroundColor(.bay)
+                            .frame(height: 24)
+                    }
                 }
-            }
+        }
     }
     
     var regionView: some View {
@@ -122,7 +125,7 @@ private extension SettingsView {
             title: Strings.aboutAppTitle,
             description: Strings.aboutAppDescription) {
                 Button {
-                    print("Tap about app view")
+                    sheetNavigator.sheetDestination = .aboutApp
                 } label: {
                     Text(Strings.open)
                         .font(.regular11)
@@ -130,6 +133,35 @@ private extension SettingsView {
                         .frame(height: 24)
                 }
             }
+            .onTapGesture {
+                sheetNavigator.sheetDestination = .aboutApp
+            }
+    }
+}
+
+// MARK: - Sheet Navigator
+
+private class SheetNavigator: ObservableObject {
+    
+    @Published var showSheet = false
+    var sheetDestination: SheetDestination = .none {
+        didSet {
+            showSheet = true
+        }
+    }
+    
+    enum SheetDestination {
+        case none
+        case aboutApp
+    }
+    
+    func sheetView() -> AnyView {
+        switch sheetDestination {
+        case .none:
+            return AnyView(Text(""))
+        case .aboutApp:
+            return AnyView(AboutAppView())
+        }
     }
 }
 
