@@ -544,7 +544,7 @@
 				8CB9F5C025CFB54B0095F063 /* UtilitiesViews */,
 				8C496FA525C47D8D000282C5 /* SharedViews */,
 				8CD6C20725C32F19004CF261 /* Models */,
-				8CD6C1FD25C32D54004CF261 /* Main */,
+				8CD6C1FD25C32D54004CF261 /* UI */,
 				8CD6C1F825C32CCC004CF261 /* Root */,
 				8CD6C1E225C327D4004CF261 /* Preview Content */,
 				8CD6C1F125C3299C004CF261 /* SupportingFiles */,
@@ -579,7 +579,7 @@
 			path = Root;
 			sourceTree = "<group>";
 		};
-		8CD6C1FD25C32D54004CF261 /* Main */ = {
+		8CD6C1FD25C32D54004CF261 /* UI */ = {
 			isa = PBXGroup;
 			children = (
 				8C7DD04B28F335F1003FE1ED /* ArchiveShows */,
@@ -589,7 +589,7 @@
 				8CD6C20D25C3301B004CF261 /* ShowsView */,
 				8CD6C20325C32E06004CF261 /* Main+Resolver.swift */,
 			);
-			path = Main;
+			path = UI;
 			sourceTree = "<group>";
 		};
 		8CD6C20725C32F19004CF261 /* Models */ = {
