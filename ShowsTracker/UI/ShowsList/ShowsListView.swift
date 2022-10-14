@@ -147,8 +147,7 @@ struct ShowsListView: View {
                     }
                     
                     STSpacer(height: 16)
-                    ProgressView()
-                        .frame(width: geometry.size.width)
+                    STSpinner()
                     STSpacer(height: 8)
                 }
                 .onChange(of: viewModel.model.currentRepresentation) { representation in
@@ -174,7 +173,6 @@ struct ShowsListView: View {
                 .frame(width: 0, height: 0)
                 .foregroundColor(.clear)
                 .onAppear {
-                    viewModel.getMorePopular()
                     switch viewModel.model.currentRepresentation {
                     case .popular: viewModel.getMorePopular()
                     case .filter: viewModel.getMoreShowsByFilter()
