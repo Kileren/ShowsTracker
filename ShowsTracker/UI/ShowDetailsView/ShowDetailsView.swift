@@ -24,6 +24,7 @@ struct ShowDetailsView: View {
     ) private var episodeDetailsShown: Bool
     @State private var episodeDetails = ""
     @State private var episodeDetailsErrorState: FloatingErrorView.State = .hidden
+    @State private var seasonNumberInfoShown: Int? = nil
     
     var showID: Int
     
@@ -202,7 +203,7 @@ private extension ShowDetailsView {
                 spacer(height: 16)
                 
                 switch viewModel.model.selectedInfoTab {
-                case .episodes where viewModel.model.episodesInfo.numberOfSeasons > 0:
+                case .episodes where viewModel.model.seasonsInfo.count > 0:
                     episodesInfo
                 case .episodes:
                     Rectangle().foregroundColor(.clear)
@@ -359,35 +360,95 @@ private extension ShowDetailsView {
 
 private extension ShowDetailsView {
     var episodesInfo: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack(spacing: 8) {
-                Text(Strings.season)
-                    .font(.regular17)
-                    .foregroundColor(.text60)
-                
-                ForEach(1...viewModel.model.episodesInfo.numberOfSeasons, id: \.self) { season in
-                    Button {
-                        viewModel.didSelectSeason(season)
-                    } label: {
-                        Text("\(season)")
-                            .font(.regular17)
-                            .foregroundColor(viewModel.model.episodesInfo.selectedSeason == season ? .bay : .text60)
-                    }
-                }
-            }
-            
-            HStack {
-                VStack(alignment: .leading, spacing: 16) {
-                    ForEach(viewModel.model.episodesInfo.episodesPerSeasons[viewModel.model.episodesInfo.selectedSeason - 1], id: \.self) {
-                        episodeInfo(episode: $0)
-                    }
-                }
-                Spacer()
+        VStack(spacing: 16) {
+            ForEach(viewModel.model.seasonsInfo, id: \.self) { info in
+                seasonInfoView(info: info)
             }
         }
     }
     
-    func episodeInfo(episode: ShowDetailsModel.EpisodesInfo.Episode) -> some View {
+    func seasonInfoView(info: ShowDetailsModel.SeasonInfo) -> some View {
+        let seasonIsSelected = seasonNumberInfoShown == info.seasonNumber
+        var backgroundRectangleHeight: CGFloat {
+            if seasonIsSelected {
+                return CGFloat(130 + info.episodes.count * (40 + 16))
+            } else {
+                return info.overview.isEmpty ? 92 : 130
+            }
+        }
+        return ZStack(alignment: .topLeading) {
+            VStack(spacing: 0) {
+                if !seasonIsSelected {
+                    spacer(height: 20)
+                }
+                
+                ZStack(alignment: .top) {
+                    RoundedRectangle(cornerRadius: 24)
+                        .foregroundColor(.separators)
+                        .frame(height: backgroundRectangleHeight)
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Text(info.title)
+                                .font(.medium17Rounded)
+                                .foregroundColor(.text100)
+                                .lineLimit(1)
+                                .truncationMode(.middle)
+                            Spacer()
+                        }
+                        
+                        if !info.overview.isEmpty {
+                            Text(info.overview)
+                                .font(.regular11)
+                                .foregroundColor(.text40)
+                                .lineLimit(4)
+                        }
+                        
+                        if !seasonIsSelected {
+                            Text(Strings.episodes)
+                                .font(.regular11)
+                                .foregroundColor(.bay)
+                                .transition(.opacity.combined(with: .offset(y: -20)))
+                        }
+                    }
+                    .padding(.top, 12)
+                    .padding(.leading, 90)
+                    .padding(.trailing, 16)
+                }
+            }
+            
+            VStack(alignment: .leading, spacing: 16) {
+                LoadableImageView(path: info.posterPath)
+                    .frame(width: 66, height: 100)
+                    .cornerRadius(12)
+                    .padding(.top, seasonIsSelected ? 12 : 0)
+                
+                if seasonIsSelected {
+                    VStack(alignment: .leading, spacing: 16) {
+                        ForEach(info.episodes, id: \.self) {
+                            episodeInfo(episode: $0)
+                        }
+                    }
+                }
+            }
+            .padding(.leading, 12)
+        }
+        .onTapGesture {
+            withAnimation(.easeInOut) {
+                if seasonIsSelected {
+                    seasonNumberInfoShown = nil
+                } else {
+                    seasonNumberInfoShown = info.seasonNumber
+                }
+            }
+        }
+    }
+    
+    var seasonInfo: some View {
+        RoundedRectangle(cornerRadius: 12)
+    }
+    
+    func episodeInfo(episode: ShowDetailsModel.Episode) -> some View {
         HStack(spacing: 24) {
             Text("\(episode.episodeNumber)")
                 .font(.medium32)
@@ -403,6 +464,7 @@ private extension ShowDetailsView {
                     .foregroundColor(.text40)
             }
         }
+        .frame(height: 40)
         .onTapGesture {
             if !episode.overview.isEmpty {
                 episodeDetails = episode.overview
@@ -617,6 +679,7 @@ extension ShowDetailsView {
 
 struct ShowDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        ShowDetailsView(showID: 0)
+        Resolver.registerAllServices()
+        return ShowDetailsView(showID: 0)
     }
 }

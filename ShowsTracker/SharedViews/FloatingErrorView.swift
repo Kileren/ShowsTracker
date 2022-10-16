@@ -57,6 +57,9 @@ struct FloatingErrorView: View {
                     }
                 }
             }
+            .onAppear {
+                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            }
         }
     }
 }

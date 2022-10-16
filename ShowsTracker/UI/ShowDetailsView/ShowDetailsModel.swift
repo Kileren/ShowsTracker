@@ -19,7 +19,7 @@ struct ShowDetailsModel: Equatable {
     var isArchived = false
     var selectedInfoTab: InfoTab = .episodes
     var detailsInfo = DetailsInfo()
-    var episodesInfo = EpisodesInfo()
+    var seasonsInfo = [SeasonInfo]()
     var similarShowsInfo = SimilarShowsInfo()
     var removeShowAlertIsShown = false
     var archiveShowAlertIsShown = false
@@ -50,17 +50,19 @@ struct ShowDetailsModel: Equatable {
         var overview: String = ""
     }
     
-    struct EpisodesInfo: Equatable {
-        var numberOfSeasons: Int = 0
-        var selectedSeason = 0
-        var episodesPerSeasons: [[Episode]] = []
-        
-        struct Episode: Equatable, Hashable {
-            var episodeNumber = 0
-            var name = ""
-            var date = ""
-            var overview = ""
-        }
+    struct SeasonInfo: Equatable, Hashable {
+        var seasonNumber = 0
+        var posterPath: String = ""
+        var title: String = ""
+        var overview: String = ""
+        var episodes: [Episode] = []
+    }
+    
+    struct Episode: Equatable, Hashable {
+        var episodeNumber = 0
+        var name = ""
+        var date = ""
+        var overview = ""
     }
     
     struct SimilarShowsInfo: Equatable {

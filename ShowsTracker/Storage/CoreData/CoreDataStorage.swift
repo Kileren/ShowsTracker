@@ -18,6 +18,10 @@ protocol ICoreDataStorage {
 final class CoreDataStorage: ICoreDataStorage {
     
     func save<T: ManagedObjectEncodable>(object: T) {
+        #if DEBUG
+        if isPreview { return }
+        #endif
+        
         if var existingObject = getManagedObject(for: T.self, id: object.id) {
             existingObject.object = object as! T.ManagedObject.Object
         } else {
@@ -28,6 +32,10 @@ final class CoreDataStorage: ICoreDataStorage {
     }
     
     func get<T: ManagedObjectEncodable>(objectsOfType type: T.Type) -> [T] {
+        #if DEBUG
+        if isPreview { return [] }
+        #endif
+        
         var result: [T] = []
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "\(type.ManagedObject.self)")
         do {
@@ -47,6 +55,10 @@ final class CoreDataStorage: ICoreDataStorage {
     }
     
     func remove<T: ManagedObjectEncodable>(objectOfType type: T.Type, id: Int) {
+        #if DEBUG
+        if isPreview { return }
+        #endif
+        
         if let object = getManagedObject(for: type, id: id) {
             managedObjectContext.delete(object)
         }

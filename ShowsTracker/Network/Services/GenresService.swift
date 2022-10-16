@@ -16,7 +16,7 @@ protocol IGenresService {
 
 final class GenresService {
     
-    private let provider = MoyaProvider<GenresTarget>(stubClosure: { _ in .delayed(seconds: 1) })
+    private let provider = MoyaProvider<GenresTarget>(stubClosure: { _ in isPreview ? .delayed(seconds: 0) : .never })
 //    private let provider = MoyaProvider<GenresTarget>()
     
     var cachedGenres: [Genre] = []

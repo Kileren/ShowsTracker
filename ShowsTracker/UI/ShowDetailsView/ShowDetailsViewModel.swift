@@ -24,7 +24,6 @@ final class ShowDetailsViewModel: ObservableObject {
         Task {
             do {
                 let show = try await tvService.getDetails(for: showID)
-                let episodesInfo = await getEpisodesInfo(for: show)
                 let shows = coreDataStorage.get(objectsOfType: Shows.self)
                 let likedShows = shows.first?.likedShows ?? []
                 let archivedShows = shows.first?.archivedShows ?? []
@@ -43,10 +42,7 @@ final class ShowDetailsViewModel: ObservableObject {
                     detailsInfo: .init(
                         tags: show.genres?.compactMap { $0.name } ?? [],
                         overview: show.overview ?? ""),
-                    episodesInfo: .init(
-                        numberOfSeasons: show.numberOfSeasons ?? 0,
-                        selectedSeason: min(1, show.numberOfSeasons ?? 0),
-                        episodesPerSeasons: episodesInfo)
+                    seasonsInfo: await seasonsInfo(from: show)
                 )
                 await set(model: model)
             } catch {
@@ -109,17 +105,14 @@ final class ShowDetailsViewModel: ObservableObject {
             loadSimilarShows()
         }
     }
-    
-    func didSelectSeason(_ season: Int) {
-        model.episodesInfo.selectedSeason = season
-    }
 }
 
 private extension ShowDetailsViewModel {
-    func getEpisodesInfo(for show: DetailedShow) async -> [[ShowDetailsModel.EpisodesInfo.Episode]] {
+    func seasonsInfo(from show: DetailedShow) async -> [ShowDetailsModel.SeasonInfo] {
+        guard let seasons = show.seasons, seasons.count > 0 else { return [] }
+        
         var seasonsDetails: [SeasonDetails] = []
-        guard let seasonsCount = show.seasons?.count, seasonsCount > 0 else { return [] }
-        for season in 1...seasonsCount {
+        for season in 1...seasons.count {
             do {
                 let details = try await tvService.getSeasonDetails(for: show.id ?? showID, season: season)
                 seasonsDetails.append(details)
@@ -127,16 +120,27 @@ private extension ShowDetailsViewModel {
                 Logger.log(error: error)
             }
         }
-        return seasonsDetails.compactMap { seasonDetails in
-            seasonDetails.episodes?.compactMap { episode in
-                ShowDetailsModel.EpisodesInfo.Episode(
+        
+        return seasonsDetails.enumerated().compactMap { element -> ShowDetailsModel.SeasonInfo? in
+            let (season, index) = (element.element, element.offset)
+            
+            guard var title = season.name else { return nil }
+            if let airDate = season.airDate, let releaseYear = STDateFormatter.component(.year, from: airDate, format: .airDate) {
+                title += " (\(releaseYear))"
+            }
+            let episodes = season.episodes?.compactMap { episode in
+                ShowDetailsModel.Episode(
                     episodeNumber: episode.episodeNumber ?? 0,
                     name: episode.name ?? "",
-                    date: STDateFormatter.format(
-                        episode.airDate ?? "",
-                        format: .full),
+                    date: STDateFormatter.format(episode.airDate ?? "", format: .full),
                     overview: episode.overview ?? "")
             }
+            return ShowDetailsModel.SeasonInfo(
+                seasonNumber: index,
+                posterPath: season.posterPath ?? "",
+                title: title,
+                overview: season.overview ?? "",
+                episodes: episodes ?? [])
         }
     }
     

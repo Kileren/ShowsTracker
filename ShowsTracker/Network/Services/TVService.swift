@@ -23,10 +23,10 @@ protocol ITVService {
 
 final class TVService {
     
-//    private let tvProvider = MoyaProvider<TVTarget>(stubClosure: { _ in .delayed(seconds: 1) })
-    private let tvProvider = MoyaProvider<TVTarget>()
-//    private let discoverProvider = MoyaProvider<DiscoverTarget>(stubClosure: { _ in .delayed(seconds: 1) })
-    private let discoverProvider = MoyaProvider<DiscoverTarget>()
+    private let tvProvider = MoyaProvider<TVTarget>(stubClosure: { _ in isPreview ? .delayed(seconds: 0) : .never })
+//    private let tvProvider = MoyaProvider<TVTarget>()
+    private let discoverProvider = MoyaProvider<DiscoverTarget>(stubClosure: { _ in isPreview ? .delayed(seconds: 0) : .never })
+//    private let discoverProvider = MoyaProvider<DiscoverTarget>()
     
     private var cachedPopularShows: [PlainShow] = []
     private var popularShowsPage: Int = 1

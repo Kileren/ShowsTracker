@@ -38,4 +38,11 @@ struct STDateFormatter {
         formatter.dateFormat = format.rawValue
         return formatter.string(from: date)
     }
+    
+    static func component(_ component: Calendar.Component, from value: String, format: Format) -> Int? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = format.rawValue
+        guard let date = formatter.date(from: value) else { return nil }
+        return Calendar.current.component(component, from: date)
+    }
 }

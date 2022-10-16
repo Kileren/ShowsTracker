@@ -14,8 +14,8 @@ protocol ISearchService {
 
 final class SearchService {
     
-//    private let provider = MoyaProvider<SearchTarget>(stubClosure: { _ in .delayed(seconds: 0) })
-    private let provider = MoyaProvider<SearchTarget>()
+    private let provider = MoyaProvider<SearchTarget>(stubClosure: { _ in isPreview ? .delayed(seconds: 0) : .never })
+//    private let provider = MoyaProvider<SearchTarget>()
 }
 
 extension SearchService: ISearchService {

@@ -17,8 +17,8 @@ protocol IImageService {
 final class ImageService {
     
 //    private let provider = MoyaProvider<ImageTarget>(stubClosure: { _ in isPreview ? .immediate : .never })
-//    private let provider = MoyaProvider<ImageTarget>(stubClosure: { _ in .delayed(seconds: 3) })
-    private let provider = MoyaProvider<ImageTarget>()
+    private let provider = MoyaProvider<ImageTarget>(stubClosure: { _ in isPreview ? .delayed(seconds: 0) : .never })
+//    private let provider = MoyaProvider<ImageTarget>()
     
     private var cache: [String: UIImage] = [:]
 }
@@ -26,6 +26,10 @@ final class ImageService {
 extension ImageService: IImageService {
     
     func loadImage(path: String) async throws -> UIImage {
+        #if DEBUG
+        if isPreview { return UIImage(named: "TheWitcher")! }
+        #endif
+        
         if let image = cache[path] {
             return image
         }
