@@ -7,12 +7,15 @@
 
 import Foundation
 import Moya
+import Resolver
 
 protocol ISearchService {
     func searchTVShows(query: String) async throws -> [PlainShow]
 }
 
 final class SearchService {
+    
+    @Injected private var inMemoryStorage: InMemoryStorageProtocol
     
     private let provider = MoyaProvider<SearchTarget>(stubClosure: { _ in isPreview ? .delayed(seconds: 0) : .never })
 //    private let provider = MoyaProvider<SearchTarget>()
@@ -25,7 +28,9 @@ extension SearchService: ISearchService {
         
         switch result {
         case .success(let response):
-            return try parse(response: response, to: [PlainShow].self)
+            let shows = try parse(response: response, to: [PlainShow].self)
+            inMemoryStorage.cacheShows(shows)
+            return shows
         case .failure(let error):
             Logger.log(error: error)
             throw error

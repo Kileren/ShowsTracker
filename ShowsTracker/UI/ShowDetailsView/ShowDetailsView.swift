@@ -444,15 +444,12 @@ private extension ShowDetailsView {
         }
     }
     
-    var seasonInfo: some View {
-        RoundedRectangle(cornerRadius: 12)
-    }
-    
     func episodeInfo(episode: ShowDetailsModel.Episode) -> some View {
         HStack(spacing: 24) {
             Text("\(episode.episodeNumber)")
                 .font(.medium32)
                 .foregroundColor(.text40)
+                .frame(width: 40)
             
             VStack(alignment: .leading, spacing: 2) {
                 Text(episode.name)

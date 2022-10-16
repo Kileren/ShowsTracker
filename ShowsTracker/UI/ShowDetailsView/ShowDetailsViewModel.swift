@@ -15,6 +15,7 @@ final class ShowDetailsViewModel: ObservableObject {
     @Injected var tvService: ITVService
     @Injected var coreDataStorage: ICoreDataStorage
     @Injected var imageService: IImageService
+    @Injected private var inMemoryStorage: InMemoryStorageProtocol
     
     private var showID: Int = 0
     
@@ -60,7 +61,7 @@ final class ShowDetailsViewModel: ObservableObject {
         if model.isLiked {
             model.removeShowAlertIsShown = true
         } else {
-            if let show = tvService.cachedShow(for: showID) {
+            if let show = inMemoryStorage.getCachedShow(id: showID) {
                 var shows = self.shows
                 shows.archivedShows.removeAll { $0.id == showID }
                 shows.likedShows.append(show)
@@ -72,7 +73,7 @@ final class ShowDetailsViewModel: ObservableObject {
     }
     
     func didTapAddToArchiveButton() {
-        if let show = tvService.cachedShow(for: showID) {
+        if let show = inMemoryStorage.getCachedShow(id: showID) {
             var shows = self.shows
             shows.likedShows.removeAll { $0.id == showID }
             shows.archivedShows.append(show)

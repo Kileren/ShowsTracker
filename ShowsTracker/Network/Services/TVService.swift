@@ -7,6 +7,7 @@
 
 import Foundation
 import Moya
+import Resolver
 
 protocol ITVService {
     func getDetails(for showId: Int) async throws -> DetailedShow
@@ -18,24 +19,28 @@ protocol ITVService {
     func getMoreByFilter(_ filter: DiscoverTarget.Filter) async throws -> [PlainShow]
     func getUpcoming() async throws -> [PlainShow]
     func getMoreUpcoming() async throws -> [PlainShow]
-    func cachedShow(for showId: Int) -> PlainShow?
 }
 
 final class TVService {
     
+    // Dependencies
+    @Injected private var inMemoryStorage: InMemoryStorageProtocol
+    
+    // Providers
     private let tvProvider = MoyaProvider<TVTarget>(stubClosure: { _ in isPreview ? .delayed(seconds: 0) : .never })
 //    private let tvProvider = MoyaProvider<TVTarget>()
     private let discoverProvider = MoyaProvider<DiscoverTarget>(stubClosure: { _ in isPreview ? .delayed(seconds: 0) : .never })
 //    private let discoverProvider = MoyaProvider<DiscoverTarget>()
     
-    private var cachedPopularShows: [PlainShow] = []
+    // Pages
     private var popularShowsPage: Int = 1
-    
-    private var cachedFilteredShows: [DiscoverTarget.Filter: [PlainShow]] = [:]
     private var filteredShowsPage: [DiscoverTarget.Filter: Int] = [:]
-    
-    private var cachedUpcomingShows: [PlainShow] = []
     private var upcomingShowsPage: Int = 1
+    
+    // Cache
+    private var cachedPopularShows: [PlainShow] = []
+    private var cachedFilteredShows: [DiscoverTarget.Filter: [PlainShow]] = [:]
+    private var cachedUpcomingShows: [PlainShow] = []
 }
 
 extension TVService: ITVService {
@@ -67,6 +72,7 @@ extension TVService: ITVService {
         do {
             let shows = try parse(result: result, to: [PlainShow].self, atKeyPath: "results")
             cachedPopularShows.append(contentsOf: shows)
+            inMemoryStorage.cacheShows(shows)
             popularShowsPage += 1
             return shows
         } catch {
@@ -88,6 +94,7 @@ extension TVService: ITVService {
         do {
             let shows = try parse(result: result, to: [PlainShow].self, atKeyPath: "results")
             cachedFilteredShows[filter]?.append(contentsOf: shows)
+            inMemoryStorage.cacheShows(shows)
             filteredShowsPage[filter] = (filteredShowsPage[filter] ?? 0) + 1
             return shows
         } catch {
@@ -112,17 +119,12 @@ extension TVService: ITVService {
         do {
             let shows = try parse(result: result, to: [PlainShow].self, atKeyPath: "results")
             cachedUpcomingShows.append(contentsOf: shows)
+            inMemoryStorage.cacheShows(shows)
             upcomingShowsPage += 1
             return shows
         } catch {
             throw error
         }
-    }
-    
-    func cachedShow(for showId: Int) -> PlainShow? {
-        cachedPopularShows.first(where: { $0.id == showId }) ??
-        cachedFilteredShows.reduce([]) { $0 + $1.value }.first(where: { $0.id == showId }) ??
-        cachedUpcomingShows.first(where: { $0.id == showId })
     }
 }
 

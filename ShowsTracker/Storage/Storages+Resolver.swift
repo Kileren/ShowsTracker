@@ -12,5 +12,9 @@ extension Resolver {
         register { CoreDataStorage() }
             .implements(ICoreDataStorage.self)
             .scope(.application)
+        
+        register { InMemoryStorage() }
+            .implements(InMemoryStorageProtocol.self)
+            .scope(.application)
     }
 }

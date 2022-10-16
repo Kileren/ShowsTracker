@@ -147,7 +147,11 @@ struct ShowsListView: View {
                     }
                     
                     STSpacer(height: 16)
-                    STSpinner()
+                    HStack {
+                        Spacer()
+                        STSpinner()
+                        Spacer()
+                    }
                     STSpacer(height: 8)
                 }
                 .onChange(of: viewModel.model.currentRepresentation) { representation in

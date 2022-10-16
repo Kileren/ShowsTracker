@@ -21,15 +21,17 @@ struct ShowsView: View {
     
     @State private var index: Int = 0
     @State private var scrollProgress: CGFloat = 0
+    @State private var verticalScrollOffset: CGFloat = 0
     
     // MARK: - View
     
     var body: some View {
         GeometryReader { geometry in
             if viewModel.model.isUserShowsLoaded {
-                ScrollView(.vertical, showsIndicators: false) {
+                TrackableScrollView(axis: .vertical, showIndicators: false, contentOffset: $verticalScrollOffset) { _ in
                     ZStack(alignment: .top) {
                         blurBackground(geometry: geometry)
+                            .offset(y: verticalScrollOffset < 0 ? verticalScrollOffset : 0)
                         
                         VStack(spacing: 32) {
                             if !viewModel.model.userShows.isEmpty {

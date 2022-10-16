@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-struct PlainShow: Codable {
+struct PlainShow: Codable, Hashable {
     let name: String?
     let originalName: String?
     let vote: Double?
