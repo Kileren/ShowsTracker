@@ -12,6 +12,7 @@ extension Resolver: ResolverRegistering {
     public static func registerAllServices() {
         registerMainDependencies()
         registerNetworkServices()
+        registerOtherServices()
         registerStorages()
     }
 }

@@ -64,11 +64,6 @@ struct ShowDetailsView: View {
                             imageView(geometry: geometry)
                         }
                     }
-                    .readSize { size in
-                        print("------------------------")
-                        print(size)
-                        print(geometry.size.height)
-                    }
                 }
             } else {
                 ShowDetailsSkeletonView()
@@ -395,6 +390,18 @@ private extension ShowDetailsView {
                                 .lineLimit(1)
                                 .truncationMode(.middle)
                             Spacer()
+                            
+                            if info.notificationStatus != .none {                            
+                                Button {
+                                    viewModel.didTapNotification(seasonInfo: info)
+                                } label: {
+                                    if info.notificationStatus == .on {
+                                        activeNotification
+                                    } else if info.notificationStatus == .off {
+                                        inactiveNotification
+                                    }
+                                }
+                            }
                         }
                         
                         if !info.overview.isEmpty {
@@ -563,6 +570,30 @@ private extension ShowDetailsView {
             )
         }
         .ignoresSafeArea()
+    }
+    
+    var activeNotification: some View {
+        Circle()
+            .foregroundColor(.bay.opacity(0.15))
+            .frame(width: 20, height: 20)
+            .overlay {
+                Image("Icons/Settings/notificationOn")
+                    .resizable()
+                    .frame(width: 12, height: 12)
+            }
+    }
+    
+    var inactiveNotification: some View {
+        Circle()
+            .trim()
+            .stroke(lineWidth: 1)
+            .fill(Color.bay)
+            .frame(width: 20, height: 20)
+            .overlay {
+                Image("Icons/Settings/notificationOn")
+                    .resizable()
+                    .frame(width: 12, height: 12)
+            }
     }
 }
 

@@ -56,6 +56,7 @@ struct ShowDetailsModel: Equatable {
         var title: String = ""
         var overview: String = ""
         var episodes: [Episode] = []
+        var notificationStatus: NotificationStatus = .none
     }
     
     struct Episode: Equatable, Hashable {
@@ -68,5 +69,11 @@ struct ShowDetailsModel: Equatable {
     struct SimilarShowsInfo: Equatable {
         var isLoaded = false
         var models: [ShowView.Model] = []
+    }
+    
+    enum NotificationStatus {
+        case on
+        case off
+        case none
     }
 }

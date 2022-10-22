@@ -9,14 +9,13 @@ import SwiftUI
 
 @main
 struct ShowsTrackerApp: App {
+    
+    private let notificationCenterDelegate = NotificationCenterDelegate()
+    private let rootManager = RootManager()
+    
     var body: some Scene {
         WindowGroup {
             TabBarView()
-                .onAppear {
-                    UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(Color.text100)]
-                    UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor(Color.text100)]
-                }
-//            Example()
         }
     }
 }

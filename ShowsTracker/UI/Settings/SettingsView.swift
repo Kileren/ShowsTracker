@@ -102,7 +102,7 @@ private extension SettingsView {
     
     var notificationView: some View {
         SettingsCardView(
-            image: Image("Icons/Settings/notification"),
+            image: Image("Icons/Settings/notificationOn"),
             title: Strings.notificationsTitle,
             description: Strings.notificationsDescription) {
                 Image("checkmark")
@@ -121,7 +121,7 @@ private extension SettingsView {
     
     var aboutAppView: some View {
         SettingsCardView(
-            image: Image("Icons/Settings/notification"),
+            image: Image("Icons/Settings/notificationOn"),
             title: Strings.aboutAppTitle,
             description: Strings.aboutAppDescription) {
                 Button {

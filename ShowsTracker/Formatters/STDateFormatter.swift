@@ -40,9 +40,13 @@ struct STDateFormatter {
     }
     
     static func component(_ component: Calendar.Component, from value: String, format: Format) -> Int? {
+        guard let date = date(from: value, format: format) else { return nil }
+        return Calendar.current.component(component, from: date)
+    }
+    
+    static func date(from value: String, format: Format) -> Date? {
         let formatter = DateFormatter()
         formatter.dateFormat = format.rawValue
-        guard let date = formatter.date(from: value) else { return nil }
-        return Calendar.current.component(component, from: date)
+        return formatter.date(from: value)
     }
 }

@@ -52,7 +52,9 @@ extension TVService: ITVService {
     
     func getSeasonDetails(for showId: Int, season: Int) async throws -> SeasonDetails {
         let result = await tvProvider.request(target: .seasonDetails(id: showId, season: season))
-        return try parse(result: result, to: SeasonDetails.self)
+        let seasonDetails = try parse(result: result, to: SeasonDetails.self)
+        inMemoryStorage.cache(seasonDetails: seasonDetails, showID: showId, seasonNumber: season)
+        return seasonDetails
     }
     
     func getSimilar(for showId: Int) async throws -> [PlainShow] {

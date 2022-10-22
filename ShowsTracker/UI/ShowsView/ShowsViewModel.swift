@@ -15,6 +15,7 @@ final class ShowsViewModel: ObservableObject {
     @Injected private var imageService: IImageService
     @Injected private var tvService: ITVService
     @Injected private var coreDataStorage: ICoreDataStorage
+    @Injected private var inMemoryStorage: InMemoryStorageProtocol
     
     func viewAppeared() {
         Task {
@@ -67,6 +68,7 @@ private extension ShowsViewModel {
     
     func getUserShows() async -> [ShowsView.Model.UserShow] {
         let likedShows = coreDataStorage.get(objectsOfType: Shows.self).first?.likedShows ?? []
+        inMemoryStorage.cacheShows(likedShows)
         var userShows: [ShowsView.Model.UserShow] = []
         for show in likedShows {
             // TODO: make concurrent loading
