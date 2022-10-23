@@ -7,8 +7,11 @@
 
 import Foundation
 import UserNotifications
+import Resolver
 
 final class NotificationCenterDelegate: NSObject {
+    
+    @Injected private var notificationService: NotificationsService
     
     override init() {
         super.init()
@@ -30,6 +33,16 @@ extension NotificationCenterDelegate: UNUserNotificationCenterDelegate {
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void
     ) {
-        completionHandler()
+        switch response.actionIdentifier {
+        case NotificationsService.snoozeIdentifier:
+            Task {
+                await notificationService.resheduleNotification(response.notification, for: 3600)
+                DispatchQueue.main.async {
+                    completionHandler()
+                }
+            }
+        default:
+            completionHandler()
+        }
     }
 }

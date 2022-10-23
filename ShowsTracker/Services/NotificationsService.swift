@@ -15,6 +15,18 @@ final class NotificationsService {
     @AppSettings<NotificationsTimeKey> private var notificationTime
     
     private lazy var options: UNAuthorizationOptions = [.alert, .sound, .badge]
+    private lazy var userActions: String = {
+        let snoozeAction = UNNotificationAction(identifier: Self.snoozeIdentifier, title: Strings.snoozeForHour)
+        let userActions = Self.userActionsIdentifier
+        let category = UNNotificationCategory(identifier: userActions, actions: [snoozeAction], intentIdentifiers: [])
+        notificationCenter.setNotificationCategories([category])
+        return userActions
+    }()
+}
+
+// MARK: - Public API
+
+extension NotificationsService {
     
     @discardableResult
     func requestAuthorization() async -> Bool {
@@ -36,34 +48,6 @@ final class NotificationsService {
             }
         }
     }
-    
-    func scheduleNotification(title: String, message: String) async {
-        let content = UNMutableNotificationContent()
-        content.title = title
-        content.body = message
-        content.sound = .default
-        content.badge = NSNumber(integerLiteral: await currentBadgeNumber + 1)
-        
-        let date = Date(timeIntervalSinceNow: 5)
-        let triggerDateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDateComponents, repeats: false)
-        
-        // Should be unique
-        let identifier = "Local Notification"
-        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-        
-        do {
-            try await notificationCenter.add(request)
-            Logger.log(message: "Request with identifier - \(request) successfully added")
-        } catch {
-            Logger.log(error: error)
-        }
-    }
-}
-
-// MARK: - Public API
-
-extension NotificationsService {
     
     func scheduleNotification(for seasonDetails: SeasonDetails, seasonNumber: Int, plainShow: PlainShow) async {
         let episodes = seasonDetails.episodes?.compactMap { $0 } ?? []
@@ -87,6 +71,7 @@ extension NotificationsService {
         }
         content.sound = .default
         content.badge = NSNumber(integerLiteral: await currentBadgeNumber + 1)
+        content.categoryIdentifier = userActions
         
         let additionalTimeInterval: TimeInterval = notificationTime
         let dateWithOffset = date.addingTimeInterval(additionalTimeInterval)
@@ -101,6 +86,20 @@ extension NotificationsService {
         do {
             try await notificationCenter.add(request)
             Logger.log(message: "Request with identifier - \(request) successfully added")
+        } catch {
+            Logger.log(error: error)
+        }
+    }
+    
+    func resheduleNotification(_ notification: UNNotification, for timeInterval: TimeInterval) async {
+        let triggerDateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: Date(timeIntervalSinceNow: timeInterval))
+        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDateComponents, repeats: false)
+        let oldRequest = notification.request
+        let request = UNNotificationRequest(identifier: oldRequest.identifier, content: oldRequest.content, trigger: trigger)
+        
+        do {
+            try await notificationCenter.add(request)
+            Logger.log(message: "Request with identifier - \(request) successfully rescheduled")
         } catch {
             Logger.log(error: error)
         }
@@ -123,4 +122,9 @@ private extension NotificationsService {
     private var currentBadgeNumber: Int {
         UIApplication.shared.applicationIconBadgeNumber
     }
+}
+
+extension NotificationsService {
+    static let snoozeIdentifier = "showsTracker.snoozeIdentifier"
+    static let userActionsIdentifier = "showsTracker.userActions"
 }

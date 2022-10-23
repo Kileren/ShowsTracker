@@ -61,6 +61,7 @@ enum Strings {
     static let season = string(forKey: "season")
     static let settings = string(forKey: "settings")
     static let similar = string(forKey: "similar")
+    static let snoozeForHour = string(forKey: "snoozeForHour")
     static let soon = string(forKey: "soon")
     static let sortBy = string(forKey: "sortBy")
     static let sortByNovelty = string(forKey: "sortByNovelty")
