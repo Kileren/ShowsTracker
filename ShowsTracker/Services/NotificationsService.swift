@@ -62,12 +62,12 @@ extension NotificationsService {
         
         let content = UNMutableNotificationContent()
         if let name = showName {
-            content.title = "\(name) - новая серия!"
+            content.title = Strings.newEpisodeTitleWithName(name)
         } else {
-            content.title = "Вышла новая серия!"
+            content.title = Strings.newEpisodeTitleWithoutName
         }
         if let name = episode.name {
-            content.body = "Серия \"\(name)\" выходит сегодня, не забудьте посмотреть."
+            content.body = Strings.newEpisodeDescription(name)
         }
         content.sound = .default
         content.badge = NSNumber(integerLiteral: await currentBadgeNumber + 1)

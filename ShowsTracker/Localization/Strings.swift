@@ -37,6 +37,7 @@ enum Strings {
     static let look = string(forKey: "look")
     static let lookYourHistory = string(forKey: "lookYourHistory")
     static let more = string(forKey: "more")
+    static let newEpisodeTitleWithoutName = string(forKey: "newEpisodeTitleWithoutName")
     static let noDescription = string(forKey: "noDescription")
     static let notificationsAllowedText = string(forKey: "notificationsAllowedText")
     static let notificationsDeniedText = string(forKey: "notificationsDeniedText")
@@ -70,15 +71,24 @@ enum Strings {
     static let status = string(forKey: "status")
     static let version = string(forKey: "version")
     
+    static func newEpisodeDescription(_ s1: String) -> String {
+        string(forKey: "newEpisodeDescription", args: s1)
+    }
+    
+    static func newEpisodeTitleWithName(_ s1: String) -> String {
+        string(forKey: "newEpisodeTitleWithName", args: s1)
+    }
+    
     static func genrePlural(_ count: Int) -> String {
         let format = NSLocalizedString("genre_plural", tableName: "Localization", comment: "")
         return String.localizedStringWithFormat(format, count)
     }
     
-    static func string(forKey key: String) -> String {
-        Bundle.main.localizedString(
+    static func string(forKey key: String, args: String...) -> String {
+        let format = Bundle.main.localizedString(
             forKey: key,
             value: nil,
             table: "Localization")
+        return String(format: format, arguments: args)
     }
 }
