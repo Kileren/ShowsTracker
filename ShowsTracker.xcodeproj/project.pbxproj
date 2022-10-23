@@ -105,6 +105,8 @@
 		8CE2693E25CEE5040045903F /* DesignConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE2693D25CEE5040045903F /* DesignConst.swift */; };
 		8CE2694125CEE7A20045903F /* ShowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE2694025CEE7A20045903F /* ShowView.swift */; };
 		8CF2F09C2905428D00E85060 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF2F09B2905428D00E85060 /* AppSettings.swift */; };
+		8CF2F09F2905AB0600E85060 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF2F09E2905AB0600E85060 /* SettingsViewModel.swift */; };
+		8CF2F0A12905AB2700E85060 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF2F0A02905AB2700E85060 /* SettingsModel.swift */; };
 		8CF5285D2677780500351915 /* CoreDataStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF5285C2677780500351915 /* CoreDataStorage.swift */; };
 		8CF5285F2677782600351915 /* ManagedObjectCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF5285E2677782600351915 /* ManagedObjectCodable.swift */; };
 		8CF52862267779E800351915 /* ShowsTrackerDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8CF52860267779E800351915 /* ShowsTrackerDataModel.xcdatamodeld */; };
@@ -219,6 +221,8 @@
 		8CE2693D25CEE5040045903F /* DesignConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignConst.swift; sourceTree = "<group>"; };
 		8CE2694025CEE7A20045903F /* ShowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowView.swift; sourceTree = "<group>"; };
 		8CF2F09B2905428D00E85060 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		8CF2F09E2905AB0600E85060 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		8CF2F0A02905AB2700E85060 /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		8CF5285C2677780500351915 /* CoreDataStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStorage.swift; sourceTree = "<group>"; };
 		8CF5285E2677782600351915 /* ManagedObjectCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedObjectCodable.swift; sourceTree = "<group>"; };
 		8CF52861267779E800351915 /* ShowsTrackerDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ShowsTrackerDataModel.xcdatamodel; sourceTree = "<group>"; };
@@ -490,10 +494,11 @@
 		8C7DD04028E975D1003FE1ED /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				8CF2F09D2905AAE400E85060 /* Views */,
 				8C9DFCEB290514C400A57B0F /* NotificationsView */,
 				8C7DD04128E975F0003FE1ED /* SettingsView.swift */,
-				8C7DD04328E97612003FE1ED /* SettingsCardView.swift */,
-				8C7DD04728E99567003FE1ED /* ThemeToggleView.swift */,
+				8CF2F09E2905AB0600E85060 /* SettingsViewModel.swift */,
+				8CF2F0A02905AB2700E85060 /* SettingsModel.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -662,6 +667,15 @@
 				8C2179442892FF8500B0E1BF /* ShowsViewModel.swift */,
 			);
 			path = ShowsView;
+			sourceTree = "<group>";
+		};
+		8CF2F09D2905AAE400E85060 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8C7DD04328E97612003FE1ED /* SettingsCardView.swift */,
+				8C7DD04728E99567003FE1ED /* ThemeToggleView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		8CF5285A267777E300351915 /* Storage */ = {
@@ -852,6 +866,7 @@
 				8C4605E328C3C57800ADCB0C /* TrackableScrollView.swift in Sources */,
 				8C156CF128149B9E0049DDD1 /* ImageTarget.swift in Sources */,
 				8C156D2228210F640049DDD1 /* ShowDetailsSkeletonView.swift in Sources */,
+				8CF2F0A12905AB2700E85060 /* SettingsModel.swift in Sources */,
 				8C156D0C281F02730049DDD1 /* SeasonDetails.swift in Sources */,
 				8C4605E528CA5D7100ADCB0C /* View+Frame.swift in Sources */,
 				8C7DD06728FC2204003FE1ED /* Resolver+Services.swift in Sources */,
@@ -900,6 +915,7 @@
 				8C156CF328149D550049DDD1 /* ImageService.swift in Sources */,
 				8C0F5D3225CFB9D500B9983C /* View+CornerRadius.swift in Sources */,
 				8C156CFA281527C70049DDD1 /* TVTarget.swift in Sources */,
+				8CF2F09F2905AB0600E85060 /* SettingsViewModel.swift in Sources */,
 				8CD2004627A311D300F61C6D /* EnvironmentValues+isPreview.swift in Sources */,
 				8C156CFC281528A90049DDD1 /* TVService.swift in Sources */,
 				8CD6C1DD25C327D3004CF261 /* ShowsTrackerApp.swift in Sources */,

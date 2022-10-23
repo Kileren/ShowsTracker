@@ -106,11 +106,8 @@ struct TabBarView_Previews: PreviewProvider {
     }
 }
 
-#if DEBUG
 struct EmptyView: View {
-
     var body: some View {
-        Color.bay
+        Color.clear
     }
 }
-#endif

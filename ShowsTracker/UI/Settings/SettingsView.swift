@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
+import Resolver
 
 struct SettingsView: View {
     
+    @InjectedObject private var viewModel: SettingsViewModel
     @ObservedObject private var sheetNavigator = SheetNavigator()
     
     @State private var cloudIsActive: Bool = true
+    @State private var notificationsIsActive: Bool = false
     @State private var selectedTheme: ThemeToggleView.Theme = .auto
     
     var body: some View {
@@ -39,8 +42,16 @@ struct SettingsView: View {
             .background {
                 Color.backgroundLight.ignoresSafeArea()
             }
+            .onChange(of: notificationsIsActive) { newValue in
+                if newValue {
+                    viewModel.didTapTurnOnNotifications()
+                }
+            }
             .sheet(isPresented: $sheetNavigator.showSheet,
                    content: sheetNavigator.sheetView)
+            .onAppear {
+                viewModel.viewAppeared()
+            }
         }
     }
 }
@@ -108,8 +119,20 @@ private extension SettingsView {
                 image: Image("Icons/Settings/notificationOn"),
                 title: Strings.notificationsTitle,
                 description: Strings.notificationsDescription) {
-                    Image("checkmark")
-                        .frame(height: 24)
+                    switch viewModel.model.notificationsState {
+                    case .on:
+                        Image("checkmark").frame(height: 24)
+                    case .off:
+                        Toggle("", isOn: $notificationsIsActive)
+                            .labelsHidden()
+                            .tint(.bay)
+                            .frame(height: 20)
+                    case .empty:
+                        Text("Выключено")
+                            .font(.regular10)
+                            .foregroundColor(.text40)
+                            .frame(height: 24)
+                    }
                 }
         }
     }
