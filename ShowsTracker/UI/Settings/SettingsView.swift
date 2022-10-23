@@ -101,13 +101,17 @@ private extension SettingsView {
     }
     
     var notificationView: some View {
-        SettingsCardView(
-            image: Image("Icons/Settings/notificationOn"),
-            title: Strings.notificationsTitle,
-            description: Strings.notificationsDescription) {
-                Image("checkmark")
-                    .frame(height: 24)
-            }
+        NavigationLink {
+            NotificationsView()
+        } label: {
+            SettingsCardView(
+                image: Image("Icons/Settings/notificationOn"),
+                title: Strings.notificationsTitle,
+                description: Strings.notificationsDescription) {
+                    Image("checkmark")
+                        .frame(height: 24)
+                }
+        }
     }
     
     var themeView: some View {

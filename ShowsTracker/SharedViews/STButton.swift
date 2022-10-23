@@ -13,7 +13,8 @@ struct STButton: View {
     
     enum Style {
         case small(width: Width)
-        case normal
+        case medium
+        case normal(geometry: GeometryProxy)
     }
     
     enum Width {
@@ -25,7 +26,6 @@ struct STButton: View {
     
     let title: String
     let style: Style
-    let geometry: GeometryProxy
     let action: () -> Void
     
     @State private var scale: CGFloat = 1
@@ -48,19 +48,26 @@ struct STButton: View {
             switch width {
             case .fit:
                 Text(title)
-                    .font(.regular15)
+                    .font(.regular13)
                     .foregroundColor(.white100)
                     .background(background)
                     .padding(.horizontal, 24)
                     .frame(height: 24)
             case .fixed(let width):
                 Text(title)
-                    .font(.regular15)
+                    .font(.regular13)
                     .foregroundColor(.white100)
                     .background(background)
                     .frame(width: width, height: 24)
             }
-        case .normal:
+        case .medium:
+            Text(title)
+                .font(.regular17)
+                .foregroundColor(.white100)
+                .background(background)
+                .padding(.horizontal, 24)
+                .frame(height: 40)
+        case .normal(let geometry):
             Text(title)
                 .font(.regular20)
                 .foregroundColor(.white100)
@@ -77,15 +84,20 @@ struct STButton: View {
             switch width {
             case .fit:
                 RoundedRectangle(cornerRadius: 15)
-                    .frame(height: 30)
+                    .frame(height: 24)
                     .foregroundColor(.bay)
                     .padding(.horizontal, -24)
             case .fixed(let width):
                 RoundedRectangle(cornerRadius: 15)
-                    .frame(width: width, height: 30)
+                    .frame(width: width, height: 24)
                     .foregroundColor(.bay)
             }
-        case .normal:
+        case .medium:
+            RoundedRectangle(cornerRadius: 20)
+                .frame(height: 40)
+                .foregroundColor(.bay)
+                .padding(.horizontal, -24)
+        case .normal(let geometry):
             RoundedRectangle(cornerRadius: 16)
                 .frame(width: min(geometry.size.width - 48, 300),
                        height: 50)
@@ -101,21 +113,18 @@ struct STButton_Previews: PreviewProvider {
             GeometryReader { geometry in
                 STButton(title: Strings.add,
                          style: .small(width: .fit),
-                         geometry: geometry,
                          action: { })
             }
             
             GeometryReader { geometry in
                 STButton(title: Strings.add,
                          style: .small(width: .fixed(150)),
-                         geometry: geometry,
                          action: { })
             }
             
             GeometryReader { geometry in
                 STButton(title: Strings.add,
-                         style: .normal,
-                         geometry: geometry,
+                         style: .normal(geometry: geometry),
                          action: { })
             }
         }

@@ -83,6 +83,9 @@
 		8C7DD06728FC2204003FE1ED /* Resolver+Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7DD06628FC2204003FE1ED /* Resolver+Services.swift */; };
 		8C854F132619FFF6002F5CC4 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C854F122619FFF6002F5CC4 /* Strings.swift */; };
 		8C9DFCE628FC46A900A57B0F /* RootManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9DFCE528FC46A900A57B0F /* RootManager.swift */; };
+		8C9DFCEA29048C5900A57B0F /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9DFCE929048C5900A57B0F /* NotificationsView.swift */; };
+		8C9DFCED290514D600A57B0F /* NotificationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9DFCEC290514D600A57B0F /* NotificationsViewModel.swift */; };
+		8C9DFCEF290514FB00A57B0F /* NotificationsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9DFCEE290514FB00A57B0F /* NotificationsModel.swift */; };
 		8CA0ECB2262AFABF00EB20D9 /* STButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA0ECB1262AFABF00EB20D9 /* STButton.swift */; };
 		8CB9F5BB25CFB0680095F063 /* TruncableText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB9F5BA25CFB0680095F063 /* TruncableText.swift */; };
 		8CB9F5BE25CFB0D70095F063 /* View+ReadSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB9F5BD25CFB0D70095F063 /* View+ReadSize.swift */; };
@@ -101,6 +104,7 @@
 		8CDCCF0628531836006EC106 /* DiscoverTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CDCCF0528531836006EC106 /* DiscoverTarget.swift */; };
 		8CE2693E25CEE5040045903F /* DesignConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE2693D25CEE5040045903F /* DesignConst.swift */; };
 		8CE2694125CEE7A20045903F /* ShowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE2694025CEE7A20045903F /* ShowView.swift */; };
+		8CF2F09C2905428D00E85060 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF2F09B2905428D00E85060 /* AppSettings.swift */; };
 		8CF5285D2677780500351915 /* CoreDataStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF5285C2677780500351915 /* CoreDataStorage.swift */; };
 		8CF5285F2677782600351915 /* ManagedObjectCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF5285E2677782600351915 /* ManagedObjectCodable.swift */; };
 		8CF52862267779E800351915 /* ShowsTrackerDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8CF52860267779E800351915 /* ShowsTrackerDataModel.xcdatamodeld */; };
@@ -191,6 +195,9 @@
 		8C7DD06628FC2204003FE1ED /* Resolver+Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Resolver+Services.swift"; sourceTree = "<group>"; };
 		8C854F122619FFF6002F5CC4 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		8C9DFCE528FC46A900A57B0F /* RootManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootManager.swift; sourceTree = "<group>"; };
+		8C9DFCE929048C5900A57B0F /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
+		8C9DFCEC290514D600A57B0F /* NotificationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewModel.swift; sourceTree = "<group>"; };
+		8C9DFCEE290514FB00A57B0F /* NotificationsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsModel.swift; sourceTree = "<group>"; };
 		8CA0ECB1262AFABF00EB20D9 /* STButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STButton.swift; sourceTree = "<group>"; };
 		8CB9F5BA25CFB0680095F063 /* TruncableText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TruncableText.swift; sourceTree = "<group>"; };
 		8CB9F5BD25CFB0D70095F063 /* View+ReadSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+ReadSize.swift"; sourceTree = "<group>"; };
@@ -211,6 +218,7 @@
 		8CDCCF0528531836006EC106 /* DiscoverTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverTarget.swift; sourceTree = "<group>"; };
 		8CE2693D25CEE5040045903F /* DesignConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignConst.swift; sourceTree = "<group>"; };
 		8CE2694025CEE7A20045903F /* ShowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowView.swift; sourceTree = "<group>"; };
+		8CF2F09B2905428D00E85060 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		8CF5285C2677780500351915 /* CoreDataStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStorage.swift; sourceTree = "<group>"; };
 		8CF5285E2677782600351915 /* ManagedObjectCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManagedObjectCodable.swift; sourceTree = "<group>"; };
 		8CF52861267779E800351915 /* ShowsTrackerDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ShowsTrackerDataModel.xcdatamodel; sourceTree = "<group>"; };
@@ -482,6 +490,7 @@
 		8C7DD04028E975D1003FE1ED /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				8C9DFCEB290514C400A57B0F /* NotificationsView */,
 				8C7DD04128E975F0003FE1ED /* SettingsView.swift */,
 				8C7DD04328E97612003FE1ED /* SettingsCardView.swift */,
 				8C7DD04728E99567003FE1ED /* ThemeToggleView.swift */,
@@ -523,6 +532,16 @@
 				8C156D4C284278E80049DDD1 /* Localization.stringsdict */,
 			);
 			path = Localization;
+			sourceTree = "<group>";
+		};
+		8C9DFCEB290514C400A57B0F /* NotificationsView */ = {
+			isa = PBXGroup;
+			children = (
+				8C9DFCE929048C5900A57B0F /* NotificationsView.swift */,
+				8C9DFCEC290514D600A57B0F /* NotificationsViewModel.swift */,
+				8C9DFCEE290514FB00A57B0F /* NotificationsModel.swift */,
+			);
+			path = NotificationsView;
 			sourceTree = "<group>";
 		};
 		8CB9F5C025CFB54B0095F063 /* UtilitiesViews */ = {
@@ -651,6 +670,7 @@
 				8CF5285B267777EF00351915 /* CoreData */,
 				8C006337285E578600893ECB /* Storages+Resolver.swift */,
 				8C7DD05F28FBFEC5003FE1ED /* InMemoryStorage.swift */,
+				8CF2F09B2905428D00E85060 /* AppSettings.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -805,6 +825,7 @@
 				8CD6C20425C32E06004CF261 /* Main+Resolver.swift in Sources */,
 				8C9DFCE628FC46A900A57B0F /* RootManager.swift in Sources */,
 				8CDCCEFC28429A96006EC106 /* Dragging.swift in Sources */,
+				8C9DFCED290514D600A57B0F /* NotificationsViewModel.swift in Sources */,
 				8C7DD04828E99567003FE1ED /* ThemeToggleView.swift in Sources */,
 				8CFADF0A25C7208800597413 /* Colors.swift in Sources */,
 				8C156D2A2828F1450049DDD1 /* ShowsListView.swift in Sources */,
@@ -853,6 +874,7 @@
 				8C518F412663F76C00EE6C4F /* ShowDetailsView.swift in Sources */,
 				8C7DD04228E975F0003FE1ED /* SettingsView.swift in Sources */,
 				8C7DD05728F523B8003FE1ED /* ShowDetailsModel.swift in Sources */,
+				8CF2F09C2905428D00E85060 /* AppSettings.swift in Sources */,
 				8C156D472841F86E0049DDD1 /* Genre.swift in Sources */,
 				8C7DD05C28F67C30003FE1ED /* AboutAppView.swift in Sources */,
 				8C156D0028152E7B0049DDD1 /* ProcessInfo+isPreview.swift in Sources */,
@@ -863,12 +885,14 @@
 				8C2179492893047E00B0E1BF /* ShowsListViewModel.swift in Sources */,
 				8C28960F25C5D0AD00C2AC37 /* DetailedShow.swift in Sources */,
 				8C156D402841EFCF0049DDD1 /* GenresView.swift in Sources */,
+				8C9DFCEA29048C5900A57B0F /* NotificationsView.swift in Sources */,
 				8C7DCFD728D5E72E003FE1ED /* FloatingErrorView.swift in Sources */,
 				8CDCCF0028434B4A006EC106 /* LangCode.swift in Sources */,
 				8C156D492841F8ED0049DDD1 /* GenresService.swift in Sources */,
 				8C156D272827057B0049DDD1 /* AnimatedState.swift in Sources */,
 				8CF5285F2677782600351915 /* ManagedObjectCodable.swift in Sources */,
 				8CDCCF0628531836006EC106 /* DiscoverTarget.swift in Sources */,
+				8C9DFCEF290514FB00A57B0F /* NotificationsModel.swift in Sources */,
 				8C7DD04428E97612003FE1ED /* SettingsCardView.swift in Sources */,
 				8CD6C1FB25C32CDB004CF261 /* RootResolver.swift in Sources */,
 				8C7DD04F28F33612003FE1ED /* ArchiveShowsView.swift in Sources */,

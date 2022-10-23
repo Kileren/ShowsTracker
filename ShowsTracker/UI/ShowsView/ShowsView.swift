@@ -182,13 +182,10 @@ struct ShowsView: View {
             }
             .padding(.bottom, 55 + geometry.size.width * 0.15)
             
-            STButton(
-                title: Strings.add,
-                style: .small(width: .fit),
-                geometry: geometry) {
-                    sheetNavigator.sheetDestination = .showsList
-                }
-                .padding(.bottom, 24)
+            STButton(title: Strings.add, style: .small(width: .fit)) {
+                sheetNavigator.sheetDestination = .showsList
+            }
+            .padding(.bottom, 24)
         }
     }
     

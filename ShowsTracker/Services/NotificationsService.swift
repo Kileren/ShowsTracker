@@ -12,6 +12,8 @@ final class NotificationsService {
     
     private let notificationCenter = UNUserNotificationCenter.current()
     
+    @AppSettings<NotificationsTimeKey> private var notificationTime
+    
     private lazy var options: UNAuthorizationOptions = [.alert, .sound, .badge]
     
     @discardableResult
@@ -72,7 +74,7 @@ extension NotificationsService {
     
     func scheduleNotification(for episode: SeasonDetails.Episode, seasonNumber: Int, showID: Int, showName: String?) async {
         guard let airDate = episode.airDate,
-              var date = STDateFormatter.date(from: airDate, format: .airDate) else { return }
+              let date = STDateFormatter.date(from: airDate, format: .airDate) else { return }
         
         let content = UNMutableNotificationContent()
         if let name = showName {
@@ -86,8 +88,7 @@ extension NotificationsService {
         content.sound = .default
         content.badge = NSNumber(integerLiteral: await currentBadgeNumber + 1)
         
-        // TODO: s.bogachev timeInterval should be taken from the settings
-        let additionalTimeInterval: TimeInterval = 19 * 60 * 60
+        let additionalTimeInterval: TimeInterval = notificationTime
         let dateWithOffset = date.addingTimeInterval(additionalTimeInterval)
         let triggerDateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: dateWithOffset)
         let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDateComponents, repeats: false)
