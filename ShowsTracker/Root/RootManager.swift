@@ -10,9 +10,12 @@ import SwiftUI
 
 final class RootManager {
     
+    @AppSettings<AppLanguageKey> private var appLanguage
+    
     init() {
         setupUI()
         addObservers()
+        saveCurrentLanguage()
     }
     
     func setupUI() {
@@ -31,5 +34,12 @@ final class RootManager {
     
     @objc func willEnterForeground() {
         UIApplication.shared.applicationIconBadgeNumber = 0
+    }
+    
+    func saveCurrentLanguage() {
+        if let preferredLanguage = NSLocale.preferredLanguages.first,
+           let language = AppLanguage.allCases.first(where: { preferredLanguage.starts(with: $0.rawValue) }) {
+            appLanguage = language.rawValue
+        }
     }
 }

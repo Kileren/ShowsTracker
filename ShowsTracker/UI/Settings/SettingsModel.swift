@@ -9,6 +9,7 @@ import Foundation
 
 struct SettingsModel {
     var notificationsState: NotificationsState = .empty
+    var selectedLanguage: String = ""
     
     enum NotificationsState {
         case on

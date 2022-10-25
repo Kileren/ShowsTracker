@@ -12,12 +12,15 @@ final class SettingsViewModel: ObservableObject {
     
     @Injected private var notificationsService: NotificationsService
     
+    @AppSettings<AppLanguageKey> private var appLanguageValue
+    
     @Published var model = SettingsModel()
     
     func viewAppeared() {
         Task {
-            await getNotificationStatusAndChangeModelIfNeeded()
+            await getNotificationStatusAndChangeModel()
         }
+        getLanguageAndChangeModel()
     }
 }
 
@@ -27,7 +30,7 @@ extension SettingsViewModel {
     func didTapTurnOnNotifications() {
         Task {
             await notificationsService.requestAuthorization()
-            await getNotificationStatusAndChangeModelIfNeeded()
+            await getNotificationStatusAndChangeModel()
         }
     }
 }
@@ -41,7 +44,7 @@ private extension SettingsViewModel {
         completion(&model)
     }
     
-    func getNotificationStatusAndChangeModelIfNeeded() async {
+    func getNotificationStatusAndChangeModel() async {
         switch await notificationsService.getStatus() {
         case .authorized:
             await changeModel { $0.notificationsState = .on }
@@ -49,6 +52,13 @@ private extension SettingsViewModel {
             await changeModel { $0.notificationsState = .off }
         default:
             await changeModel { $0.notificationsState = .empty }
+        }
+    }
+    
+    func getLanguageAndChangeModel() {
+        switch AppLanguage(rawValue: appLanguageValue) {
+        case .en: model.selectedLanguage = "English"
+        case .ru: model.selectedLanguage = "Русский"
         }
     }
 }

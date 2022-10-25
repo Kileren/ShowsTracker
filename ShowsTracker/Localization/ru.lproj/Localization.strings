@@ -24,6 +24,10 @@
 "goToSettings" = "Перейти в настройки";
 "iCloudSync" = "Синхронизация iCloud";
 "inProduction" = "В производстве";
+"language" = "Язык";
+"languageChangeInstruction" = "Сменить язык приложения можно в\nнастройках iPhone.";
+"languageDescription" = "Указанный язык используется при поиске";
+"languageRecommendation" = "Рекомендуется использовать английский язык, т.к. база данных на английском быстрее обновляется и содержит больше информации";
 "look" = "Посмотреть";
 "lookYourHistory" = "Посмотрите свою историю и отложенные картины";
 "more" = "Больше";
@@ -45,8 +49,6 @@
 "originalLanguage" = "Язык оригинала";
 "ourTime" = "н.в.";
 "popular" = "Популярное";
-"region" = "Регион";
-"regionDescription" = "Указанный регион используется при поиске";
 "releaseYear" = "Год выпуска";
 "removeFromArchive" = "Удалить из архива";
 "removeFromFavourites" = "Удалить из избранного";

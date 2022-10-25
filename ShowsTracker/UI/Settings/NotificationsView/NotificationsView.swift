@@ -13,8 +13,7 @@ struct NotificationsView: View {
     @InjectedObject private var viewModel: NotificationsViewModel
     
     var body: some View {
-        VStack(spacing: 0) {
-            STSpacer(height: 24)
+        Group {
             switch viewModel.model.state {
             case .allowed:
                 allowedView()
@@ -27,6 +26,10 @@ struct NotificationsView: View {
             }
         }
         .padding(.horizontal, 16)
+        .padding(.top, 24)
+        .background {
+            Color.backgroundLight.ignoresSafeArea()
+        }
         .navigationTitle(Strings.notificationsTitle)
         .onChange(of: viewModel.model.selectedTime) { newValue in
             viewModel.notificationTimeDidChange(newValue)

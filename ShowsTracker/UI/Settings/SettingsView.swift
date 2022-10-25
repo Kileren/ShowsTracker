@@ -26,7 +26,7 @@ struct SettingsView: View {
                         archiveView
                     }
                     HStack(spacing: 16) {
-                        regionView
+                        languageView
                         notificationView
                     }
                     HStack(spacing: 16) {
@@ -95,20 +95,24 @@ private extension SettingsView {
         }
     }
     
-    var regionView: some View {
-        SettingsCardView(
-            image: Image("Icons/Settings/global"),
-            title: Strings.region,
-            description: Strings.regionDescription) {
-                Button {
-                    print("Tap region view")
-                } label: {
-                    Text("Российская Федерация")
-                        .font(.regular11)
-                        .foregroundColor(.bay)
-                        .frame(height: 24)
+    var languageView: some View {
+        NavigationLink {
+            AppLanguageView()
+        } label: {
+            SettingsCardView(
+                image: Image("Icons/Settings/global"),
+                title: Strings.language,
+                description: Strings.languageDescription) {
+                    NavigationLink {
+                        AppLanguageView()
+                    } label: {
+                        Text(viewModel.model.selectedLanguage)
+                            .font(.regular11)
+                            .foregroundColor(.bay)
+                            .frame(height: 24)
+                    }
                 }
-            }
+        }
     }
     
     var notificationView: some View {
