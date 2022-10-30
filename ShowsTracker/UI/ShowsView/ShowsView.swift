@@ -134,29 +134,15 @@ struct ShowsView: View {
     }
     
     func currentShows(geometry: GeometryProxy) -> some View {
-        let content = viewModel.model.userShows.enumerated().map {
-            WatchingShowView(
-                image: $0.element.image,
-                index: $0.offset,
-                showId: $0.element.id,
-                sheetNavigator: sheetNavigator)
+        let models = viewModel.model.userShows.enumerated().map {
+            ShowsScrollView.Model(image: $0.element.image, index: $0.offset, showID: $0.element.id) { showID in
+                sheetNavigator.sheetDestination = .showDetails(showID: showID)
+            }
         }
         
-        return PagingScrollView(
-            content: content,
-            spacing: 16,
-            changeIndexClosure: { index in
-                withAnimation {
-                    self.index = index
-                }
-                scrollProgress = CGFloat(index)
-            },
-            changeProgressClosure: { scrollProgress = $0 },
-            tapAction: { _ in }
-        )
-        .frame(width: geometry.size.width * 0.6,
-               height: geometry.size.width * 0.9)
-        .padding(.top, .topCurrentShowsOffset)
+        return ShowsScrollView(models: models, currentCardIndex: $index, scrollProgress: $scrollProgress)
+            .frame(width: geometry.size.width, height: geometry.size.width * 0.9)
+            .padding(.top, .topCurrentShowsOffset)
     }
     
     private func emptyShowsViews(geometry: GeometryProxy) -> some View {
@@ -197,10 +183,21 @@ struct ShowsView: View {
     }
     
     func backgroundImage(geometry: GeometryProxy) -> some View {
-        let index = max(min(Int(scrollProgress.rounded()), viewModel.model.userShows.count - 1), 0)
-        let image = viewModel.model.userShows[index].image
-        let opacity = 1 - abs(scrollProgress - CGFloat(index)) * 1.25
+        let index: Int
+        let opacity: CGFloat
+        if scrollProgress > 0.5, (viewModel.model.userShows.count - 1) >= (self.index + 1) {
+            index = self.index + 1
+            opacity = scrollProgress
+        } else {
+            index = self.index
+            if (viewModel.model.userShows.count - 1) >= (self.index + 1) {
+                opacity = 1 - scrollProgress
+            } else {
+                opacity = 1
+            }
+        }
         
+        let image = viewModel.model.userShows[index].image
         return image
             .resizable()
             .frame(width: geometry.size.width,
@@ -276,24 +273,6 @@ struct ShowsView: View {
             content: {
                 content(showWidth, showHeight)
             })
-    }
-}
-
-fileprivate struct WatchingShowView: View, Identifiable, Indexable {
-    var id = UUID()
-    let image: Image
-    var index: Int
-    var showId: Int
-    
-    @ObservedObject var sheetNavigator: SheetNavigator
-    
-    var body: some View {
-        image
-            .resizable()
-            .cornerRadius(DesignConst.normalCornerRadius)
-            .onTapGesture {
-                sheetNavigator.sheetDestination = .showDetails(showID: showId)
-            }
     }
 }
 

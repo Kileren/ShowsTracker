@@ -27,16 +27,10 @@ struct NotificationsView: View {
         }
         .padding(.horizontal, 16)
         .padding(.top, 24)
-        .background {
-            Color.backgroundLight.ignoresSafeArea()
-        }
+        .background { Color.backgroundLight.ignoresSafeArea() }
         .navigationTitle(Strings.notificationsTitle)
-        .onChange(of: viewModel.model.selectedTime) { newValue in
-            viewModel.notificationTimeDidChange(newValue)
-        }
-        .onAppear {
-            viewModel.viewAppeared()
-        }
+        .onTapGesture { viewModel.notificationTimeDidChange(viewModel.model.selectedTime) }
+        .onAppear { viewModel.viewAppeared() }
     }
 }
 
