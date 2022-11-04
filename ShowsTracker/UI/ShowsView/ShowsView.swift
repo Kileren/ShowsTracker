@@ -134,7 +134,10 @@ struct ShowsView: View {
     }
     
     func currentShows(geometry: GeometryProxy) -> some View {
-        let models = viewModel.model.userShows.enumerated().map {
+        let maxIndex = min(index + 3, viewModel.model.userShows.count - 1)
+        let models = viewModel.model.userShows.isEmpty
+        ? []
+        : viewModel.model.userShows[0...maxIndex].enumerated().map {
             ShowsScrollView.Model(image: $0.element.image, index: $0.offset, showID: $0.element.id) { showID in
                 sheetNavigator.sheetDestination = .showDetails(showID: showID)
             }
