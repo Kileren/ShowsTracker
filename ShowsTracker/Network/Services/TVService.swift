@@ -59,7 +59,9 @@ extension TVService: ITVService {
     
     func getSimilar(for showId: Int) async throws -> [PlainShow] {
         let result = await tvProvider.request(target: .similar(id: showId))
-        return try parse(result: result, to: [PlainShow].self, atKeyPath: "results")
+        let shows = try parse(result: result, to: [PlainShow].self, atKeyPath: "results")
+        inMemoryStorage.cacheShows(shows)
+        return shows
     }
     
     func getPopular() async throws -> [PlainShow] {
