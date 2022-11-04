@@ -13,6 +13,7 @@
 "backToFavourites" = "Вернуть в избранное";
 "cancel" = "Отмена";
 "clear" = "Очистить";
+"close" = "Закрыть";
 "confirm" = "Подтвердить";
 "description" = "Описание";
 "details" = "Детали";
@@ -44,7 +45,7 @@
 "notificationsTimeTitle" = "Время отправки";
 "notificationsTitle" = "Уведомления";
 "noTrackingShows" = "Нет отслеживаемых\nсериалов";
-"ongoing" = "Продолжается";
+"ongoing" = "Идет";
 "open" = "Открыть";
 "originalLanguage" = "Язык оригинала";
 "ourTime" = "н.в.";
@@ -64,3 +65,4 @@
 "sortByRating" = "Оценке";
 "status" = "Статус";
 "version" = "Версия";
+"yourShows" = "Ваши сериалы";

@@ -12,7 +12,7 @@ struct PlainShow: Codable, Hashable {
     let name: String?
     let originalName: String?
     let vote: Double?
-    let posterPath: String?
+    var posterPath: String?
     let popularity: Double?
     let id: Int
     let backdropPath: String?

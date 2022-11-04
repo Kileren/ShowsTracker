@@ -23,6 +23,7 @@ enum Strings {
     static let backToFavourites = string(forKey: "backToFavourites")
     static let cancel = string(forKey: "cancel")
     static let clear = string(forKey: "clear")
+    static let close = string(forKey: "close")
     static let confirm = string(forKey: "confirm")
     static let description = string(forKey: "description")
     static let details = string(forKey: "details")
@@ -72,6 +73,7 @@ enum Strings {
     static let sortByRating = string(forKey: "sortByRating")
     static let status = string(forKey: "status")
     static let version = string(forKey: "version")
+    static let yourShows = string(forKey: "yourShows")
     
     static func newEpisodeDescription(_ s1: String) -> String {
         string(forKey: "newEpisodeDescription", args: s1)

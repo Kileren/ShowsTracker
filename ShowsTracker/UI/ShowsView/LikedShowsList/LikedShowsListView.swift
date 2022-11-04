@@ -31,10 +31,10 @@ struct LikedShowsListView: View {
             }
             .listStyle(.plain)
             .background(Color.backgroundLight)
-            .navigationTitle("Ваши сериалы")
+            .navigationTitle(Strings.yourShows)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Закрыть") { dismiss.callAsFunction() }
+                    Button(Strings.close) { dismiss.callAsFunction() }
                 }
             }
         }

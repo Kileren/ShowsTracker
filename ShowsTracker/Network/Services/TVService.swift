@@ -154,9 +154,7 @@ private extension TVService {
         
         let findAndChangeIfNeeded: (WritableKeyPath<Shows, [PlainShow]>) -> Void = { keyPath in
             if let index = shows[keyPath: keyPath].firstIndex(where: { $0.id == detailedShow.id }) {
-                let updatedShow = PlainShow(detailedShow: detailedShow)
-                shows[keyPath: keyPath].remove(at: index)
-                shows[keyPath: keyPath].insert(updatedShow, at: index)
+                shows[keyPath: keyPath][index].posterPath = detailedShow.posterPath
             }
         }
         findAndChangeIfNeeded(\.likedShows)

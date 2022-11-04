@@ -13,6 +13,7 @@
 "backToFavourites" = "Return tv show to the favourites";
 "cancel" = "Cancel";
 "clear" = "Clear";
+"close" = "Close";
 "confirm" = "Confirm";
 "description" = "Description";
 "details" = "Details";
@@ -44,7 +45,7 @@
 "notificationsTimeTitle" = "Sending time";
 "notificationsTitle" = "Notifications";
 "noTrackingShows" = "There are no\ntracked series";
-"ongoing" = "Continues";
+"ongoing" = "Returning Series";
 "open" = "Open";
 "originalLanguage" = "Original language";
 "ourTime" = "now";
@@ -64,3 +65,4 @@
 "sortByRating" = "Score";
 "status" = "Status";
 "version" = "Version";
+"yourShows" = "Your series";
