@@ -10,7 +10,7 @@ import Resolver
 
 struct LikedShowsListView: View {
     
-    @InjectedObject private var viewModel: LikedShowsListViewModel
+    @StateObject private var viewModel = LikedShowsListViewModel()
     @ObservedObject private var sheetNavigator = SheetNavigator()
     
     @Environment(\.dismiss) private var dismiss
