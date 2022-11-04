@@ -21,6 +21,9 @@ struct STDateFormatter {
         
         /// dd
         case day = "dd"
+        
+        /// yyyy
+        case year = "yyyy"
     }
     
     static func format(_ value: String, format: Format) -> String {

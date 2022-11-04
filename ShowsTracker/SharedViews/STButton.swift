@@ -15,6 +15,7 @@ struct STButton: View {
         case small(width: Width)
         case medium
         case normal(geometry: GeometryProxy)
+        case custom(width: CGFloat, height: CGFloat, font: Font)
     }
     
     enum Width {
@@ -74,6 +75,12 @@ struct STButton: View {
                 .background(background)
                 .frame(width: min(geometry.size.width - 48, 300),
                        height: 50)
+        case let .custom(width, height, font):
+            Text(title)
+                .font(font)
+                .foregroundColor(.white100)
+                .background(background)
+                .frame(width: width, height: height)
         }
     }
     
@@ -103,6 +110,10 @@ struct STButton: View {
                        height: 50)
                 .foregroundColor(.bay)
                 .padding(.horizontal, -24)
+        case let .custom(width, height, _):
+            RoundedRectangle(cornerRadius: 16)
+                .frame(width: width, height: height)
+                .foregroundColor(.bay)
         }
     }
 }

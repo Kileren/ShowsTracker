@@ -114,7 +114,7 @@ extension ShowsScrollView {
         let tapAction: (Int) -> Void
         
         static func == (lhs: ShowsScrollView.Model, rhs: ShowsScrollView.Model) -> Bool {
-            lhs.showID == rhs.showID
+            lhs.showID == rhs.showID && lhs.index == rhs.index
         }
         
         func hash(into hasher: inout Hasher) {

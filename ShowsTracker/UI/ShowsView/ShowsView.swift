@@ -175,11 +175,17 @@ struct ShowsView: View {
         }
     }
     
-    @ViewBuilder
     func pageDotsView(geometry: GeometryProxy) -> some View {
-        PageDotsView(numberOfPages: viewModel.model.userShows.count,
-                     currentIndex: index)
-            .frame(width: geometry.size.width, height: 12, alignment: .center)
+        HStack(spacing: 12) {
+            STButton(
+                title: Strings.all,
+                style: .custom(width: 54, height: 24, font: .regular15)) {
+                    sheetNavigator.sheetDestination = .likedShows
+                }
+            PageDotsView(numberOfPages: viewModel.model.userShows.count, currentIndex: index)
+                .frame(height: 12, alignment: .center)
+        }
+        .frame(width: geometry.size.width)
     }
     
     func backgroundImage(geometry: GeometryProxy) -> some View {
@@ -322,6 +328,7 @@ private class SheetNavigator: ObservableObject {
         case none
         case showDetails(showID: Int)
         case showsList
+        case likedShows
     }
     
     func sheetView() -> AnyView {
@@ -332,6 +339,8 @@ private class SheetNavigator: ObservableObject {
             return AnyView(ShowDetailsView(showID: showID))
         case .showsList:
             return AnyView(ShowsListView())
+        case .likedShows:
+            return AnyView(LikedShowsListView())
         }
     }
 }

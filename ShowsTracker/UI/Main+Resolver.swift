@@ -15,5 +15,6 @@ extension Resolver {
         register { SettingsViewModel() }
         register { ArchiveShowsViewModel() }
         register { NotificationsViewModel() }
+        register { LikedShowsListViewModel() }
     }
 }
