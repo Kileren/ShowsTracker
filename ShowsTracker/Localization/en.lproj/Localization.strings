@@ -12,11 +12,13 @@
 "archive" = "Archive";
 "backToFavourites" = "Return tv show to the favourites";
 "cancel" = "Cancel";
+"edit" = "Edit";
 "clear" = "Clear";
 "close" = "Close";
 "confirm" = "Confirm";
 "description" = "Description";
 "details" = "Details";
+"done" = "Done";
 "emptyArchive" = "Archive is empty\nat the moment";
 "ended" = "Finished";
 "episodes" = "Episodes";

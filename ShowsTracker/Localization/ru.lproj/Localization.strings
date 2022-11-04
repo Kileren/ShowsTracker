@@ -12,11 +12,13 @@
 "archive" = "Архив";
 "backToFavourites" = "Вернуть в избранное";
 "cancel" = "Отмена";
+"edit" = "Изменить";
 "clear" = "Очистить";
 "close" = "Закрыть";
 "confirm" = "Подтвердить";
 "description" = "Описание";
 "details" = "Детали";
+"done" = "Готово";
 "emptyArchive" = "На данный момент\nв архиве пусто";
 "ended" = "Закончен";
 "episodes" = "Эпизоды";

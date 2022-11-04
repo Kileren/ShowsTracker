@@ -206,7 +206,7 @@ struct ShowsView: View {
             }
         }
         
-        let image = viewModel.model.userShows[index].image
+        let image = viewModel.model.userShows.safeObject(at: index)?.image ?? Image("")
         return image
             .resizable()
             .frame(width: geometry.size.width,

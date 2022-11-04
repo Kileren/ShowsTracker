@@ -15,6 +15,12 @@ struct LikedShowsListView: View {
     
     @Environment(\.dismiss) private var dismiss
     
+    @State private var editMode: EditMode = .inactive
+    
+    private var isEditModeActive: Bool {
+        editMode == .active
+    }
+    
     var body: some View {
         NavigationView {
             List {
@@ -26,6 +32,9 @@ struct LikedShowsListView: View {
                     viewModel.model.shows
                         .move(fromOffsets: indexSet, toOffset: index)
                 }
+                .onDelete { indexSet in
+                    viewModel.delete(indexSet: indexSet)
+                }
                 .listRowSeparator(.hidden)
                 .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
             }
@@ -36,7 +45,15 @@ struct LikedShowsListView: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(Strings.close) { dismiss.callAsFunction() }
                 }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(isEditModeActive ? Strings.done : Strings.edit) {
+                        withAnimation {
+                            editMode = isEditModeActive ? .inactive : .active
+                        }
+                    }
+                }
             }
+            .environment(\.editMode, $editMode)
         }
         .sheet(isPresented: $sheetNavigator.showSheet,
                onDismiss: viewModel.reload,
@@ -65,9 +82,12 @@ struct LikedShowsListView: View {
                         .font(.medium13Rounded)
                         .foregroundColor(.text40)
                 }
-                Spacer()
-                Image(systemName: "list.dash")
-                    .foregroundColor(.bay)
+                
+                if editMode != .active {
+                    Spacer()
+                    Image(systemName: "list.dash")
+                        .foregroundColor(.bay)
+                }
             }
             .padding(.leading, 8)
             .padding(.trailing, 16)

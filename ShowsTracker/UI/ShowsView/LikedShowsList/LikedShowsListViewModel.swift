@@ -65,6 +65,13 @@ final class LikedShowsListViewModel: ObservableObject {
         }
         save(likedShows: likedShows)
     }
+    
+    func delete(indexSet: IndexSet) {
+        guard let index = indexSet.map({ $0 }).first else { return }
+        var likedShows = savedLikedShows
+        likedShows.remove(at: index)
+        save(likedShows: likedShows)
+    }
 }
 
 private extension LikedShowsListViewModel {
