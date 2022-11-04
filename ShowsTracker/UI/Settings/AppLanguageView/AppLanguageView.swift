@@ -8,6 +8,11 @@
 import SwiftUI
 
 struct AppLanguageView: View {
+    
+    private var appLanguage: AppLanguage {
+        AppLanguage(rawValue: AppSettings<AppLanguageKey>.value(for: AppLanguageKey.self))
+    }
+    
     var body: some View {
         VStack(spacing: 32) {
             warningBannerView
@@ -26,10 +31,17 @@ struct AppLanguageView: View {
     
     var warningBannerView: some View {
         HStack(spacing: 12) {
-            Image(systemName: "exclamationmark.triangle.fill")
-                .resizable()
-                .frame(width: 25, height: 23)
-                .foregroundColor(.orangeSoft)
+            if appLanguage == .en {
+                Image(systemName: "checkmark.circle.fill")
+                    .resizable()
+                    .frame(width: 25, height: 25)
+                    .foregroundColor(.greenLight)
+            } else {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .resizable()
+                    .frame(width: 25, height: 23)
+                    .foregroundColor(.orangeSoft)
+            }
             
             Text(Strings.languageRecommendation)
                 .font(.regular11)
