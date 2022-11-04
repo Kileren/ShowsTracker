@@ -25,6 +25,7 @@ struct DetailedShow: Codable, Equatable {
     let numberOfEpisodes: Int?
     let numberOfSeasons: Int?
     let countries: [String]?
+    let originalName: String?
     let originalLanguage: String?
     let overview: String?
     let popularity: Double?
@@ -32,8 +33,8 @@ struct DetailedShow: Codable, Equatable {
     let seasons: [Season]?
     let status: Status?
     let tagline: String?
-    private let voteOriginal: Double?
-    private let voteCountOriginal: Int?
+    let voteOriginal: Double?
+    let voteCountOriginal: Int?
     
     enum CodingKeys: String, CodingKey {
         case posterPath = "poster_path"
@@ -52,6 +53,7 @@ struct DetailedShow: Codable, Equatable {
         case numberOfEpisodes = "number_of_episodes"
         case numberOfSeasons = "number_of_seasons"
         case countries = "origin_country"
+        case originalName = "original_name"
         case originalLanguage = "original_language"
         case overview
         case popularity
@@ -204,6 +206,7 @@ extension DetailedShow {
         numberOfEpisodes: nil,
         numberOfSeasons: nil,
         countries: nil,
+        originalName: nil,
         originalLanguage: nil,
         overview: nil,
         popularity: nil,
