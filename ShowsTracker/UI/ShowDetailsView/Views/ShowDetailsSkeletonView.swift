@@ -41,7 +41,7 @@ struct ShowDetailsSkeletonView: View {
         Rectangle()
             .cornerRadius(DesignConst.normalCornerRadius,
                           corners: [.topLeft, .topRight])
-            .foregroundColor(.white100)
+            .foregroundColor(.dynamic.background)
             .ignoresSafeArea(edges: .bottom)
             .padding(.top, geometry.size.width * 0.42 + 8)
     }
@@ -55,38 +55,38 @@ struct ShowDetailsSkeletonView: View {
         RoundedRectangle(cornerRadius: DesignConst.normalCornerRadius)
             .frame(width: geometry.size.width * 0.3,
                    height: geometry.size.width * 0.45)
-            .foregroundColor(.separators)
+            .foregroundColor(.dynamic.separators)
             .padding(.top, 40)
     }
     
     func titlePlaceholder(geometry: GeometryProxy) -> some View {
         RoundedRectangle(cornerRadius: DesignConst.normalCornerRadius)
             .frame(width: geometry.size.width * 0.65, height: 32)
-            .foregroundColor(.separators)
+            .foregroundColor(.dynamic.separators)
     }
     
     var broadcastYearsPlaceholder: some View {
         RoundedRectangle(cornerRadius: 11)
             .frame(width: 70, height: 22)
-            .foregroundColor(.separators)
+            .foregroundColor(.dynamic.separators)
     }
     
     func mainInfoPlaceholder(geometry: GeometryProxy) -> some View {
         RoundedRectangle(cornerRadius: DesignConst.smallCornerRadius)
             .frame(width: geometry.size.width - 72, height: 34)
-            .foregroundColor(.separators)
+            .foregroundColor(.dynamic.separators)
     }
     
     func infoTabsPlaceholder(geometry: GeometryProxy) -> some View {
         RoundedRectangle(cornerRadius: DesignConst.smallCornerRadius)
             .frame(width: min(280, geometry.size.width - 72), height: 30)
-            .foregroundColor(.separators)
+            .foregroundColor(.dynamic.separators)
     }
     
     var firstLineOfTabPlaceholder: some View {
         RoundedRectangle(cornerRadius: 10)
             .frame(width: 90, height: 20)
-            .foregroundColor(.separators)
+            .foregroundColor(.dynamic.separators)
     }
     
     func spacer(height: CGFloat) -> some View {

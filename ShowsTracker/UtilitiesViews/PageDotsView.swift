@@ -19,8 +19,8 @@ struct PageDotsView: View {
     private let circleSize: CGFloat = 12
     private let circleSpacing: CGFloat = 8
     
-    private let primaryColor: Color = .bay
-    private let secondaryColor: Color = .text20
+    private let primaryColor: Color = .dynamic.bay
+    private let secondaryColor: Color = .dynamic.text20
     
     private let smallScale: CGFloat = 0.84
     private let scale: CGFloat = 0.16

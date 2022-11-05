@@ -13,6 +13,7 @@ final class SettingsViewModel: ObservableObject {
     @Injected private var notificationsService: NotificationsService
     
     @AppSettings<AppLanguageKey> private var appLanguageValue
+    @AppSettings<AppThemeKey> private var appThemeValue
     
     @Published var model = SettingsModel()
     
@@ -21,6 +22,7 @@ final class SettingsViewModel: ObservableObject {
             await getNotificationStatusAndChangeModel()
         }
         getLanguageAndChangeModel()
+        getAppThemeAndChangeModel()
     }
 }
 
@@ -60,5 +62,9 @@ private extension SettingsViewModel {
         case .en: model.selectedLanguage = "English"
         case .ru: model.selectedLanguage = "Русский"
         }
+    }
+    
+    func getAppThemeAndChangeModel() {
+        model.selectedTheme = AppTheme(rawValue: appThemeValue)
     }
 }

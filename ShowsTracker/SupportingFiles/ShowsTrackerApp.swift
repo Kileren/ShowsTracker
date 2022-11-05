@@ -13,9 +13,12 @@ struct ShowsTrackerApp: App {
     private let notificationCenterDelegate = NotificationCenterDelegate()
     private let rootManager = RootManager()
     
+    @ObservedObject private var themeManager: ThemeManager = .shared
+    
     var body: some Scene {
         WindowGroup {
             TabBarView()
+                .preferredColorScheme(themeManager.colorScheme)
         }
     }
 }

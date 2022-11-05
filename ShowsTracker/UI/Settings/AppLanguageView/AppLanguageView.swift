@@ -24,7 +24,7 @@ struct AppLanguageView: View {
         }
         .padding(.top, 24)
         .background {
-            Color.backgroundLight.ignoresSafeArea()
+            Color.dynamic.background.ignoresSafeArea()
         }
         .navigationTitle(Strings.language)
     }
@@ -45,13 +45,13 @@ struct AppLanguageView: View {
             
             Text(Strings.languageRecommendation)
                 .font(.regular11)
-                .foregroundColor(.text40)
+                .foregroundColor(.dynamic.text40)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
         .background {
             RoundedRectangle(cornerRadius: 12)
-                .foregroundColor(.white)
+                .foregroundColor(.dynamic.infoView)
                 .shadow(color: .black.opacity(0.15), radius: 8, x: 4, y: 4)
         }
         .padding(.horizontal, 32)
@@ -60,7 +60,7 @@ struct AppLanguageView: View {
     var descriptionTextView: some View {
         Text(Strings.languageChangeInstruction)
             .font(.regular11)
-            .foregroundColor(.text40)
+            .foregroundColor(.dynamic.text40)
             .multilineTextAlignment(.center)
     }
     

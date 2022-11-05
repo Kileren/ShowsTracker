@@ -9,19 +9,19 @@ import SwiftUI
 
 struct ThemeToggleView: View {
     
-    @Binding var selectedTheme: Theme
+    @Binding var selectedTheme: AppTheme
     
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 12)
-                .foregroundColor(.separators)
+                .foregroundColor(.dynamic.separators)
                 .frame(width: 100, height: 24)
             
             bubbleForSelectedIcon
             
             HStack(spacing: 20) {
                 iconView(for: .light)
-                iconView(for: .auto)
+                iconView(for: .unspecified)
                 iconView(for: .dark)
             }
         }
@@ -31,27 +31,20 @@ struct ThemeToggleView: View {
 // MARK: - Views
 
 extension ThemeToggleView {
-    func iconView(for theme: Theme) -> some View {
+    func iconView(for theme: AppTheme) -> some View {
         let image: Image
         switch theme {
         case .light:
             image = Image("Icons/Settings/Theme/sun")
         case .dark:
             image = Image("Icons/Settings/Theme/moon")
-        case .auto:
+        case .unspecified:
             image = Image("Icons/Settings/Theme/settings")
         }
         
         return image
             .renderingMode(.template)
-            .foregroundColor(selectedTheme == theme ? .bay : .text40)
-//            .background {
-//                if theme == selectedTheme {
-//                    RoundedRectangle(cornerRadius: 12)
-//                        .frame(width: 32, height: 20)
-//                        .foregroundColor(.white)
-//                }
-//            }
+            .foregroundColor(selectedTheme == theme ? .dynamic.bay : .dynamic.text40)
             .onTapGesture {
                 withAnimation {
                     selectedTheme = theme
@@ -63,31 +56,21 @@ extension ThemeToggleView {
         var xOffset: CGFloat {
             switch selectedTheme {
             case .light: return -32
-            case .auto: return 0
+            case .unspecified: return 0
             case .dark: return 32
             }
         }
         
         return RoundedRectangle(cornerRadius: 12)
             .frame(width: 32, height: 20)
-            .foregroundColor(.white)
+            .foregroundColor(.dynamic.backgroundEl1)
             .offset(x: xOffset)
-    }
-}
-
-// MARK: - Models
-
-extension ThemeToggleView {
-    enum Theme {
-        case light
-        case dark
-        case auto
     }
 }
 
 struct ThemeToggleView_Previews: PreviewProvider {
     
-    @State static private var selectedTheme: ThemeToggleView.Theme = .auto
+    @State static private var selectedTheme: AppTheme = .unspecified
     
     static var previews: some View {
         ThemeToggleView(selectedTheme: $selectedTheme)

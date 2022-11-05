@@ -10,6 +10,7 @@ import Foundation
 struct SettingsModel {
     var notificationsState: NotificationsState = .empty
     var selectedLanguage: String = ""
+    var selectedTheme: AppTheme = .unspecified
     
     enum NotificationsState {
         case on

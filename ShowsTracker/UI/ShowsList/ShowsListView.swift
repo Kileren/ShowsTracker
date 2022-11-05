@@ -20,7 +20,7 @@ struct ShowsListView: View {
     @State private var filterIsShown: Bool = false
     
     var body: some View {
-        Group {
+        ZStack {
             if viewModel.model.isLoaded {
                 VStack(spacing: 32) {
                     if viewModel.model.tabIsVisible {
@@ -42,9 +42,9 @@ struct ShowsListView: View {
                     .padding(.top, -8)
             }
         }
-        .foregroundColor(.backgroundLight)
         .padding(.horizontal, 24)
         .padding(.top, 28)
+        .background(Color.dynamic.background)
         .overlay {
             if filterActive {
                 filterView
@@ -63,11 +63,11 @@ struct ShowsListView: View {
         } label: {
             Text(tab.name)
                 .font(.regular15)
-                .foregroundColor(viewModel.model.chosenTab == tab ? .white100 : .text100)
+                .foregroundColor(viewModel.model.chosenTab == tab ? .white100 : .dynamic.text100)
                 .frame(height: 16)
                 .background(
                     RoundedRectangle(cornerRadius: 16)
-                        .foregroundColor(viewModel.model.chosenTab == tab ? .bay : .clear)
+                        .foregroundColor(viewModel.model.chosenTab == tab ? .dynamic.bay : .clear)
                         .padding(.horizontal, -12)
                         .padding(.vertical, -8)
                 )
@@ -78,21 +78,21 @@ struct ShowsListView: View {
         ZStack(alignment: .leading) {
             RoundedRectangle(cornerRadius: 16)
                 .frame(height: 48)
-                .foregroundColor(.separators)
+                .foregroundColor(.dynamic.separators)
             
             HStack(spacing: 16) {
                 Image(systemName: "magnifyingglass")
                     .resizable()
                     .frame(width: 16, height: 16)
                     .padding(.leading, 16)
-                    .foregroundColor(.text100)
+                    .foregroundColor(.dynamic.text100)
                 
                 TextField(
                     "",
                     text: $searchedText,
-                    prompt: Text(Strings.search).font(.regular17).foregroundColor(.text40)
+                    prompt: Text(Strings.search).font(.regular17).foregroundColor(.dynamic.text40)
                 )
-                .foregroundColor(.text100)
+                .foregroundColor(.dynamic.text100)
                 .onSubmit {
                     viewModel.searchShows(query: searchedText)
                 }
@@ -106,11 +106,11 @@ struct ShowsListView: View {
                     } label: {
                         Text(Strings.clear)
                             .font(.medium12)
-                            .foregroundColor(.text40)
+                            .foregroundColor(.dynamic.text40)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
                                     .frame(height: 24)
-                                    .foregroundColor(.graySimple)
+                                    .foregroundColor(Color(light: .graySimple, dark: .backgroundDarkEl1))
                                     .padding(.horizontal, -8)
                             )
                     }
@@ -127,11 +127,11 @@ struct ShowsListView: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 8)
                     .frame(width: 32, height: 32)
-                    .foregroundColor(viewModel.model.filter.isEmpty ? .white100 : .bay)
+                    .foregroundColor(viewModel.model.filter.isEmpty ? .clear : .dynamic.bay)
                 Image(systemName: "slider.horizontal.3")
                     .resizable()
                     .frame(width: 20, height: 17)
-                    .foregroundColor(viewModel.model.filter.isEmpty ? .bay : .white100)
+                    .foregroundColor(viewModel.model.filter.isEmpty ? .dynamic.bay : .white100)
             }
         }
     }
@@ -297,3 +297,4 @@ struct ShowsListView_Previews: PreviewProvider {
         ShowsListView()
     }
 }
+

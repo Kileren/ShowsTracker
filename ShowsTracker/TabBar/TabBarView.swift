@@ -26,7 +26,7 @@ struct TabBarView: View {
                     button(for: .profile)
                 }
                 .frame(width: geometry.size.width, height: 60)
-                .background(Color.white100)
+                .background(Color.dynamic.backgroundEl1)
             }
         }
     }
@@ -53,7 +53,7 @@ struct TabBarView: View {
             Image(value.imageName)
                 .resizable()
                 .frame(width: 32, height: 32)
-                .foregroundColor(model.selectedTab == value ? Color.bay : Color.text100)
+                .foregroundColor(model.selectedTab == value ? Color.dynamic.bay : Color.dynamic.text60)
         }
     }
 }
@@ -103,11 +103,5 @@ private extension TabBarView {
 struct TabBarView_Previews: PreviewProvider {
     static var previews: some View {
         TabBarView()
-    }
-}
-
-struct EmptyView: View {
-    var body: some View {
-        Color.clear
     }
 }

@@ -29,7 +29,7 @@ struct ArchiveShowsView: View {
         .padding(.all, 16)
         .navigationTitle(Strings.archive)
         .background {
-            Color.backgroundLight.ignoresSafeArea()
+            Color.dynamic.background.ignoresSafeArea()
         }
         .sheet(
             isPresented: $sheetNavigator.showSheet,
@@ -70,12 +70,14 @@ private extension ArchiveShowsView {
             Spacer()
             VStack(spacing: 16) {
                 Image("Icons/EmptyList")
+                    .renderingMode(.template)
                     .resizable()
                     .frame(width: geometry.size.width * 0.5,
                            height: geometry.size.width * 0.5)
+                    .foregroundColor(.dynamic.text100)
                 Text(Strings.emptyArchive)
                     .font(.regular20)
-                    .foregroundColor(.text100)
+                    .foregroundColor(.dynamic.text100)
                     .lineLimit(nil)
                     .multilineTextAlignment(.center)
             }
@@ -113,8 +115,8 @@ private class SheetNavigator: ObservableObject {
 
 struct ArchiveShowsView_Previews: PreviewProvider {
     static var previews: some View {
-        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(Color.text100)]
-        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor(Color.text100)]
+        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(Color.dynamic.text100)]
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor(Color.dynamic.text100)]
         return ArchiveShowsView()
     }
 }

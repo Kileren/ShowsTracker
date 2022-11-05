@@ -10,12 +10,12 @@ import Resolver
 
 struct SettingsView: View {
     
-    @InjectedObject private var viewModel: SettingsViewModel
+    @StateObject private var viewModel = SettingsViewModel()
     @ObservedObject private var sheetNavigator = SheetNavigator()
     
     @State private var cloudIsActive: Bool = true
     @State private var notificationsIsActive: Bool = false
-    @State private var selectedTheme: ThemeToggleView.Theme = .auto
+//    @State private var selectedTheme: AppTheme = .unspecified
     
     var body: some View {
         NavigationView {
@@ -40,12 +40,15 @@ struct SettingsView: View {
             .padding(.horizontal, 16)
             .padding(.top, 16)
             .background {
-                Color.backgroundLight.ignoresSafeArea()
+                Color.dynamic.background.ignoresSafeArea()
             }
             .onChange(of: notificationsIsActive) { newValue in
                 if newValue {
                     viewModel.didTapTurnOnNotifications()
                 }
+            }
+            .onChange(of: viewModel.model.selectedTheme) { newValue in
+                ThemeManager.shared.set(theme: newValue)
             }
             .sheet(isPresented: $sheetNavigator.showSheet,
                    content: sheetNavigator.sheetView)
@@ -88,7 +91,7 @@ private extension SettingsView {
                     } label: {
                         Text(Strings.look)
                             .font(.regular11)
-                            .foregroundColor(.bay)
+                            .foregroundColor(.dynamic.bay)
                             .frame(height: 24)
                     }
                 }
@@ -108,7 +111,7 @@ private extension SettingsView {
                     } label: {
                         Text(viewModel.model.selectedLanguage)
                             .font(.regular11)
-                            .foregroundColor(.bay)
+                            .foregroundColor(.dynamic.bay)
                             .frame(height: 24)
                     }
                 }
@@ -134,7 +137,7 @@ private extension SettingsView {
                     case .empty:
                         Text("Выключено")
                             .font(.regular10)
-                            .foregroundColor(.text40)
+                            .foregroundColor(.dynamic.text40)
                             .frame(height: 24)
                     }
                 }
@@ -146,7 +149,7 @@ private extension SettingsView {
             image: Image("Icons/Settings/theme"),
             title: Strings.appThemeTitle,
             description: Strings.appThemeDescription) {
-                ThemeToggleView(selectedTheme: $selectedTheme)
+                ThemeToggleView(selectedTheme: $viewModel.model.selectedTheme)
             }
     }
     
@@ -160,7 +163,7 @@ private extension SettingsView {
                 } label: {
                     Text(Strings.open)
                         .font(.regular11)
-                        .foregroundColor(.bay)
+                        .foregroundColor(.dynamic.bay)
                         .frame(height: 24)
                 }
             }

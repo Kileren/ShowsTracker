@@ -27,7 +27,7 @@ struct LanguageSelectorView: View {
         .padding(.horizontal, 16)
         .background {
             Rectangle()
-                .foregroundColor(.white)
+                .foregroundColor(.dynamic.backgroundEl1)
                 .cornerRadius(16, corners: [.topLeft, .topRight])
                 .ignoresSafeArea(edges: .bottom)
                 .padding(.bottom, min(viewOffset, 0))
@@ -37,10 +37,10 @@ struct LanguageSelectorView: View {
     
     var notchView: some View {
         VStack(spacing: 0) {
-            STSpacer(height: 8, width: nil, color: .white100)
+            STSpacer(height: 8, width: nil)
             RoundedRectangle(cornerRadius: 2.5)
                 .frame(width: 50, height: 5)
-                .foregroundColor(.graySimple)
+                .foregroundColor(Color(light: .graySimple, dark: .backgroundDarkEl2))
         }
     }
     
@@ -48,7 +48,7 @@ struct LanguageSelectorView: View {
         ZStack {
             Text(Strings.originalLanguage)
                 .font(.semibold20)
-                .foregroundColor(.text100)
+                .foregroundColor(.dynamic.text100)
             HStack {
                 Spacer()
                 Button {
@@ -56,7 +56,7 @@ struct LanguageSelectorView: View {
                 } label: {
                     Text(Strings.clear)
                         .font(.regular13)
-                        .foregroundColor(.text40)
+                        .foregroundColor(.dynamic.text40)
                 }
             }
         }
@@ -67,7 +67,7 @@ struct LanguageSelectorView: View {
             HStack {
                 Text(language.nameRu)
                     .font(.medium17)
-                    .foregroundColor(.text100)
+                    .foregroundColor(.dynamic.text100)
                     .frame(height: 40)
                 Spacer()
                 if selectedLanguage == language {
@@ -76,6 +76,7 @@ struct LanguageSelectorView: View {
                         .frame(width: 16, height: 16)
                 }
             }
+            .listRowBackground(Color.backgroundDarkEl1)
             .frame(height: 40)
             .contentShape(Rectangle())
             .onTapGesture {
@@ -88,18 +89,11 @@ struct LanguageSelectorView: View {
     }
     
     var confirmButton: some View {
-        Button {
-            onClose(selectedLanguage)
-        } label: {
-            RoundedRectangle(cornerRadius: 16)
-                .frame(width: 300, height: 50)
-                .foregroundColor(.bay)
-                .overlay {
-                    Text(Strings.confirm)
-                        .font(.medium20)
-                        .foregroundColor(.white100)
-                }
-        }
+        STButton(
+            title: Strings.confirm,
+            style: .custom(width: 300, height: 50, font: .medium20)) {
+                onClose(selectedLanguage)
+            }
     }
 }
 

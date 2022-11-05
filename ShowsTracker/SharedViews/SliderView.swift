@@ -42,22 +42,22 @@ struct SliderView: View {
         ZStack(alignment: .leading) {
             RoundedRectangle(cornerRadius: 3)
                 .frame(height: 6)
-                .foregroundColor(.graySimple)
+                .foregroundColor(Color(light: .graySimple, dark: .backgroundDarkEl2))
             RoundedRectangle(cornerRadius: 3)
                 .frame(width: rightStickLocation.x - leftStickLocation.x, height: 6)
-                .foregroundColor(.bay)
+                .foregroundColor(.dynamic.bay)
                 .position(x: leftStickLocation.x / 2 + rightStickLocation.x / 2, y: .circleSide / 2)
             
             HStack {
                 Text(minValue.description)
                     .font(.regular12)
-                    .foregroundColor(.text40)
+                    .foregroundColor(.dynamic.text40)
                     .opacity(lowerValueIsVisible ? 1 : 0)
                     .animation(Animation.spring(), value: lowerValueIsVisible)
                 Spacer()
                 Text(maxValue.description)
                     .font(.regular12)
-                    .foregroundColor(.text40)
+                    .foregroundColor(.dynamic.text40)
                     .opacity(upperValueIsVisible ? 1 : 0)
                     .animation(Animation.spring(), value: upperValueIsVisible)
             }
@@ -93,10 +93,10 @@ struct SliderView: View {
         ZStack {
             Circle()
                 .frame(width: .circleSide, height: .circleSide)
-                .foregroundColor(.white100)
+                .foregroundColor(.dynamic.backgroundEl2)
             Circle()
                 .frame(width: .circleSide - 2, height: .circleSide - 2)
-                .foregroundColor(.bay)
+                .foregroundColor(.dynamic.bay)
             
             HStack(spacing: 4) {
                 Image(systemName: "arrowtriangle.forward.fill")

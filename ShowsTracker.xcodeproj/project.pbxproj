@@ -51,6 +51,10 @@
 		8C1DBA33291038FA007B5F09 /* LikedShowsListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1DBA32291038FA007B5F09 /* LikedShowsListViewModel.swift */; };
 		8C1DBA352910390C007B5F09 /* LikedShowsListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1DBA342910390C007B5F09 /* LikedShowsListModel.swift */; };
 		8C1DBA3729155675007B5F09 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1DBA3629155675007B5F09 /* Array+Extensions.swift */; };
+		8C1DBA3929157B36007B5F09 /* UIApplication+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1DBA3829157B36007B5F09 /* UIApplication+Extensions.swift */; };
+		8C1DBA3B291582D6007B5F09 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1DBA3A291582D6007B5F09 /* ThemeManager.swift */; };
+		8C1DBA3D29167BFB007B5F09 /* EmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1DBA3C29167BFB007B5F09 /* EmptyView.swift */; };
+		8C1DBA3F291687DF007B5F09 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1DBA3E291687DF007B5F09 /* AppTheme.swift */; };
 		8C217943288F0BE500B0E1BF /* ShowDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C217942288F0BE500B0E1BF /* ShowDetailsViewModel.swift */; };
 		8C2179452892FF8500B0E1BF /* ShowsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2179442892FF8500B0E1BF /* ShowsViewModel.swift */; };
 		8C2179492893047E00B0E1BF /* ShowsListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2179482893047E00B0E1BF /* ShowsListViewModel.swift */; };
@@ -174,6 +178,10 @@
 		8C1DBA32291038FA007B5F09 /* LikedShowsListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedShowsListViewModel.swift; sourceTree = "<group>"; };
 		8C1DBA342910390C007B5F09 /* LikedShowsListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedShowsListModel.swift; sourceTree = "<group>"; };
 		8C1DBA3629155675007B5F09 /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
+		8C1DBA3829157B36007B5F09 /* UIApplication+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extensions.swift"; sourceTree = "<group>"; };
+		8C1DBA3A291582D6007B5F09 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+		8C1DBA3C29167BFB007B5F09 /* EmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyView.swift; sourceTree = "<group>"; };
+		8C1DBA3E291687DF007B5F09 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		8C217942288F0BE500B0E1BF /* ShowDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowDetailsViewModel.swift; sourceTree = "<group>"; };
 		8C2179442892FF8500B0E1BF /* ShowsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowsViewModel.swift; sourceTree = "<group>"; };
 		8C2179482893047E00B0E1BF /* ShowsListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowsListViewModel.swift; sourceTree = "<group>"; };
@@ -525,6 +533,7 @@
 				8C4605D928B7410B00ADCB0C /* STAnimation.swift */,
 				8C4605E428CA5D7100ADCB0C /* View+Frame.swift */,
 				8C1DBA3629155675007B5F09 /* Array+Extensions.swift */,
+				8C1DBA3829157B36007B5F09 /* UIApplication+Extensions.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -597,6 +606,7 @@
 				8CFAD6A825C872250090DC4F /* PageDotsView.swift */,
 				8CB9F5BA25CFB0680095F063 /* TruncableText.swift */,
 				8C4605E228C3C57800ADCB0C /* TrackableScrollView.swift */,
+				8C1DBA3C29167BFB007B5F09 /* EmptyView.swift */,
 			);
 			path = UtilitiesViews;
 			sourceTree = "<group>";
@@ -698,6 +708,7 @@
 				8C518F4426640A9700EE6C4F /* Shows */,
 				8CDCCEFF28434B4A006EC106 /* LangCode.swift */,
 				8C5B18D729065A4D0007BE0E /* AppLanguage.swift */,
+				8C1DBA3E291687DF007B5F09 /* AppTheme.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -782,6 +793,7 @@
 				8CE2693D25CEE5040045903F /* DesignConst.swift */,
 				8C5E8D4B25CF08CD0058A9B1 /* Fonts.swift */,
 				8C59A92C2628B1E0000C489C /* Images.swift */,
+				8C1DBA3A291582D6007B5F09 /* ThemeManager.swift */,
 			);
 			path = Design;
 			sourceTree = "<group>";
@@ -917,6 +929,7 @@
 				8C156D0C281F02730049DDD1 /* SeasonDetails.swift in Sources */,
 				8C4605E528CA5D7100ADCB0C /* View+Frame.swift in Sources */,
 				8C7DD06728FC2204003FE1ED /* Resolver+Services.swift in Sources */,
+				8C1DBA3929157B36007B5F09 /* UIApplication+Extensions.swift in Sources */,
 				8CD2004427A30B9100F61C6D /* TabBarView.swift in Sources */,
 				8C2179452892FF8500B0E1BF /* ShowsViewModel.swift in Sources */,
 				8C7DD06028FBFEC5003FE1ED /* InMemoryStorage.swift in Sources */,
@@ -942,6 +955,7 @@
 				8C7DD05C28F67C30003FE1ED /* AboutAppView.swift in Sources */,
 				8C156D0028152E7B0049DDD1 /* ProcessInfo+isPreview.swift in Sources */,
 				8C4605DF28BB85D800ADCB0C /* HorizontalAlignment.swift in Sources */,
+				8C1DBA3B291582D6007B5F09 /* ThemeManager.swift in Sources */,
 				8CE2694125CEE7A20045903F /* ShowView.swift in Sources */,
 				8CF52873267DE2F500351915 /* JSONReader.swift in Sources */,
 				8C006338285E578600893ECB /* Storages+Resolver.swift in Sources */,
@@ -961,6 +975,7 @@
 				8C7DD04428E97612003FE1ED /* SettingsCardView.swift in Sources */,
 				8CD6C1FB25C32CDB004CF261 /* RootResolver.swift in Sources */,
 				8C1DBA33291038FA007B5F09 /* LikedShowsListViewModel.swift in Sources */,
+				8C1DBA3F291687DF007B5F09 /* AppTheme.swift in Sources */,
 				8C7DD04F28F33612003FE1ED /* ArchiveShowsView.swift in Sources */,
 				8C217943288F0BE500B0E1BF /* ShowDetailsViewModel.swift in Sources */,
 				8C156CF328149D550049DDD1 /* ImageService.swift in Sources */,
@@ -969,6 +984,7 @@
 				8CF2F09F2905AB0600E85060 /* SettingsViewModel.swift in Sources */,
 				8CD2004627A311D300F61C6D /* EnvironmentValues+isPreview.swift in Sources */,
 				8C156CFC281528A90049DDD1 /* TVService.swift in Sources */,
+				8C1DBA3D29167BFB007B5F09 /* EmptyView.swift in Sources */,
 				8CD6C1DD25C327D3004CF261 /* ShowsTrackerApp.swift in Sources */,
 				8C4605DD28BB71CE00ADCB0C /* ScaleButtonStyle.swift in Sources */,
 				8C156CE82811C79B0049DDD1 /* SearchService.swift in Sources */,

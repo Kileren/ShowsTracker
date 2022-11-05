@@ -13,24 +13,26 @@ struct NotificationsView: View {
     @InjectedObject private var viewModel: NotificationsViewModel
     
     var body: some View {
-        Group {
-            switch viewModel.model.state {
-            case .allowed:
-                allowedView()
-            case .denied:
-                deniedView()
-            case .notDetermined:
-                notDeterminedView()
-            case .loading:
-                EmptyView()
+        ZStack {
+            Color.dynamic.background.ignoresSafeArea()
+            Group {
+                switch viewModel.model.state {
+                case .allowed:
+                    allowedView()
+                case .denied:
+                    deniedView()
+                case .notDetermined:
+                    notDeterminedView()
+                case .loading:
+                    EmptyView()
+                }
             }
+            .padding(.horizontal, 16)
+            .padding(.top, 24)
+            .navigationTitle(Strings.notificationsTitle)
+            .onTapGesture { viewModel.notificationTimeDidChange(viewModel.model.selectedTime) }
+            .onAppear { viewModel.viewAppeared() }
         }
-        .padding(.horizontal, 16)
-        .padding(.top, 24)
-        .background { Color.backgroundLight.ignoresSafeArea() }
-        .navigationTitle(Strings.notificationsTitle)
-        .onTapGesture { viewModel.notificationTimeDidChange(viewModel.model.selectedTime) }
-        .onAppear { viewModel.viewAppeared() }
     }
 }
 
@@ -85,7 +87,7 @@ private extension NotificationsView {
     ) -> some View {
         ZStack {
             RoundedRectangle(cornerRadius: 12)
-                .foregroundColor(.white)
+                .foregroundColor(.dynamic.infoView)
                 .shadow(color: .black.opacity(0.15), radius: 8, x: 4, y: 4)
             
             HStack {
@@ -93,16 +95,16 @@ private extension NotificationsView {
                     HStack(spacing: 12) {
                         image
                             .resizable()
-                            .foregroundColor(.bay)
+                            .foregroundColor(.dynamic.bay)
                             .frame(width: 25, height: 25)
                         Text(title)
                             .font(.medium17)
-                            .foregroundColor(.text100)
+                            .foregroundColor(.dynamic.text100)
                             .frame(height: 28)
                     }
                     Text(description)
                         .font(.regular11)
-                        .foregroundColor(.text40)
+                        .foregroundColor(.dynamic.text40)
                 }
                 Spacer(minLength: 24)
                 VStack {
@@ -126,7 +128,7 @@ private extension NotificationsView {
         }
         return Text(title)
             .font(.regular11)
-            .foregroundColor(.text40)
+            .foregroundColor(.dynamic.text40)
             .multilineTextAlignment(.center)
             .padding(.horizontal, 12)
     }

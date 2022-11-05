@@ -40,7 +40,7 @@ struct GenresView: View {
         .animation(.interactiveSpring(), value: selectedGenres)
         .background {
             Rectangle()
-                .foregroundColor(.white)
+                .foregroundColor(.dynamic.backgroundEl1)
                 .cornerRadius(16, corners: [.topLeft, .topRight])
                 .ignoresSafeArea(edges: .bottom)
                 .padding(.bottom, min(viewOffset, 0))
@@ -50,10 +50,10 @@ struct GenresView: View {
     
     var notchView: some View {
         VStack(spacing: 0) {
-            STSpacer(height: 8, width: nil, color: .white100)
+            STSpacer(height: 8, width: nil)
             RoundedRectangle(cornerRadius: 2.5)
                 .frame(width: 50, height: 5)
-                .foregroundColor(.graySimple)
+                .foregroundColor(Color(light: .graySimple, dark: .backgroundDarkEl2))
         }
     }
     
@@ -61,7 +61,7 @@ struct GenresView: View {
         ZStack {
             Text(Strings.genres)
                 .font(.semibold20)
-                .foregroundColor(.text100)
+                .foregroundColor(.dynamic.text100)
             HStack {
                 Spacer()
                 Button {
@@ -69,7 +69,7 @@ struct GenresView: View {
                 } label: {
                     Text(Strings.clear)
                         .font(.regular13)
-                        .foregroundColor(.text40)
+                        .foregroundColor(.dynamic.text40)
                 }
             }
         }
@@ -82,12 +82,12 @@ struct GenresView: View {
                     ForEach(line, id: \.self) { genre in
                         Text(genre.name ?? "")
                             .font(.regular13)
-                            .foregroundColor(isSelected(genre) ? .white100 : .text100)
+                            .foregroundColor(isSelected(genre) ? .white100 : .dynamic.text100)
                             .frame(height: 24)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
                                     .frame(height: 24)
-                                    .foregroundColor(isSelected(genre) ? .bay : .separators)
+                                    .foregroundColor(isSelected(genre) ? .dynamic.bay : .dynamic.separators)
                                     .padding(.horizontal, -8)
                             )
                             .onTapGesture {
@@ -105,18 +105,11 @@ struct GenresView: View {
     }
     
     var confirmButton: some View {
-        Button {
-            onConfirm(selectedGenres)
-        } label: {
-            RoundedRectangle(cornerRadius: 16)
-                .frame(width: 300, height: 50)
-                .foregroundColor(.bay)
-                .overlay {
-                    Text(Strings.confirm)
-                        .font(.medium20)
-                        .foregroundColor(.white100)
-                }
-        }
+        STButton(
+            title: Strings.confirm,
+            style: .custom(width: 300, height: 50, font: .medium20)) {
+                onConfirm(selectedGenres)
+            }
     }
 }
 

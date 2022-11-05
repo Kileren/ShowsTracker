@@ -92,28 +92,28 @@ struct STButton: View {
             case .fit:
                 RoundedRectangle(cornerRadius: 15)
                     .frame(height: 24)
-                    .foregroundColor(.bay)
+                    .foregroundColor(.dynamic.bay)
                     .padding(.horizontal, -24)
             case .fixed(let width):
                 RoundedRectangle(cornerRadius: 15)
                     .frame(width: width, height: 24)
-                    .foregroundColor(.bay)
+                    .foregroundColor(.dynamic.bay)
             }
         case .medium:
             RoundedRectangle(cornerRadius: 20)
                 .frame(height: 40)
-                .foregroundColor(.bay)
+                .foregroundColor(.dynamic.bay)
                 .padding(.horizontal, -24)
         case .normal(let geometry):
             RoundedRectangle(cornerRadius: 16)
                 .frame(width: min(geometry.size.width - 48, 300),
                        height: 50)
-                .foregroundColor(.bay)
+                .foregroundColor(.dynamic.bay)
                 .padding(.horizontal, -24)
         case let .custom(width, height, _):
             RoundedRectangle(cornerRadius: 16)
                 .frame(width: width, height: height)
-                .foregroundColor(.bay)
+                .foregroundColor(.dynamic.bay)
         }
     }
 }

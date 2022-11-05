@@ -42,7 +42,7 @@ struct ShowsListSkeletonView: View {
             
             Spacer()
         }
-        .foregroundColor(.separators)
+        .foregroundColor(.dynamic.separators)
     }
     
     func showSkeleton(geometry: GeometryProxy) -> some View {

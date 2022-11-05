@@ -42,7 +42,7 @@ struct STSpinner: View {
                 start: spinnerStart,
                 end: spinnerEndS1,
                 rotation: rotationDegreeS1,
-                color: .bay)
+                color: .dynamic.bay)
         }
         .frame(width: 20, height: 20)
         .onAppear() {

@@ -49,14 +49,14 @@ struct SettingsCardView<Content: View>: View {
 private extension SettingsCardView {
     var backgroundView: some View {
         RoundedRectangle(cornerRadius: 12)
-            .foregroundColor(.white)
+            .foregroundColor(.dynamic.backgroundEl1)
             .shadow(color: .black.opacity(0.15), radius: 8, x: 4, y: 4)
     }
     
     var imageView: some View {
         Circle()
             .frame(width: 32, height: 32)
-            .foregroundColor(.bay.opacity(0.15))
+            .foregroundColor(.dynamic.bay.opacity(0.15))
             .overlay {
                 image
                     .resizable()
@@ -67,7 +67,7 @@ private extension SettingsCardView {
     var titleView: some View {
         Text(title)
             .font(.medium13)
-            .foregroundColor(.text100)
+            .foregroundColor(.dynamic.text100)
             .lineLimit(2)
             .multilineTextAlignment(.leading)
             .frame(height: 32)
@@ -77,7 +77,7 @@ private extension SettingsCardView {
         VStack {
             Text(description)
                 .font(.regular10)
-                .foregroundColor(.text40)
+                .foregroundColor(.dynamic.text40)
                 .lineLimit(2)
                 .multilineTextAlignment(.leading)
             Spacer()

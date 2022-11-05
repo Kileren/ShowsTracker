@@ -12,7 +12,6 @@ extension Resolver {
         register { ShowsViewModel() }
         register { ShowsListViewModel() }
         register { ShowDetailsViewModel() }
-        register { SettingsViewModel() }
         register { ArchiveShowsViewModel() }
         register { NotificationsViewModel() }
     }

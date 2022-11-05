@@ -52,7 +52,6 @@ struct ShowDetailsView: View {
                             .frame(minHeight: geometry.size.height)
                             
                             blurBackground(geometry: geometry)
-                                .foregroundColor(.yellowSoft)
                                 .mask {
                                     Rectangle()
                                         .frame(width: geometry.size.width, height: Const.minSpacingFromTopToOverlay)
@@ -121,7 +120,7 @@ struct ShowDetailsView: View {
             Rectangle()
                 .cornerRadius(DesignConst.normalCornerRadius,
                               corners: [.topLeft, .topRight])
-                .foregroundColor(.backgroundLight)
+                .foregroundColor(.dynamic.background)
                 .ignoresSafeArea(edges: .bottom)
                 .offset(y: offsetForOverlay(geometry: geometry))
         }
@@ -148,7 +147,7 @@ private extension ShowDetailsView {
             backgroundImageGradient(geometry: geometry)
         })
         .background(
-            Color.backgroundLight.edgesIgnoringSafeArea(.all)
+            Color.dynamic.background.edgesIgnoringSafeArea(.all)
         )
         .mask {
             // Fixes scroll background on devices without safe area
@@ -176,12 +175,19 @@ private extension ShowDetailsView {
                    height: geometry.size.width * 1.45,
                    alignment: .top)
             .foregroundColor(.clear)
-            .background(
-                LinearGradient(
-                    gradient: Gradient(colors: [.backgroundLight, Color.backgroundLight.opacity(0)]),
-                    startPoint: .bottom,
-                    endPoint: .top))
+            .background(backgroundImageGradientLinearGradient)
             .ignoresSafeArea(edges: .top)
+    }
+    
+    var backgroundImageGradientLinearGradient: LinearGradient {
+        let colors: [Color] = [
+            .dynamic.background,
+            .dynamic.background.opacity(0),
+        ]
+        return LinearGradient(
+            gradient: Gradient(colors: colors),
+            startPoint: .bottom,
+            endPoint: .top)
     }
 }
 
@@ -228,10 +234,10 @@ private extension ShowDetailsView {
         VStack(spacing: 4) {
             Text(viewModel.model.name)
                 .font(.medium28)
-                .foregroundColor(.text100)
+                .foregroundColor(.dynamic.text100)
             Text(viewModel.model.broadcastYears)
                 .font(.regular15)
-                .foregroundColor(.text60)
+                .foregroundColor(.dynamic.text60)
         }
         .frame(height: 56)
     }
@@ -265,7 +271,7 @@ private extension ShowDetailsView {
             }
             Text(viewModel.model.voteCount)
                 .font(.medium13)
-                .foregroundColor(.text40)
+                .foregroundColor(.dynamic.text40)
         }
     }
     
@@ -285,7 +291,7 @@ private extension ShowDetailsView {
                 .foregroundColor(color)
             Text(Strings.status)
                 .font(.medium13)
-                .foregroundColor(.text40)
+                .foregroundColor(.dynamic.text40)
         }
     }
     
@@ -296,7 +302,7 @@ private extension ShowDetailsView {
             Image(systemName: viewModel.model.isLiked ? "heart.fill" : "heart")
                 .resizable()
                 .frame(width: 32, height: 32)
-                .foregroundColor(.bay)
+                .foregroundColor(.dynamic.bay)
         }
     }
     
@@ -323,9 +329,10 @@ private extension ShowDetailsView {
         .background {
             if offsetForInfoTabs(geometry: geometry) > 0 {
                 Rectangle()
-                    .foregroundColor(.white)
+                    .foregroundColor(.dynamic.background)
                     .frame(height: 1000)
                     .padding(.bottom, 1000 - Const.infoTabsHeight - 8)
+                    .padding(.horizontal, -8)
             }
         }
         .offset(y: offsetForInfoTabs(geometry: geometry))
@@ -339,12 +346,12 @@ private extension ShowDetailsView {
             VStack(alignment: .leading, spacing: 4) {
                 Text(tab.rawValue)
                     .font(.medium20)
-                    .foregroundColor(viewModel.model.selectedInfoTab == tab ? .bay : .text60)
+                    .foregroundColor(viewModel.model.selectedInfoTab == tab ? .dynamic.bay : .dynamic.text60)
                 
                 if viewModel.model.selectedInfoTab == tab {
                     RoundedRectangle(cornerRadius: 1)
                         .size(width: 32, height: 2)
-                        .foregroundColor(.bay)
+                        .foregroundColor(.dynamic.bay)
                 }
             }
         }
@@ -379,14 +386,14 @@ private extension ShowDetailsView {
                 
                 ZStack(alignment: .top) {
                     RoundedRectangle(cornerRadius: 24)
-                        .foregroundColor(.separators)
+                        .foregroundColor(Color(light: .separators, dark: .backgroundDarkEl1))
                         .frame(height: backgroundRectangleHeight)
                     
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
                             Text(info.title)
                                 .font(.medium17Rounded)
-                                .foregroundColor(.text100)
+                                .foregroundColor(.dynamic.text100)
                                 .lineLimit(1)
                                 .truncationMode(.middle)
                             Spacer()
@@ -407,14 +414,14 @@ private extension ShowDetailsView {
                         if !info.overview.isEmpty {
                             Text(info.overview)
                                 .font(.regular11)
-                                .foregroundColor(.text40)
+                                .foregroundColor(.dynamic.text40)
                                 .lineLimit(4)
                         }
                         
                         if !seasonIsSelected {
                             Text(Strings.episodes)
                                 .font(.regular11)
-                                .foregroundColor(.bay)
+                                .foregroundColor(.dynamic.bay)
                                 .transition(.opacity.combined(with: .offset(y: -20)))
                         }
                     }
@@ -455,17 +462,17 @@ private extension ShowDetailsView {
         HStack(spacing: 24) {
             Text("\(episode.episodeNumber)")
                 .font(.medium32)
-                .foregroundColor(.text40)
+                .foregroundColor(.dynamic.text40)
                 .frame(width: 40)
             
             VStack(alignment: .leading, spacing: 2) {
                 Text(episode.name)
                     .font(.medium17)
-                    .foregroundColor(.text100)
+                    .foregroundColor(.dynamic.text100)
                     .lineLimit(1)
                 Text(episode.date)
                     .font(.regular13)
-                    .foregroundColor(.text40)
+                    .foregroundColor(.dynamic.text40)
             }
         }
         .frame(height: 40)
@@ -490,11 +497,11 @@ private extension ShowDetailsView {
             VStack(alignment: .leading, spacing: 8) {
                 Text(Strings.description)
                     .font(.semibold17)
-                    .foregroundColor(.text100)
+                    .foregroundColor(.dynamic.text100)
                 ScrollView(.vertical, showsIndicators: false) {
                     Text(viewModel.model.detailsInfo.overview)
                         .font(.regular17)
-                        .foregroundColor(.text100)
+                        .foregroundColor(.dynamic.text100)
                 }
             }
         }
@@ -515,10 +522,10 @@ private extension ShowDetailsView {
     func tagView(for tag: String) -> some View {
         Text(tag)
             .font(.regular13)
-            .foregroundColor(.text100)
+            .foregroundColor(.dynamic.text100)
             .background {
                 RoundedRectangle(cornerRadius: 8)
-                    .foregroundColor(.separators)
+                    .foregroundColor(.dynamic.separators)
                     .padding(.vertical, -5)
                     .padding(.horizontal, -8)
             }
@@ -551,22 +558,21 @@ private extension ShowDetailsView {
                 .onTapGesture {
                     episodeDetailsShown = false
                 }
-            
             VStack(spacing: 16) {
                 Text(Strings.description)
                     .font(.semibold17)
-                    .foregroundColor(.text100)
+                    .foregroundColor(.dynamic.text100)
                 
                 Text(episodeDetails)
                     .font(.regular17)
-                    .foregroundColor(.text100)
+                    .foregroundColor(.dynamic.text100)
                     .padding(.horizontal, 32)
             }
             .background(
                 RoundedRectangle(cornerRadius: DesignConst.normalCornerRadius)
                     .padding(.horizontal, 16)
                     .padding(.vertical, -16)
-                    .foregroundColor(.white100)
+                    .foregroundColor(.dynamic.backgroundEl1)
             )
         }
         .ignoresSafeArea()
@@ -574,7 +580,7 @@ private extension ShowDetailsView {
     
     var activeNotification: some View {
         Circle()
-            .foregroundColor(.bay.opacity(0.15))
+            .foregroundColor(.dynamic.bay.opacity(0.15))
             .frame(width: 20, height: 20)
             .overlay {
                 Image("Icons/Settings/notificationOn")
@@ -587,7 +593,7 @@ private extension ShowDetailsView {
         Circle()
             .trim()
             .stroke(lineWidth: 1)
-            .fill(Color.bay)
+            .fill(Color.dynamic.bay)
             .frame(width: 20, height: 20)
             .overlay {
                 Image("Icons/Settings/notificationOn")

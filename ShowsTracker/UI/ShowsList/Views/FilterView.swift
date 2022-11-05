@@ -52,7 +52,7 @@ struct FilterView: View {
             .padding(.horizontal, 16)
             .background {
                 Rectangle()
-                    .foregroundColor(.backgroundLight)
+                    .foregroundColor(.dynamic.backgroundEl1)
                     .cornerRadius(16, corners: [.topLeft, .topRight])
                     .ignoresSafeArea(edges: .bottom)
                     .padding(.bottom, min(viewOffset, 0))
@@ -72,10 +72,10 @@ struct FilterView: View {
     
     var notchView: some View {
         VStack(spacing: 0) {
-            STSpacer(height: 8, width: nil, color: .white100)
+            STSpacer(height: 8, width: nil, color: .clear)
             RoundedRectangle(cornerRadius: 2.5)
                 .frame(width: 50, height: 5)
-                .foregroundColor(.graySimple)
+                .foregroundColor(Color(light: .graySimple, dark: .backgroundDarkEl2))
         }
     }
     
@@ -83,12 +83,12 @@ struct FilterView: View {
         ZStack {
             Text(Strings.filters)
                 .font(.semibold20)
-                .foregroundColor(.text100)
+                .foregroundColor(.dynamic.text100)
             HStack {
                 Spacer()
                 Text(Strings.clear)
                     .font(.regular13)
-                    .foregroundColor(.text40)
+                    .foregroundColor(.dynamic.text40)
             }
         }
     }
@@ -98,11 +98,11 @@ struct FilterView: View {
             HStack {
                 Text(Strings.releaseYear)
                     .font(.medium17)
-                    .foregroundColor(.text100)
+                    .foregroundColor(.dynamic.text100)
                 Spacer()
                 Text("\(model.minYear.description) - \(model.maxYear.description)")
                     .font(.medium13)
-                    .foregroundColor(.text60)
+                    .foregroundColor(.dynamic.text60)
             }
             SliderView(
                 minValue: Model.originalMinYear,
@@ -116,7 +116,7 @@ struct FilterView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(Strings.genres)
                 .font(.medium17)
-                .foregroundColor(.text100)
+                .foregroundColor(.dynamic.text100)
             
             Button {
                 genresViewIsActive = true
@@ -124,14 +124,14 @@ struct FilterView: View {
                 ZStack {
                     if model.selectedGenres.isEmpty {
                         RoundedRectangle(cornerRadius: 16)
-                            .strokeBorder(Color.bay, lineWidth: 1)
+                            .strokeBorder(Color.dynamic.bay, lineWidth: 1)
                             .frame(width: 130, height: 32)
                         Text(Strings.all)
                             .font(.regular15)
-                            .foregroundColor(.bay)
+                            .foregroundColor(.dynamic.bay)
                     } else {
                         RoundedRectangle(cornerRadius: 16)
-                            .foregroundColor(.bay)
+                            .foregroundColor(.dynamic.bay)
                             .frame(width: 130, height: 32)
                         Text(Strings.genrePlural(model.selectedGenres.count))
                             .font(.regular15)
@@ -146,7 +146,7 @@ struct FilterView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(Strings.originalLanguage)
                 .font(.medium17)
-                .foregroundColor(.text100)
+                .foregroundColor(.dynamic.text100)
             
             Button {
                 languageViewIsActive = true
@@ -160,7 +160,7 @@ struct FilterView: View {
                             .frame(minWidth: 98)
                             .background {
                                 RoundedRectangle(cornerRadius: 16)
-                                    .foregroundColor(.bay)
+                                    .foregroundColor(.dynamic.bay)
                                     .frame(height: 32)
                                     .frame(minWidth: 98)
                                     .padding(.horizontal, -16)
@@ -168,11 +168,11 @@ struct FilterView: View {
                             .padding(.horizontal, 16)
                     } else {
                         RoundedRectangle(cornerRadius: 16)
-                            .strokeBorder(Color.bay, lineWidth: 1)
+                            .strokeBorder(Color.dynamic.bay, lineWidth: 1)
                             .frame(width: 130, height: 32)
                         Text(Strings.any)
                             .font(.regular15)
-                            .foregroundColor(.bay)
+                            .foregroundColor(.dynamic.bay)
                     }
                 }
             }
@@ -244,7 +244,7 @@ struct FilterView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(Strings.sortBy)
                 .font(.medium17)
-                .foregroundColor(.text100)
+                .foregroundColor(.dynamic.text100)
             sortingCell(for: .popularity)
             sortingCell(for: .airDate)
             sortingCell(for: .votes)
@@ -255,18 +255,18 @@ struct FilterView: View {
         let isSelected = model.sorting == sorting
         return HStack(spacing: 8) {
             Circle()
-                .strokeBorder(isSelected ? Color.bay : Color.graySimple, lineWidth: 1)
+                .strokeBorder(isSelected ? Color.dynamic.bay : Color(light: .graySimple, dark: .backgroundDarkEl2), lineWidth: 1)
                 .frame(width: 16, height: 16)
                 .overlay {
                     if isSelected {
                         Circle()
                             .frame(width: 6, height: 6)
-                            .foregroundColor(.bay)
+                            .foregroundColor(.dynamic.bay)
                     }
                 }
             Text(sorting.name)
                 .font(.regular13)
-                .foregroundColor(.text100)
+                .foregroundColor(.dynamic.text100)
         }
         .onTapGesture {
             model.sorting = sorting
@@ -274,18 +274,11 @@ struct FilterView: View {
     }
     
     var confirmButton: some View {
-        Button {
-            onConfirm(model)
-        } label: {
-            RoundedRectangle(cornerRadius: 16)
-                .frame(width: 300, height: 50)
-                .foregroundColor(.bay)
-                .overlay {
-                    Text(Strings.confirm)
-                        .font(.medium20)
-                        .foregroundColor(.white100)
-                }
-        }
+        STButton(
+            title: Strings.confirm,
+            style: .custom(width: 300, height: 50, font: .medium20)) {
+                onConfirm(model)
+            }
     }
 }
 

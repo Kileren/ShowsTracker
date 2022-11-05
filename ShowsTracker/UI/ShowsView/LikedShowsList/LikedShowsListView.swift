@@ -39,7 +39,7 @@ struct LikedShowsListView: View {
                 .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
             }
             .listStyle(.plain)
-            .background(Color.backgroundLight)
+            .background(Color.dynamic.background)
             .navigationTitle(Strings.yourShows)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -64,7 +64,7 @@ struct LikedShowsListView: View {
     func showView(show: FavoritesShowsListModel.Show) -> some View {
         ZStack(alignment: .leading) {
             RoundedRectangle(cornerRadius: 16)
-                .foregroundColor(.separators)
+                .foregroundColor(.dynamic.separators)
                 .frame(height: 80)
             
             HStack(spacing: 12) {
@@ -76,17 +76,17 @@ struct LikedShowsListView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(show.title)
                         .font(.medium17Rounded)
-                        .foregroundColor(.text100)
+                        .foregroundColor(.dynamic.text100)
                         .lineLimit(1)
                     Text(show.description)
                         .font(.medium13Rounded)
-                        .foregroundColor(.text40)
+                        .foregroundColor(.dynamic.text40)
                 }
                 
                 if editMode != .active {
                     Spacer()
                     Image(systemName: "list.dash")
-                        .foregroundColor(.bay)
+                        .foregroundColor(.dynamic.bay)
                 }
             }
             .padding(.leading, 8)

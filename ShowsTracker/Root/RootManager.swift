@@ -19,8 +19,8 @@ final class RootManager {
     }
     
     func setupUI() {
-        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(Color.text100)]
-        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor(Color.text100)]
+        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(Color.dynamic.text100)]
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor(Color.dynamic.text100)]
     }
     
     func addObservers() {

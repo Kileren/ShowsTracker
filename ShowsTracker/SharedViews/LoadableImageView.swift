@@ -39,7 +39,7 @@ struct LoadableImageView: View {
                 .scaledToFill()
         } else {
             Rectangle()
-                .foregroundColor(.separators)
+                .foregroundColor(Color(light: .separators, dark: .backgroundDarkEl1))
                 .frame(minHeight: 150)
                 .redacted(reason: .shimmer)
                 .onAppear {

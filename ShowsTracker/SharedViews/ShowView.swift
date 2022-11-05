@@ -51,7 +51,7 @@ struct ShowView: View {
                     isTextTruncated = $0
                 }
                 .font(.medium12)
-                .foregroundColor(.text100)
+                .foregroundColor(.dynamic.text100)
                 .multilineTextAlignment(.center)
                 .frame(width: 96)
                 
@@ -59,13 +59,25 @@ struct ShowView: View {
                     Rectangle()
                         .frame(width: 96, height: 12, alignment: .center)
                         .foregroundColor(.clear)
-                        .background(LinearGradient(gradient: Gradient(colors: [.white40, .white60, .white]), startPoint: .leading, endPoint: .trailing))
+                        .background(linearGradientForTruncatedText)
                 }
             }
         }
         .onTapGesture {
             tapAction(model.id)
         }
+    }
+    
+    var linearGradientForTruncatedText: LinearGradient {
+        let colors: [Color] = [
+            Color(light: UIColor(Color.white40), dark: UIColor(Color.backgroundDark.opacity(0.4))),
+            Color(light: UIColor(Color.white60), dark: UIColor(Color.backgroundDark.opacity(0.6))),
+            Color(light: UIColor(Color.white100), dark: UIColor(Color.backgroundDark))
+        ]
+        return LinearGradient(
+            gradient: Gradient(colors: colors),
+            startPoint: .leading,
+            endPoint: .trailing)
     }
     
     func voteAccessoryView(vote: String) -> some View {

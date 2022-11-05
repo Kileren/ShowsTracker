@@ -55,7 +55,7 @@ struct ShowsView: View {
                 skeletonLoader(geometry: geometry)
             }
         }
-        .background(Color.backgroundLight)
+        .background(Color.dynamic.background)
         .edgesIgnoringSafeArea(.all)
         .onAppear { viewModel.viewAppeared() }
         .sheet(isPresented: $sheetNavigator.showSheet) {
@@ -71,13 +71,13 @@ struct ShowsView: View {
             
             VStack(spacing: 32) {
                 RoundedRectangle(cornerRadius: 16)
-                    .foregroundColor(.separators)
+                    .foregroundColor(.dynamic.separators)
                     .frame(width: geometry.size.width * 0.6,
                            height: geometry.size.width * 0.9)
                     .padding(.top, .topCurrentShowsOffset)
                 
                 RoundedRectangle(cornerRadius: 6)
-                    .foregroundColor(.separators)
+                    .foregroundColor(.dynamic.separators)
                     .frame(width: 72, height: 12)
                 
                 skeletonForPopular(geometry: geometry)
@@ -99,7 +99,7 @@ struct ShowsView: View {
             backgroundImageGradient(geometry: geometry)
         })
         .background(
-            Color.backgroundLight.edgesIgnoringSafeArea(.all)
+            Color.dynamic.background.edgesIgnoringSafeArea(.all)
         )
     }
     
@@ -107,12 +107,12 @@ struct ShowsView: View {
         VStack(alignment: .leading, spacing: 16) {
             RoundedRectangle(cornerRadius: 17)
                 .frame(width: 160, height: 34)
-                .foregroundColor(.separators)
+                .foregroundColor(.dynamic.separators)
             
             popularShows(geometry: geometry, content: { width, height in
                 ForEach(0..<3) { _ in
                     RoundedRectangle(cornerRadius: DesignConst.smallCornerRadius)
-                        .foregroundColor(.separators)
+                        .foregroundColor(.dynamic.separators)
                         .frame(width: width, height: height)
                 }
             })
@@ -128,7 +128,7 @@ struct ShowsView: View {
             backgroundImageGradient(geometry: geometry)
         })
         .background(
-            Color.backgroundLight.edgesIgnoringSafeArea(.all)
+            Color.dynamic.background.edgesIgnoringSafeArea(.all)
         )
         .scaleEffect(1.1, anchor: .center)
     }
@@ -155,18 +155,20 @@ struct ShowsView: View {
                 .frame(width: geometry.size.width * 0.6,
                        height: geometry.size.width * 0.9)
                 .padding(.top, .topCurrentShowsOffset)
-                .foregroundColor(.white100)
+                .foregroundColor(.dynamic.infoView)
                 .shadow(color: .black.opacity(0.15), radius: 8, x: 4, y: 4)
             
             VStack(spacing: 12) {
                 Images.emptyList
+                    .renderingMode(.template)
                     .resizable()
                     .frame(width: geometry.size.width * 0.35,
                        height: geometry.size.width * 0.35)
+                    .foregroundColor(.dynamic.text100)
                 
                 Text(Strings.noTrackingShows)
                     .font(.regular15)
-                    .foregroundColor(.text100)
+                    .foregroundColor(.dynamic.text100)
                     .multilineTextAlignment(.center)
             }
             .padding(.bottom, 55 + geometry.size.width * 0.15)
@@ -224,12 +226,19 @@ struct ShowsView: View {
                    height: geometry.size.width * 1.45,
                    alignment: .top)
             .foregroundColor(.clear)
-            .background(
-                LinearGradient(
-                    gradient: Gradient(colors: [.backgroundLight, Color.backgroundLight.opacity(0)]),
-                    startPoint: .bottom,
-                    endPoint: .top))
+            .background(backgroundImageGradientLinearGradient)
             .ignoresSafeArea(edges: .top)
+    }
+    
+    var backgroundImageGradientLinearGradient: LinearGradient {
+        var colors: [Color] = [
+            .dynamic.background,
+            .dynamic.background.opacity(0)
+        ]
+        return LinearGradient(
+            gradient: Gradient(colors: colors),
+            startPoint: .bottom,
+            endPoint: .top)
     }
     
     func popular(geometry: GeometryProxy) -> some View {
@@ -237,14 +246,14 @@ struct ShowsView: View {
             HStack {
                 Text(Strings.popular)
                     .font(.medium28)
-                    .foregroundColor(.text100)
+                    .foregroundColor(.dynamic.text100)
                 Spacer()
                 Button {
                     sheetNavigator.sheetDestination = .showsList
                 } label: {
                     Text(Strings.more)
                         .font(.medium13)
-                        .foregroundColor(.bay)
+                        .foregroundColor(.dynamic.bay)
                 }
             }
             
@@ -260,6 +269,7 @@ struct ShowsView: View {
             })
         }
         .padding(.horizontal, 24)
+        .padding(.bottom, 24)
     }
     
     func popularShows<Content: View>(

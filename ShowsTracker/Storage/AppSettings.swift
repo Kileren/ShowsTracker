@@ -42,3 +42,9 @@ struct AppLanguageKey: AppSettingKey {
     static var defaultValue: String { AppLanguage.en.rawValue }
     static var key: String { "showsTracker.selectedAppLanguage" }
 }
+
+/// Selected app theme
+struct AppThemeKey: AppSettingKey {
+    static var defaultValue: String { AppTheme.unspecified.rawValue }
+    static var key: String { "showsTracker.selectedAppTheme" }
+}

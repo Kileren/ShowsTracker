@@ -13,14 +13,14 @@ struct AboutAppView: View {
     
     var body: some View {
         ZStack {
-            Color.backgroundLight.ignoresSafeArea()
+            Color.dynamic.backgroundEl1.ignoresSafeArea()
             
             VStack {
                 Spacer()
                 Image("Icon")
                 Spacer()
                 Text("\(Strings.version) \(version ?? "")")
-                    .foregroundColor(.text100)
+                    .foregroundColor(.dynamic.text100)
                     .font(.medium20)
                     .padding(.bottom, 16)
             }
