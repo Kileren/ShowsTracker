@@ -147,6 +147,9 @@ final class ShowsListViewModel: ObservableObject {
                     ShowView.Model(withVoteFrom: $0)
                 }
                 await setNewRepresentation(.filter, with: shows)
+                if !tvService.canLoadMoreByFilter {
+                    await changeModel { $0.loadMoreSpinnerIsVisible = false }
+                }
             } catch {
                 if case TVService.InternalError.allShowsLoaded = error {
                     await changeModel { $0.loadMoreSpinnerIsVisible = false }

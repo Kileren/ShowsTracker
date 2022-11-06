@@ -86,9 +86,13 @@ struct FilterView: View {
                 .foregroundColor(.dynamic.text100)
             HStack {
                 Spacer()
-                Text(Strings.clear)
-                    .font(.regular13)
-                    .foregroundColor(.dynamic.text40)
+                Button {
+                    onConfirm(.empty)
+                } label: {
+                    Text(Strings.clear)
+                        .font(.regular13)
+                        .foregroundColor(.dynamic.text40)
+                }
             }
         }
     }

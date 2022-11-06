@@ -144,6 +144,17 @@ struct ShowsListView: View {
                     
                     if !viewModel.model.shows.isEmpty {
                         showsView(geometry: geometry)
+                    } else if !viewModel.model.loadMoreSpinnerIsVisible {
+                        STSpacer(height: geometry.size.height / 4)
+                        HStack {
+                            Spacer()
+                            Text(Strings.emptySearchResult)
+                                .font(.regular17)
+                                .foregroundColor(.dynamic.text100)
+                                .multilineTextAlignment(.center)
+                                .lineSpacing(4)
+                            Spacer()
+                        }
                     }
                     
                     STSpacer(height: 16)

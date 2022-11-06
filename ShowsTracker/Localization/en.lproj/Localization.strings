@@ -12,14 +12,15 @@
 "archive" = "Archive";
 "backToFavourites" = "Return tv show to the favourites";
 "cancel" = "Cancel";
-"edit" = "Edit";
 "clear" = "Clear";
 "close" = "Close";
 "confirm" = "Confirm";
 "description" = "Description";
 "details" = "Details";
 "done" = "Done";
+"edit" = "Edit";
 "emptyArchive" = "Archive is empty\nat the moment";
+"emptySearchResult" = "¯\\_(ツ)_/¯\nUnfortunately, nothing was found.\nTry to change the query.";
 "ended" = "Finished";
 "episodes" = "Episodes";
 "filters" = "Filters";

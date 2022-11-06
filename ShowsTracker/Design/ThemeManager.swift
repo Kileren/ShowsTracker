@@ -31,7 +31,6 @@ final class ThemeManager: ObservableObject {
                 colorScheme = nil
             }
         }
-        
         appTheme = theme.rawValue
     }
     
