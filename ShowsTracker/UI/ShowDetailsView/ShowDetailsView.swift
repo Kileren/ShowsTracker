@@ -22,9 +22,11 @@ struct ShowDetailsView: View {
         value: false,
         animation: .easeInOut(duration: 0.25)
     ) private var episodeDetailsShown: Bool
+    @State private var episodeTitle = ""
     @State private var episodeDetails = ""
     @State private var episodeDetailsErrorState: FloatingErrorView.State = .hidden
     @State private var seasonNumberInfoShown: Int? = nil
+    @State private var seasonInfoAdditionalYOffset: CGFloat = 0
     
     var showID: Int
     
@@ -70,9 +72,8 @@ struct ShowDetailsView: View {
         }
         .edgesIgnoringSafeArea(.all)
         .onAppear { viewModel.viewAppeared(withShowID: showID) }
-        .sheet(isPresented: $sheetNavigator.showSheet) {
-            sheetNavigator.sheetView()
-        }
+        .sheet(isPresented: $sheetNavigator.showSheet, content: sheetNavigator.sheetView)
+        .blur(radius: episodeDetailsShown ? 5 : 0)
         .confirmationDialog(
             "",
             isPresented: $viewModel.model.removeShowAlertIsShown,
@@ -373,7 +374,7 @@ private extension ShowDetailsView {
         let seasonIsSelected = seasonNumberInfoShown == info.seasonNumber
         var backgroundRectangleHeight: CGFloat {
             if seasonIsSelected {
-                return CGFloat(130 + info.episodes.count * (40 + 16))
+                return CGFloat(130 + info.episodes.count * (40 + 16)) + seasonInfoAdditionalYOffset
             } else {
                 return info.overview.isEmpty ? 92 : 130
             }
@@ -398,7 +399,7 @@ private extension ShowDetailsView {
                                 .truncationMode(.middle)
                             Spacer()
                             
-                            if info.notificationStatus != .none {                            
+                            if info.notificationStatus != .none {
                                 Button {
                                     viewModel.didTapNotification(seasonInfo: info)
                                 } label: {
@@ -415,7 +416,11 @@ private extension ShowDetailsView {
                             Text(info.overview)
                                 .font(.regular11)
                                 .foregroundColor(.dynamic.text40)
-                                .lineLimit(4)
+                                .lineLimit(seasonIsSelected ? nil : 4)
+                                .readSize { size in
+                                    let defaultHeight: CGFloat = 64
+                                    seasonInfoAdditionalYOffset = max(size.height - defaultHeight, 0)
+                                }
                         }
                         
                         if !seasonIsSelected {
@@ -443,6 +448,7 @@ private extension ShowDetailsView {
                             episodeInfo(episode: $0)
                         }
                     }
+                    .padding(.top, seasonInfoAdditionalYOffset)
                 }
             }
             .padding(.leading, 12)
@@ -478,6 +484,7 @@ private extension ShowDetailsView {
         .frame(height: 40)
         .onTapGesture {
             if !episode.overview.isEmpty {
+                episodeTitle = episode.name
                 episodeDetails = episode.overview
                 episodeDetailsShown = true
             } else {
@@ -555,19 +562,17 @@ private extension ShowDetailsView {
     var episodeDetailsView: some View {
         ZStack {
             Color.backgroundDark.opacity(0.7)
-                .onTapGesture {
-                    episodeDetailsShown = false
-                }
+                .onTapGesture { episodeDetailsShown = false }
+            
             VStack(spacing: 16) {
-                Text(Strings.description)
+                Text(episodeTitle)
                     .font(.semibold17)
-                    .foregroundColor(.dynamic.text100)
-                
+                    .multilineTextAlignment(.center)
                 Text(episodeDetails)
                     .font(.regular17)
-                    .foregroundColor(.dynamic.text100)
-                    .padding(.horizontal, 32)
             }
+            .foregroundColor(.dynamic.text100)
+            .padding(.horizontal, 32)
             .background(
                 RoundedRectangle(cornerRadius: DesignConst.normalCornerRadius)
                     .padding(.horizontal, 16)
