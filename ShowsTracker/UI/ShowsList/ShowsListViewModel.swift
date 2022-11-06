@@ -10,7 +10,7 @@ import Resolver
 
 final class ShowsListViewModel: ObservableObject {
     
-    @Published var model: ShowsListView.Model = .init()
+    @Published var model: ShowsListModel = .init()
     
     @Injected private var tvService: ITVService
     @Injected private var searchService: ISearchService
@@ -18,8 +18,6 @@ final class ShowsListViewModel: ObservableObject {
     
     private var popularShows: [ShowView.Model] = []
     private var upcomingShows: [ShowView.Model] = []
-    private var filterShows: [ShowView.Model] = []
-    private var searchedShows: [ShowView.Model] = []
     
     private var tasks: [TaskType: (task: Task<(), Never>?, inProgress: Bool)] = Dictionary(uniqueKeysWithValues: TaskType.allCases.map { ($0, (nil, false)) })
 
@@ -36,7 +34,7 @@ final class ShowsListViewModel: ObservableObject {
                     )
                 }
                 self.popularShows = popularShows
-                let model = ShowsListView.Model(
+                let model = ShowsListModel(
                     isLoaded: true,
                     chosenTab: .popular,
                     filter: .init(allGenres: genresService.cachedGenres),
@@ -74,14 +72,25 @@ final class ShowsListViewModel: ObservableObject {
                     ShowView.Model(withVoteFrom: $0)
                 }
                 try Task.checkCancellation()
-                searchedShows = shows
                 await setNewRepresentation(.search, with: shows)
+                if !searchService.canLoadMoreTVShows() {
+                    await changeModel { $0.loadMoreSpinnerIsVisible = false }
+                }
             } catch {
                 Logger.log(warning: "Shows not loaded after search and not handled")
             }
             tasks[.search] = (nil, false)
         }
         tasks[.search] = (task, true)
+    }
+    
+    func getMore() {
+        switch model.currentRepresentation {
+        case .popular: getMorePopular()
+        case .filter: getMoreShowsByFilter()
+        case .upcoming: getMoreUpcoming()
+        case .search: getMoreBySearch()
+        }
     }
     
     func getMorePopular() {
@@ -95,7 +104,11 @@ final class ShowsListViewModel: ObservableObject {
                 popularShows.append(contentsOf: shows)
                 await addShows(shows)
             } catch {
-                Logger.log(warning: "Additional popular shows not loaded and not handled")
+                if case TVService.InternalError.allShowsLoaded = error {
+                    await changeModel { $0.loadMoreSpinnerIsVisible = false }
+                } else {
+                    Logger.log(warning: "Additional popular shows not loaded and not handled")
+                }
             }
             tasks[.morePopular] = (nil, false)
         }
@@ -133,10 +146,13 @@ final class ShowsListViewModel: ObservableObject {
                 let shows = try await tvService.getByFilter(.init(from: filterModel)).map {
                     ShowView.Model(withVoteFrom: $0)
                 }
-                filterShows = shows
                 await setNewRepresentation(.filter, with: shows)
             } catch {
-                Logger.log(warning: "Filter shows not loaded and not handled")
+                if case TVService.InternalError.allShowsLoaded = error {
+                    await changeModel { $0.loadMoreSpinnerIsVisible = false }
+                } else {
+                    Logger.log(warning: "Filter shows not loaded and not handled")
+                }
             }
             tasks[.showsByFilter] = (nil, false)
         }
@@ -148,14 +164,19 @@ final class ShowsListViewModel: ObservableObject {
         
         let task = Task {
             do {
-                let filterModel = model.filter
-                let shows = try await tvService.getMoreByFilter(.init(from: filterModel)).map {
+                let shows = try await tvService.getMoreByFilter().map {
                     ShowView.Model(withVoteFrom: $0)
                 }
-                filterShows.append(contentsOf: shows)
                 await addShows(shows)
+                if !tvService.canLoadMoreByFilter {
+                    await changeModel { $0.loadMoreSpinnerIsVisible = false }
+                }
             } catch {
-                Logger.log(warning: "More filter shows not loaded and not handled")
+                if case TVService.InternalError.allShowsLoaded = error {
+                    await changeModel { $0.loadMoreSpinnerIsVisible = false }
+                } else {
+                    Logger.log(warning: "More filter shows not loaded and not handled")
+                }
             }
             tasks[.moreShowsByFilter] = (nil, false)
         }
@@ -169,7 +190,7 @@ final class ShowsListViewModel: ObservableObject {
     }
     
     @MainActor
-    func didSelectTab(_ tab: ShowsListView.Model.Tab) {
+    func didSelectTab(_ tab: ShowsListModel.Tab) {
         model.chosenTab = tab
         switch tab {
         case .popular:
@@ -190,7 +211,11 @@ final class ShowsListViewModel: ObservableObject {
                 upcomingShows = shows
                 await addShows(shows)
             } catch {
-                Logger.log(warning: "Upcoming shows not loaded and not handled")
+                if case TVService.InternalError.allShowsLoaded = error {
+                    await changeModel { $0.loadMoreSpinnerIsVisible = false }
+                } else {
+                    Logger.log(warning: "Upcoming shows not loaded and not handled")
+                }
             }
             tasks[.upcoming] = (nil, false)
         }
@@ -208,11 +233,39 @@ final class ShowsListViewModel: ObservableObject {
                 upcomingShows.append(contentsOf: shows)
                 await addShows(shows)
             } catch {
-                Logger.log(warning: "Upcoming shows not loaded and not handled")
+                if case TVService.InternalError.allShowsLoaded = error {
+                    await changeModel { $0.loadMoreSpinnerIsVisible = false }
+                } else {
+                    Logger.log(warning: "Upcoming shows not loaded and not handled")
+                }
             }
             tasks[.moreUpcoming] = (nil, false)
         }
         tasks[.moreUpcoming] = (task, true)
+    }
+    
+    func getMoreBySearch() {
+        guard tasks[.search]?.inProgress == false else { return }
+        
+        let task = Task {
+            do {
+                let shows = try await searchService.loadMoreTVShows().map { ShowView.Model(withDateFrom: $0) }
+                let canLoadMoreTVShows = searchService.canLoadMoreTVShows()
+                try Task.checkCancellation()
+                if !canLoadMoreTVShows {
+                    await changeModel { $0.loadMoreSpinnerIsVisible = false }
+                }
+                await addShows(shows)
+            } catch {
+                if case SearchService.InternalError.allShowsLoaded = error {
+                    await changeModel { $0.loadMoreSpinnerIsVisible = false }
+                } else {
+                    Logger.log(warning: "Shows not loaded after search and not handled")
+                }
+            }
+            tasks[.search] = (nil, false)
+        }
+        tasks[.search] = (task, true)
     }
 }
 
@@ -220,19 +273,26 @@ final class ShowsListViewModel: ObservableObject {
 
 private extension ShowsListViewModel {
     @MainActor
-    func setModel(_ model: ShowsListView.Model) {
+    func setModel(_ model: ShowsListModel) {
         self.model = model
     }
     
     @MainActor
-    func setNewRepresentation(_ representation: ShowsListView.Model.Representation, with shows: [ShowView.Model]) {
+    func changeModel(handler: (inout ShowsListModel) -> Void) {
+        handler(&model)
+    }
+    
+    @MainActor
+    func setNewRepresentation(_ representation: ShowsListModel.Representation, with shows: [ShowView.Model]) {
         guard model.currentRepresentation != representation else {
             model.shows = shows
+            model.loadMoreSpinnerIsVisible = true
             return
         }
         
         model.currentRepresentation = representation
         model.shows = shows
+        model.loadMoreSpinnerIsVisible = true
         
         withAnimation(.easeInOut(duration: Const.animationDuration), animateCompletion: true) {
             // Tab with popular and upcoming shows should be visible only if search or filter is inactive

@@ -10,7 +10,6 @@ import Resolver
 extension Resolver {
     static func registerMainDependencies() {
         register { ShowsViewModel() }
-        register { ShowsListViewModel() }
         register { ShowDetailsViewModel() }
         register { ArchiveShowsViewModel() }
         register { NotificationsViewModel() }

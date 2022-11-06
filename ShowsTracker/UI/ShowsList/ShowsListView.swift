@@ -11,7 +11,7 @@ import Resolver
 
 struct ShowsListView: View {
     
-    @InjectedObject private var viewModel: ShowsListViewModel
+    @StateObject private var viewModel = ShowsListViewModel()
     @ObservedObject private var sheetNavigator = SheetNavigator()
     
     @State private var searchedText: String = ""
@@ -54,7 +54,7 @@ struct ShowsListView: View {
         .sheet(isPresented: $sheetNavigator.showSheet) { sheetNavigator.sheetView() }
     }
     
-    func tabView(for tab: Model.Tab) -> some View {
+    func tabView(for tab: ShowsListModel.Tab) -> some View {
         Button {
             viewModel.didSelectTab(tab)
             if tab == .soon, viewModel.model.shows.isEmpty {
@@ -147,12 +147,15 @@ struct ShowsListView: View {
                     }
                     
                     STSpacer(height: 16)
-                    HStack {
-                        Spacer()
-                        STSpinner()
-                        Spacer()
+                    
+                    if viewModel.model.loadMoreSpinnerIsVisible {
+                        HStack {
+                            Spacer()
+                            STSpinner()
+                            Spacer()
+                        }
+                        STSpacer(height: 8)
                     }
-                    STSpacer(height: 8)
                 }
                 .onChange(of: viewModel.model.currentRepresentation) { representation in
                     let timeout: TimeInterval = representation == .filter || representation == .search ? 0.1 : 0.05
@@ -173,17 +176,13 @@ struct ShowsListView: View {
                     sheetNavigator.sheetDestination = .showDetails(showID: showID)
                 }
             }
-            Rectangle()
-                .frame(width: 0, height: 0)
-                .foregroundColor(.clear)
-                .onAppear {
-                    switch viewModel.model.currentRepresentation {
-                    case .popular: viewModel.getMorePopular()
-                    case .filter: viewModel.getMoreShowsByFilter()
-                    case .upcoming: viewModel.getMoreUpcoming()
-                    case .search: Logger.log(message: "Load more shows by search")
-                    }
-                }
+            
+            if viewModel.model.loadMoreSpinnerIsVisible {
+                Rectangle()
+                    .frame(width: 0, height: 0)
+                    .foregroundColor(.clear)
+                    .onAppear { viewModel.getMore() }
+            }
         }
     }
     
@@ -231,37 +230,6 @@ private extension ShowsListView {
         }
         .onAppear {
             filterIsShown = true
-        }
-    }
-}
-
-extension ShowsListView {
-    struct Model: Equatable {
-        var isLoaded: Bool = false
-        var chosenTab: Tab = .popular
-        var filter: FilterView.Model = .empty
-        var currentRepresentation: Representation = .popular
-        var shows: [ShowView.Model] = []
-        var tabIsVisible: Bool = true
-        var filterButtonIsVisible: Bool = true
-        
-        enum Representation: Equatable {
-            case popular
-            case filter
-            case upcoming
-            case search
-        }
-        
-        enum Tab {
-            case popular
-            case soon
-            
-            var name: String {
-                switch self {
-                case .popular: return Strings.popular
-                case .soon: return Strings.soon
-                }
-            }
         }
     }
 }

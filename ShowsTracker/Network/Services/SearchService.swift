@@ -11,6 +11,8 @@ import Resolver
 
 protocol ISearchService {
     func searchTVShows(query: String) async throws -> [PlainShow]
+    func loadMoreTVShows() async throws -> [PlainShow]
+    func canLoadMoreTVShows() -> Bool
 }
 
 final class SearchService {
@@ -18,23 +20,42 @@ final class SearchService {
     @Injected private var inMemoryStorage: InMemoryStorageProtocol
     
     private let provider = MoyaProvider<SearchTarget>(stubClosure: { _ in isPreview ? .delayed(seconds: 0) : .never })
-//    private let provider = MoyaProvider<SearchTarget>()
+    
+    private var lastQuery: String = ""
+    private var lastQueryCurrentPage: Int = 1
+    private var lastQueryTotalPages: Int = Int.max
 }
 
 extension SearchService: ISearchService {
     
     func searchTVShows(query: String) async throws -> [PlainShow] {
-        let result = await provider.request(target: .tv(query: query))
+        lastQuery = query
+        lastQueryCurrentPage = 1
+        lastQueryTotalPages = Int.max
+        return try await loadMoreTVShows()
+    }
+    
+    func loadMoreTVShows() async throws -> [PlainShow] {
+        guard lastQueryCurrentPage <= lastQueryTotalPages else {
+            throw InternalError.allShowsLoaded
+        }
         
+        let result = await provider.request(target: .tv(query: lastQuery, page: lastQueryCurrentPage))
         switch result {
         case .success(let response):
             let shows = try parse(response: response, to: [PlainShow].self)
             inMemoryStorage.cacheShows(shows)
+            lastQueryCurrentPage += 1
+            lastQueryTotalPages = totalPages(from: response) ?? lastQueryTotalPages
             return shows
         case .failure(let error):
             Logger.log(error: error)
             throw error
         }
+    }
+    
+    func canLoadMoreTVShows() -> Bool {
+        lastQueryCurrentPage <= lastQueryTotalPages
     }
 }
 
@@ -49,5 +70,15 @@ private extension SearchService {
             Logger.log(error: error, response: response)
             throw error
         }
+    }
+    
+    func totalPages(from response: Response) -> Int? {
+        try? response.map(Int.self, atKeyPath: "total_pages", using: JSONDecoder())
+    }
+}
+
+extension SearchService {
+    enum InternalError: Error {
+        case allShowsLoaded
     }
 }

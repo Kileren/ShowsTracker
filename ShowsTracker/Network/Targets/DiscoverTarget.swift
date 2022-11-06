@@ -102,6 +102,8 @@ extension DiscoverTarget {
             self.minAirDate = minAirDate
             self.maxAirDate = maxAirDate
         }
+        
+        static let `default` = Filter(sortType: .popularity, genres: [], originalLanguage: nil, minAirYear: nil, maxAirYear: nil)
     }
     
     enum SortType: String {

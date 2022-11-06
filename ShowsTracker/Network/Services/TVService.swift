@@ -10,13 +10,17 @@ import Moya
 import Resolver
 
 protocol ITVService {
+    var canLoadMorePopular: Bool { get }
+    var canLoadMoreByFilter: Bool { get }
+    var canLoadMoreUpcoming: Bool { get }
+    
     func getDetails(for showId: Int) async throws -> DetailedShow
     func getSeasonDetails(for showId: Int, season: Int) async throws -> SeasonDetails
     func getSimilar(for showId: Int) async throws -> [PlainShow]
     func getPopular() async throws -> [PlainShow]
     func getMorePopular() async throws -> [PlainShow]
     func getByFilter(_ filter: DiscoverTarget.Filter) async throws -> [PlainShow]
-    func getMoreByFilter(_ filter: DiscoverTarget.Filter) async throws -> [PlainShow]
+    func getMoreByFilter() async throws -> [PlainShow]
     func getUpcoming() async throws -> [PlainShow]
     func getMoreUpcoming() async throws -> [PlainShow]
 }
@@ -29,22 +33,29 @@ final class TVService {
     
     // Providers
     private let tvProvider = MoyaProvider<TVTarget>(stubClosure: { _ in isPreview ? .delayed(seconds: 0) : .never })
-//    private let tvProvider = MoyaProvider<TVTarget>()
     private let discoverProvider = MoyaProvider<DiscoverTarget>(stubClosure: { _ in isPreview ? .delayed(seconds: 0) : .never })
-//    private let discoverProvider = MoyaProvider<DiscoverTarget>()
     
     // Pages
     private var popularShowsPage: Int = 1
-    private var filteredShowsPage: [DiscoverTarget.Filter: Int] = [:]
+    private var filterShowsPage: Int = 1
     private var upcomingShowsPage: Int = 1
+    
+    private var popularShowsTotalPages: Int = Int.max
+    private var filterShowsTotalPages: Int = Int.max
+    private var upcomingShowsTotalPages: Int = Int.max
     
     // Cache
     private var cachedPopularShows: [PlainShow] = []
-    private var cachedFilteredShows: [DiscoverTarget.Filter: [PlainShow]] = [:]
     private var cachedUpcomingShows: [PlainShow] = []
+    
+    private var lastFilter: DiscoverTarget.Filter = .default
 }
 
 extension TVService: ITVService {
+    
+    var canLoadMorePopular: Bool { popularShowsPage <= popularShowsTotalPages }
+    var canLoadMoreUpcoming: Bool { upcomingShowsPage <= upcomingShowsTotalPages }
+    var canLoadMoreByFilter: Bool { filterShowsPage <= filterShowsTotalPages }
     
     func getDetails(for showId: Int) async throws -> DetailedShow {
         let result = await tvProvider.request(target: .details(id: showId))
@@ -75,9 +86,14 @@ extension TVService: ITVService {
     }
     
     func getMorePopular() async throws -> [PlainShow] {
+        guard canLoadMorePopular else {
+            throw InternalError.allShowsLoaded
+        }
+        
         let result = await tvProvider.request(target: .popular(page: popularShowsPage))
         do {
             let shows = try parse(result: result, to: [PlainShow].self, atKeyPath: "results")
+            popularShowsTotalPages = min(totalPages(from: result) ?? popularShowsPage, Int.max)
             cachedPopularShows.append(contentsOf: shows)
             inMemoryStorage.cacheShows(shows)
             popularShowsPage += 1
@@ -88,21 +104,24 @@ extension TVService: ITVService {
     }
     
     func getByFilter(_ filter: DiscoverTarget.Filter) async throws -> [PlainShow] {
-        if let shows = cachedFilteredShows[filter], !shows.isEmpty {
-            return shows
-        }
-        cachedFilteredShows[filter] = []
-        filteredShowsPage[filter] = 1
-        return try await getMoreByFilter(filter)
+        lastFilter = filter
+        filterShowsPage = 1
+        filterShowsTotalPages = Int.max
+        return try await getMoreByFilter()
     }
     
-    func getMoreByFilter(_ filter: DiscoverTarget.Filter) async throws -> [PlainShow] {
-        let result = await discoverProvider.request(target: .tv(filter: filter, page: filteredShowsPage[filter] ?? 1))
+    func getMoreByFilter() async throws -> [PlainShow] {
+        guard canLoadMoreByFilter else {
+            throw InternalError.allShowsLoaded
+        }
+        
+        let target = DiscoverTarget.tv(filter: lastFilter, page: filterShowsPage)
+        let result = await discoverProvider.request(target: target)
         do {
             let shows = try parse(result: result, to: [PlainShow].self, atKeyPath: "results")
-            cachedFilteredShows[filter]?.append(contentsOf: shows)
             inMemoryStorage.cacheShows(shows)
-            filteredShowsPage[filter] = (filteredShowsPage[filter] ?? 0) + 1
+            filterShowsPage += 1
+            filterShowsTotalPages = totalPages(from: result) ?? filterShowsTotalPages
             return shows
         } catch {
             throw error
@@ -117,6 +136,10 @@ extension TVService: ITVService {
     }
     
     func getMoreUpcoming() async throws -> [PlainShow] {
+        guard canLoadMoreUpcoming else {
+            throw InternalError.allShowsLoaded
+        }
+        
         let day: TimeInterval = 60 * 60 * 24
         let date = Date().addingTimeInterval(day)
         let upcomingFilter = DiscoverTarget.Filter(
@@ -125,6 +148,7 @@ extension TVService: ITVService {
         let result = await discoverProvider.request(target: .tv(filter: upcomingFilter, page: upcomingShowsPage))
         do {
             let shows = try parse(result: result, to: [PlainShow].self, atKeyPath: "results")
+            upcomingShowsTotalPages = totalPages(from: result) ?? upcomingShowsTotalPages
             cachedUpcomingShows.append(contentsOf: shows)
             inMemoryStorage.cacheShows(shows)
             upcomingShowsPage += 1
@@ -149,6 +173,13 @@ private extension TVService {
         }
     }
     
+    func totalPages(from result: Result<Response, MoyaError>) -> Int? {
+        if case .success(let response) = result {
+            return (try? response.map(Int.self, atKeyPath: "total_pages", using: JSONDecoder())) ?? 0
+        }
+        return nil
+    }
+    
     func refreshSavedInfo(basedOn detailedShow: DetailedShow) {
         guard var shows = coreDataStorage.get(objectsOfType: Shows.self).first else { return }
         
@@ -167,6 +198,7 @@ private extension TVService {
 extension TVService {
     enum InternalError: Error {
         case couldntGetDateComponents
+        case allShowsLoaded
     }
 }
 

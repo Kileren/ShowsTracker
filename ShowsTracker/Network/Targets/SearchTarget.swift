@@ -9,7 +9,7 @@ import Foundation
 import Moya
 
 enum SearchTarget {
-    case tv(query: String)
+    case tv(query: String, page: Int)
 }
 
 extension SearchTarget: TargetType {
@@ -28,8 +28,8 @@ extension SearchTarget: TargetType {
     
     var task: Task {
         switch self {
-        case .tv(let query):
-            return .requestParameters(parameters: ["query": query].withApiKey, encoding: URLEncoding.queryString)
+        case let .tv(query, page):
+            return .requestParameters(parameters: ["query": query, "page": page].withApiKey, encoding: URLEncoding.queryString)
         }
     }
     

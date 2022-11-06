@@ -49,7 +49,7 @@ final class CoreDataStorage: ICoreDataStorage {
                 }
             }
         } catch {
-            print(error)
+            Logger.log(error: error)
         }
         return result
     }
@@ -77,7 +77,7 @@ final class CoreDataStorage: ICoreDataStorage {
                 }
             }
         } catch {
-            print(error)
+            Logger.log(error: error)
         }
         return nil
     }
