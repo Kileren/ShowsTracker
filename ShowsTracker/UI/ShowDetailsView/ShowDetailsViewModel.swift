@@ -151,7 +151,7 @@ private extension ShowDetailsViewModel {
         var seasonsInfo: [ShowDetailsModel.SeasonInfo] = []
         for details in seasonsDetails.sorted(by: { ($0.seasonNumber ?? 0) < ($1.seasonNumber ?? 0) }) {
             guard let seasonNumber = details.seasonNumber else { continue }
-            var title = details.name ?? "Сезон \(seasonNumber)"
+            var title = details.name ?? "\(Strings.season) \(seasonNumber)"
             if let airDate = details.airDate, let releaseYear = STDateFormatter.component(.year, from: airDate, format: .airDate) {
                 title += " (\(releaseYear))"
             }
