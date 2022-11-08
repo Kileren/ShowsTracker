@@ -13,6 +13,7 @@ struct SeasonDetails: Codable {
     let airDate: String?
     let overview: String?
     let episodes: [Episode]?
+    let seasonNumber: Int?
     
     enum CodingKeys: String, CodingKey {
         case name
@@ -20,6 +21,7 @@ struct SeasonDetails: Codable {
         case airDate = "air_date"
         case overview
         case episodes
+        case seasonNumber = "season_number"
     }
 }
 

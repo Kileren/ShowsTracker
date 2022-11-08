@@ -135,35 +135,41 @@ private extension ShowDetailsViewModel {
     func seasonsInfo(from show: DetailedShow) async -> [ShowDetailsModel.SeasonInfo] {
         guard let seasons = show.seasons, seasons.count > 0 else { return [] }
         
-        var seasonsInfo: [ShowDetailsModel.SeasonInfo] = []
-        for season in seasons where season.seasonNumber != nil {
-            guard let seasonNumber = season.seasonNumber else { continue }
-            
-            do {
-                let details = try await tvService.getSeasonDetails(for: show.id ?? showID, season: seasonNumber)
-                
-                var title = details.name ?? "Сезон \(seasonNumber)"
-                if let airDate = details.airDate, let releaseYear = STDateFormatter.component(.year, from: airDate, format: .airDate) {
-                    title += " (\(releaseYear))"
+        let seasonsDetails: [SeasonDetails] = await withTaskGroup(of: SeasonDetails?.self) { taskGroup in
+            seasons.compactMap { $0.seasonNumber }.forEach { season in
+                taskGroup.addTask {
+                    try? await self.tvService.getSeasonDetails(for: show.id ?? self.showID, season: season)
                 }
-                let episodes = details.episodes?.compactMap { episode in
-                    ShowDetailsModel.Episode(
-                        episodeNumber: episode.episodeNumber ?? 0,
-                        name: episode.name ?? "",
-                        date: STDateFormatter.format(episode.airDate ?? "", format: .full),
-                        overview: episode.overview ?? "")
-                }
-                let seasonInfo = ShowDetailsModel.SeasonInfo(
-                    seasonNumber: seasonNumber,
-                    posterPath: details.posterPath ?? "",
-                    title: title,
-                    overview: details.overview ?? "",
-                    episodes: episodes ?? [],
-                    notificationStatus: await notificationStatus(for: details, seasonNumber: seasonNumber))
-                seasonsInfo.append(seasonInfo)
-            } catch {
-                Logger.log(error: error)
             }
+            var details: [SeasonDetails] = []
+            for await result in taskGroup.compactMap({ $0 }) {
+                details.append(result)
+            }
+            return details
+        }
+        
+        var seasonsInfo: [ShowDetailsModel.SeasonInfo] = []
+        for details in seasonsDetails.sorted(by: { ($0.seasonNumber ?? 0) < ($1.seasonNumber ?? 0) }) {
+            guard let seasonNumber = details.seasonNumber else { continue }
+            var title = details.name ?? "Сезон \(seasonNumber)"
+            if let airDate = details.airDate, let releaseYear = STDateFormatter.component(.year, from: airDate, format: .airDate) {
+                title += " (\(releaseYear))"
+            }
+            let episodes = details.episodes?.compactMap { episode in
+                ShowDetailsModel.Episode(
+                    episodeNumber: episode.episodeNumber ?? 0,
+                    name: episode.name ?? "",
+                    date: STDateFormatter.format(episode.airDate ?? "", format: .full),
+                    overview: episode.overview ?? "")
+            }
+            let seasonInfo = ShowDetailsModel.SeasonInfo(
+                seasonNumber: seasonNumber,
+                posterPath: details.posterPath ?? "",
+                title: title,
+                overview: details.overview ?? "",
+                episodes: episodes ?? [],
+                notificationStatus: await notificationStatus(for: details, seasonNumber: seasonNumber))
+            seasonsInfo.append(seasonInfo)
         }
         return seasonsInfo
     }
