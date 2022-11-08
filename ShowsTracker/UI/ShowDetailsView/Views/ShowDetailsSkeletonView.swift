@@ -33,6 +33,7 @@ struct ShowDetailsSkeletonView: View {
                     }
                     .padding(.leading, 24)
                 }
+                .redacted(reason: .shimmer)
             }
         }
     }
