@@ -28,6 +28,11 @@ struct ShowDetailsView: View {
     @State private var seasonNumberInfoShown: Int? = nil
     @State private var seasonInfoAdditionalYOffset: CGFloat = 0
     
+    @AnimatedState(
+        value: false,
+        animation: .spring(response: 0.65)
+    ) private var imageScaled: Bool
+    
     var showID: Int
     
     @State private var contentOffset: CGFloat = 0
@@ -40,10 +45,16 @@ struct ShowDetailsView: View {
                 ZStack(alignment: .top) {
                     blurBackground(geometry: geometry)
                     
-                    TrackableScrollView(showIndicators: false, contentOffset: $contentOffset) { geometry in
+                    TrackableScrollView(
+                        showIndicators: false,
+                        contentOffset: $contentOffset
+                    ) { geometry in
                         ZStack(alignment: .top) {
+                            // View which visually contains main info
                             overlayView(geometry: geometry)
+                                .blur(radius: imageScaled ? 5 : 0)
                             
+                            // Stack with main info
                             VStack(spacing: 12) {
                                 Color.clear
                                     .frame(height: imageWidthHeight(for: geometry).height)
@@ -52,7 +63,9 @@ struct ShowDetailsView: View {
                                 Spacer()
                             }
                             .frame(minHeight: geometry.size.height)
+                            .blur(radius: imageScaled ? 5 : 0)
                             
+                            // Blur background
                             blurBackground(geometry: geometry)
                                 .mask {
                                     Rectangle()
@@ -61,10 +74,18 @@ struct ShowDetailsView: View {
                                 }
                                 .offset(y: contentOffset)
                                 .allowsHitTesting(false)
+                                .blur(radius: imageScaled ? 5 : 0)
                             
+                            // Background dimmer while image view zoomed
+                            Color.backgroundDark
+                                .opacity(imageScaled ? 0.7 : 0)
+                                .onTapGesture { imageScaled = false }
+                            
+                            // Serial image
                             imageView(geometry: geometry)
                         }
                     }
+                    .modifier(DisabledScroll(flag: imageScaled))
                 }
             } else {
                 ShowDetailsSkeletonView()
@@ -129,13 +150,15 @@ struct ShowDetailsView: View {
     
     func imageView(geometry: GeometryProxy) -> some View {
         let (width, height) = imageWidthHeight(for: geometry)
+        let (scale, anchor) = imageScaleParams(for: geometry, width: width)
         return LoadableImageView(path: viewModel.model.posterPath)
             .frame(width: width, height: height)
             .clipped()
             .cornerRadius(DesignConst.normalCornerRadius)
             .padding(.top, 40)
-            .scaleEffect(scaleForImage(geometry: geometry), anchor: .bottom)
+            .scaleEffect(scale, anchor: anchor)
             .offset(y: offsetForImage(geometry: geometry))
+            .onTapGesture { imageScaled.toggle() }
     }
 }
 
@@ -637,6 +660,17 @@ private extension ShowDetailsView {
     
     func imageWidthHeight(for geometry: GeometryProxy) -> (width: CGFloat, height: CGFloat) {
         (geometry.size.width * 0.3, geometry.size.width * 0.45)
+    }
+    
+    func imageScaleParams(
+        for geometry: GeometryProxy,
+        width: CGFloat
+    ) -> (scale: CGFloat, anchor: UnitPoint) {
+        if imageScaled {
+            return ((geometry.size.width - 48) / width, .top)
+        } else {
+            return (scaleForImage(geometry: geometry), .bottom)
+        }
     }
     
     func opacityForTitle(geometry: GeometryProxy) -> CGFloat {
