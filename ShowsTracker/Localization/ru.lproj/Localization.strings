@@ -23,6 +23,7 @@
 "emptySearchResult" = "¯\\_(ツ)_/¯\nК сожалению, ничего не найдено.\nПопробуйте изменить запрос.";
 "ended" = "Закончен";
 "episodes" = "Эпизоды";
+"errorOccured" = "Произошла ошибка при загрузке данных";
 "filters" = "Фильтры";
 "genres" = "Жанры";
 "goToSettings" = "Перейти в настройки";
@@ -56,6 +57,7 @@
 "releaseYear" = "Год выпуска";
 "removeFromArchive" = "Удалить из архива";
 "removeFromFavourites" = "Удалить из избранного";
+"retry" = "Повторить";
 "search" = "Поиск";
 "season" = "Сезон";
 "settings" = "Настройки";

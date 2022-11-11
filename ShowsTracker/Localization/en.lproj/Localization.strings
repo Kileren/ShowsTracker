@@ -23,6 +23,7 @@
 "emptySearchResult" = "¯\\_(ツ)_/¯\nUnfortunately, nothing was found.\nTry to change the query.";
 "ended" = "Finished";
 "episodes" = "Episodes";
+"errorOccured" = "An error occurred while loading the data";
 "filters" = "Filters";
 "genres" = "Genres";
 "goToSettings" = "Go to Settings";
@@ -56,6 +57,7 @@
 "releaseYear" = "Year of release";
 "removeFromArchive" = "Delete from the archive";
 "removeFromFavourites" = "Delete from favourites";
+"retry" = "Retry";
 "search" = "Search";
 "season" = "Season";
 "settings" = "Settings";

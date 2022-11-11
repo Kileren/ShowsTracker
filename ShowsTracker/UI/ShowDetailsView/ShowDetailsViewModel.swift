@@ -22,6 +22,7 @@ final class ShowDetailsViewModel: ObservableObject {
     
     func viewAppeared(withShowID showID: Int) {
         self.showID = showID
+        self.model.loading = .loading
         
         Task {
             await loadModel()
@@ -68,14 +69,15 @@ final class ShowDetailsViewModel: ObservableObject {
     }
     
     func didSelectInfoTab(to tab: ShowDetailsModel.InfoTab) {
+        if tab == .similar, model.similarShowsInfo.state == .initial {
+            model.similarShowsInfo.state = .loading
+            loadSimilarShows()
+        }
+        
         if model.selectedInfoTab != tab {
             withAnimation(.easeIn) {
                 model.selectedInfoTab = tab
             }
-        }
-        
-        if tab == .similar, !model.similarShowsInfo.isLoaded {
-            loadSimilarShows()
         }
     }
     
@@ -88,6 +90,11 @@ final class ShowDetailsViewModel: ObservableObject {
         case .none:
             break
         }
+    }
+    
+    func reloadSimilarShows() {
+        model.similarShowsInfo.state = .loading
+        loadSimilarShows()
     }
 }
 
@@ -102,7 +109,7 @@ private extension ShowDetailsViewModel {
             let isLiked = likedShows.contains(where: { $0.id == showID })
             let isArchived = archivedShows.contains(where: { $0.id == showID })
             let model = ShowDetailsModel(
-                isLoaded: true,
+                loading: .done,
                 posterPath: show.posterPath ?? "",
                 name: show.name ?? "",
                 broadcastYears: show.broadcastYears,
@@ -118,18 +125,8 @@ private extension ShowDetailsViewModel {
             )
             await set(model: model)
         } catch {
-            Logger.log(warning: "Detailed show not loaded and not handled")
+            await set(model: .init(loading: .error))
         }
-    }
-    
-    @MainActor
-    func set(model: ShowDetailsModel) {
-        self.model = model
-    }
-    
-    @MainActor
-    func changeModel(completion: (inout ShowDetailsModel) -> Void) {
-        completion(&model)
     }
     
     func seasonsInfo(from show: DetailedShow) async -> [ShowDetailsModel.SeasonInfo] {
@@ -230,14 +227,9 @@ private extension ShowDetailsViewModel {
                     .map { ShowView.Model(plainShow: $0) }
                 await set(similarShows: similarShowsViewModels)
             } catch {
-                Logger.log(warning: "Similar show not loaded and not handled", error: error)
+                await changeModel { $0.similarShowsInfo.state = .error }
             }
         }
-    }
-    
-    @MainActor
-    func set(similarShows: [ShowView.Model]) {
-        model.similarShowsInfo = .init(isLoaded: true, models: similarShows)
     }
     
     var shows: Shows {
@@ -269,6 +261,23 @@ private extension ShowDetailsViewModel {
                 await notificationsService.scheduleNotification(for: episode, seasonNumber: seasonNumber, showID: showID, showName: showName)
             }
         }
+    }
+}
+
+private extension ShowDetailsViewModel {
+    @MainActor
+    func set(model: ShowDetailsModel) {
+        self.model = model
+    }
+    
+    @MainActor
+    func changeModel(completion: (inout ShowDetailsModel) -> Void) {
+        completion(&model)
+    }
+    
+    @MainActor
+    func set(similarShows: [ShowView.Model]) {
+        model.similarShowsInfo = .init(state: .loaded(models: similarShows))
     }
 }
 

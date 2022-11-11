@@ -41,54 +41,16 @@ struct ShowDetailsView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            if viewModel.model.isLoaded {
+            switch viewModel.model.loading {
+            case .done:
                 ZStack(alignment: .top) {
                     blurBackground(geometry: geometry)
-                    
-                    TrackableScrollView(
-                        showIndicators: false,
-                        contentOffset: $contentOffset
-                    ) { geometry in
-                        ZStack(alignment: .top) {
-                            // View which visually contains main info
-                            overlayView(geometry: geometry)
-                                .blur(radius: imageScaled ? 5 : 0)
-                            
-                            // Stack with main info
-                            VStack(spacing: 12) {
-                                Color.clear
-                                    .frame(height: imageWidthHeight(for: geometry).height)
-                                    .padding(.top, 40)
-                                mainInfoView(geometry: geometry)
-                                Spacer()
-                            }
-                            .frame(minHeight: geometry.size.height)
-                            .blur(radius: imageScaled ? 5 : 0)
-                            
-                            // Blur background
-                            blurBackground(geometry: geometry)
-                                .mask {
-                                    Rectangle()
-                                        .frame(width: geometry.size.width, height: Const.minSpacingFromTopToOverlay)
-                                    Spacer()
-                                }
-                                .offset(y: contentOffset)
-                                .allowsHitTesting(false)
-                                .blur(radius: imageScaled ? 5 : 0)
-                            
-                            // Background dimmer while image view zoomed
-                            Color.backgroundDark
-                                .opacity(imageScaled ? 0.7 : 0)
-                                .onTapGesture { imageScaled = false }
-                            
-                            // Serial image
-                            imageView(geometry: geometry)
-                        }
-                    }
-                    .modifier(DisabledScroll(flag: imageScaled))
+                    detailsInfoScrollView(geometry: geometry)
                 }
-            } else {
+            case .loading:
                 ShowDetailsSkeletonView()
+            case .error:
+                unexpectedErrorView(geometry: geometry)
             }
         }
         .edgesIgnoringSafeArea(.all)
@@ -134,6 +96,50 @@ struct ShowDetailsView: View {
             Button(role: .destructive) { viewModel.didTapRemoveButton() } label: { Text(Strings.removeFromArchive) }
             Button(role: .cancel) { } label: { Text(Strings.cancel) }
         }
+    }
+    
+    func detailsInfoScrollView(geometry: GeometryProxy) -> some View {
+        TrackableScrollView(
+            showIndicators: false,
+            contentOffset: $contentOffset
+        ) { geometry in
+            ZStack(alignment: .top) {
+                // View which visually contains main info
+                overlayView(geometry: geometry)
+                    .blur(radius: imageScaled ? 5 : 0)
+                
+                // Stack with main info
+                VStack(spacing: 12) {
+                    Color.clear
+                        .frame(height: imageWidthHeight(for: geometry).height)
+                        .padding(.top, 40)
+                    mainInfoView(geometry: geometry)
+                    Spacer()
+                }
+                .frame(minHeight: geometry.size.height)
+                .blur(radius: imageScaled ? 5 : 0)
+                
+                // Blur background
+                blurBackground(geometry: geometry)
+                    .mask {
+                        Rectangle()
+                            .frame(width: geometry.size.width, height: Const.minSpacingFromTopToOverlay)
+                        Spacer()
+                    }
+                    .offset(y: contentOffset)
+                    .allowsHitTesting(false)
+                    .blur(radius: imageScaled ? 5 : 0)
+                
+                // Background dimmer while image view zoomed
+                Color.backgroundDark
+                    .opacity(imageScaled ? 0.7 : 0)
+                    .onTapGesture { imageScaled = false }
+                
+                // Serial image
+                imageView(geometry: geometry)
+            }
+        }
+        .modifier(DisabledScroll(flag: imageScaled))
     }
     
     func overlayView(geometry: GeometryProxy) -> some View {
@@ -220,7 +226,7 @@ private extension ShowDetailsView {
 private extension ShowDetailsView {
     
     func mainInfoView(geometry: GeometryProxy) -> some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .center, spacing: 0) {
             infoView(geometry: geometry)
             spacer(height: 24)
             Group {
@@ -234,10 +240,20 @@ private extension ShowDetailsView {
                     Rectangle().foregroundColor(.clear)
                 case .details:
                     detailsInfo
-                case .similar where !viewModel.model.similarShowsInfo.isLoaded:
-                    Text("Loading")
                 case .similar:
-                    similarInfo(geometry: geometry)
+                    switch viewModel.model.similarShowsInfo.state {
+                    case .initial:
+                        Text("") // Initial state not shown
+                    case .loading:
+                        STSpinner()
+                    case .loaded(let models):
+                        similarInfo(models: models, geometry: geometry)
+                    case .error:
+                        errorView {
+                            viewModel.reloadSimilarShows()
+                        }
+                        .padding(.top, 24)
+                    }
                 }
             }
             .padding(.horizontal, Const.horizontalPadding)
@@ -377,6 +393,33 @@ private extension ShowDetailsView {
                         .size(width: 32, height: 2)
                         .foregroundColor(.dynamic.bay)
                 }
+            }
+        }
+    }
+    
+    func unexpectedErrorView(geometry: GeometryProxy) -> some View {
+        ZStack(alignment: .top) {
+            Rectangle()
+                .cornerRadius(DesignConst.normalCornerRadius,
+                              corners: [.topLeft, .topRight])
+                .foregroundColor(.dynamic.background)
+                .ignoresSafeArea(edges: .bottom)
+                .padding(.top, geometry.size.width * 0.42 + 8)
+            
+            LinearGradient(gradient: .darkBackground, startPoint: .leading, endPoint: .trailing)
+                .edgesIgnoringSafeArea(.all)
+            
+            ZStack {
+                Rectangle()
+                    .cornerRadius(DesignConst.normalCornerRadius,
+                                  corners: [.topLeft, .topRight])
+                    .foregroundColor(.dynamic.background)
+                    .ignoresSafeArea(edges: .bottom)
+                    .padding(.top, geometry.size.width * 0.42 + 8)
+                errorView {
+                    viewModel.viewAppeared(withShowID: showID)
+                }
+                .padding(.horizontal, Const.horizontalPadding)
             }
         }
     }
@@ -562,7 +605,7 @@ private extension ShowDetailsView {
             .frame(height: 24)
     }
     
-    func similarInfo(geometry: GeometryProxy) -> some View {
+    func similarInfo(models: [ShowView.Model], geometry: GeometryProxy) -> some View {
         let spacing: CGFloat = 14
         let itemWidth = (geometry.size.width - 2 * spacing - 2 * Const.horizontalPadding) / 3
         return LazyVGrid(
@@ -574,12 +617,26 @@ private extension ShowDetailsView {
             alignment: .leading,
             spacing: 16,
             pinnedViews: []) {
-                ForEach(viewModel.model.similarShowsInfo.models, id: \.self) { model in
+                ForEach(models, id: \.self) { model in
                     ShowView(model: model, itemWidth: itemWidth) { showID in
                         sheetNavigator.sheetDestination = .showDetails(showID: showID)
                     }
                 }
             }
+    }
+    
+    func errorView(retryAction: @escaping () -> Void) -> some View {
+        VStack(spacing: 16) {
+            Text(Strings.errorOccured)
+                .font(.regular17)
+                .foregroundColor(.text100)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 24)
+            STButton(title: Strings.retry,
+                     style: .medium,
+                     action: retryAction)
+        }
+//        .padding(.horizontal, 16)
     }
     
     var episodeDetailsView: some View {

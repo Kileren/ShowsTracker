@@ -8,7 +8,7 @@
 import Foundation
 
 struct ShowDetailsModel: Equatable {
-    var isLoaded = false
+    var loading: Loading = .loading
     var posterPath = ""
     var name = ""
     var broadcastYears = ""
@@ -23,6 +23,12 @@ struct ShowDetailsModel: Equatable {
     var similarShowsInfo = SimilarShowsInfo()
     var removeShowAlertIsShown = false
     var archiveShowAlertIsShown = false
+    
+    enum Loading {
+        case loading
+        case done
+        case error
+    }
     
     enum Status {
         case ongoing
@@ -67,8 +73,14 @@ struct ShowDetailsModel: Equatable {
     }
     
     struct SimilarShowsInfo: Equatable {
-        var isLoaded = false
-        var models: [ShowView.Model] = []
+        var state: State = .initial
+        
+        enum State: Equatable {
+            case initial
+            case loading
+            case loaded(models: [ShowView.Model])
+            case error
+        }
     }
     
     enum NotificationStatus {
