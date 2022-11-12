@@ -54,6 +54,7 @@
 "originalLanguage" = "Original language";
 "ourTime" = "now";
 "popular" = "Popular";
+"popularShowsLoadingError" = "Couldn't load popular TV shows";
 "releaseYear" = "Year of release";
 "removeFromArchive" = "Delete from the archive";
 "removeFromFavourites" = "Delete from favourites";

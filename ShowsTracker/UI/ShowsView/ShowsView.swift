@@ -43,10 +43,13 @@ struct ShowsView: View {
                                 emptyShowsViews(geometry: geometry)
                             }
                             
-                            if viewModel.model.isPopularShowsLoaded {
-                                popular(geometry: geometry)
-                            } else {
+                            switch viewModel.model.popularShowsState {
+                            case .loaded(let models):
+                                popular(shows: models, geometry: geometry)
+                            case .loading:
                                 skeletonForPopular(geometry: geometry)
+                            case .error:
+                                popularShowsLoadingError
                             }
                         }
                     }
@@ -59,7 +62,7 @@ struct ShowsView: View {
         .edgesIgnoringSafeArea(.all)
         .onAppear { viewModel.viewAppeared() }
         .sheet(isPresented: $sheetNavigator.showSheet) {
-            viewModel.reload()
+            viewModel.reloadLikedShows()
         } content: {
             sheetNavigator.sheetView()
         }
@@ -223,7 +226,7 @@ struct ShowsView: View {
     func backgroundImageGradient(geometry: GeometryProxy) -> some View {
         Rectangle()
             .frame(width: geometry.size.width,
-                   height: geometry.size.width * 1.45,
+                   height: geometry.size.width * 1.5,
                    alignment: .top)
             .foregroundColor(.clear)
             .background(backgroundImageGradientLinearGradient)
@@ -231,7 +234,7 @@ struct ShowsView: View {
     }
     
     var backgroundImageGradientLinearGradient: LinearGradient {
-        var colors: [Color] = [
+        let colors: [Color] = [
             .dynamic.background,
             .dynamic.background.opacity(0)
         ]
@@ -241,7 +244,10 @@ struct ShowsView: View {
             endPoint: .top)
     }
     
-    func popular(geometry: GeometryProxy) -> some View {
+    func popular(
+        shows: [Model.PopularShow],
+        geometry: GeometryProxy
+    ) -> some View {
         VStack(spacing: 16) {
             HStack {
                 Text(Strings.popular)
@@ -258,7 +264,7 @@ struct ShowsView: View {
             }
             
             popularShows(geometry: geometry, content: { width, height in
-                ForEach(viewModel.model.popularShows, id: \.id) { show in
+                ForEach(shows, id: \.id) { show in
                     LoadableImageView(path: show.posterPath)
                         .frame(width: width, height: height)
                         .cornerRadius(DesignConst.smallCornerRadius)
@@ -293,6 +299,23 @@ struct ShowsView: View {
                 content(showWidth, showHeight)
             })
     }
+    
+    var popularShowsLoadingError: some View {
+        VStack(spacing: 16) {
+            VStack(spacing: 16) {
+                Text(Strings.popularShowsLoadingError)
+                    .font(.regular17)
+                    .foregroundColor(.text100)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 24)
+                STButton(
+                    title: Strings.retry,
+                    style: .medium,
+                    action: viewModel.reloadPopularShows)
+            }
+        }
+        .padding(.top, 24)
+    }
 }
 
 // MARK: - Routing
@@ -309,10 +332,8 @@ extension ShowsView {
 extension ShowsView {
     struct Model: Equatable {
         var isUserShowsLoaded: Bool = false
-        var isPopularShowsLoaded: Bool = false
-        
         var userShows: [UserShow] = []
-        var popularShows: [PopularShow] = []
+        var popularShowsState: PopularShowsState = .loading
         
         struct UserShow: Equatable {
             var id: Int = 0
@@ -322,6 +343,12 @@ extension ShowsView {
         struct PopularShow: Equatable {
             var id: Int = 0
             var posterPath: String = ""
+        }
+        
+        enum PopularShowsState: Equatable {
+            case loading
+            case loaded(models: [PopularShow])
+            case error
         }
     }
 }

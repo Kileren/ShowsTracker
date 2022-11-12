@@ -62,6 +62,7 @@ enum Strings {
     static let originalLanguage = string(forKey: "originalLanguage")
     static let ourTime = string(forKey: "ourTime")
     static let popular = string(forKey: "popular")
+    static let popularShowsLoadingError = string(forKey: "popularShowsLoadingError")
     static let releaseYear = string(forKey: "releaseYear")
     static let removeFromArchive = string(forKey: "removeFromArchive")
     static let removeFromFavourites = string(forKey: "removeFromFavourites")

@@ -19,25 +19,38 @@ final class ShowsViewModel: ObservableObject {
     
     func viewAppeared() {
         Task {
-            var model = await ShowsView.Model(
+            let model = await ShowsView.Model(
                 isUserShowsLoaded: true,
-                isPopularShowsLoaded: false,
                 userShows: getUserShows(),
-                popularShows: [])
-            
+                popularShowsState: .loading)
             await setModel(model)
-            
-            let popularShows = try await tvService.getPopular()
-            model.popularShows = popularShows.map { .init(id: $0.id, posterPath: $0.posterPath ?? "") }
-            model.isPopularShowsLoaded = true
-            
-            await setModel(model)
+            await reloadPopularShows()
         }
     }
     
-    func reload() {
+    func reloadLikedShows() {
         Task {
             await setUserShows(getUserShows())
+        }
+    }
+    
+    func reloadPopularShows() async {
+        await changeModel { $0.popularShowsState = .loading }
+        do {
+            let popularShows = try await tvService.getPopular()
+            await changeModel {
+                $0.popularShowsState = .loaded(
+                    models: popularShows.map { .init(id: $0.id, posterPath: $0.posterPath ?? "") }
+                )
+            }
+        } catch {
+            await changeModel { $0.popularShowsState = .error }
+        }
+    }
+    
+    func reloadPopularShows() {
+        Task {
+            await reloadPopularShows()
         }
     }
 }
@@ -61,6 +74,11 @@ private extension ShowsViewModel {
         } else {
             model.userShows = shows
         }
+    }
+    
+    @MainActor
+    func changeModel(handler: (inout ShowsView.Model) -> Void) {
+        handler(&model)
     }
 }
 

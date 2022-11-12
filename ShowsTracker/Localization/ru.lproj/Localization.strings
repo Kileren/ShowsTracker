@@ -54,6 +54,7 @@
 "originalLanguage" = "Язык оригинала";
 "ourTime" = "н.в.";
 "popular" = "Популярное";
+"popularShowsLoadingError" = "Не получилось загрузить популярные сериалы";
 "releaseYear" = "Год выпуска";
 "removeFromArchive" = "Удалить из архива";
 "removeFromFavourites" = "Удалить из избранного";

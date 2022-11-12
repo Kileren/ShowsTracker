@@ -636,7 +636,6 @@ private extension ShowDetailsView {
                      style: .medium,
                      action: retryAction)
         }
-//        .padding(.horizontal, 16)
     }
     
     var episodeDetailsView: some View {
