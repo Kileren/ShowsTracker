@@ -21,7 +21,7 @@ struct ShowsListView: View {
     
     var body: some View {
         ZStack {
-            if viewModel.model.isLoaded {
+            if viewModel.model.initiallyLoaded {
                 VStack(spacing: 32) {
                     if viewModel.model.tabIsVisible {
                         HStack(spacing: 32) {
@@ -35,7 +35,19 @@ struct ShowsListView: View {
                             filterButton
                         }
                     }
-                    contentView
+                    
+                    switch viewModel.model.state {
+                    case .loading:
+                        VStack {
+                            STSpinner()
+                            Spacer()
+                        }
+                    case .error:
+                        errorViewOnLoading
+                    case .loaded:
+                        contentView(shows: viewModel.model.shows,
+                                    loadMoreAvailable: viewModel.model.loadMoreAvailable)
+                    }
                 }
             } else {
                 ShowsListSkeletonView()
@@ -57,9 +69,6 @@ struct ShowsListView: View {
     func tabView(for tab: ShowsListModel.Tab) -> some View {
         Button {
             viewModel.didSelectTab(tab)
-            if tab == .soon, viewModel.model.shows.isEmpty {
-                viewModel.getUpcoming()
-            }
         } label: {
             Text(tab.name)
                 .font(.regular15)
@@ -100,7 +109,7 @@ struct ShowsListView: View {
                 if !searchedText.isEmpty {
                     Button {
                         searchedText = ""
-                        if viewModel.model.currentRepresentation == .search {
+                        if case .search = viewModel.model.currentRepresentation {
                             viewModel.searchShows(query: "")
                         }
                     } label: {
@@ -136,15 +145,17 @@ struct ShowsListView: View {
         }
     }
     
-    var contentView: some View {
+    func contentView(shows: [ShowView.Model], loadMoreAvailable: Bool) -> some View {
         GeometryReader { geometry in
             ScrollViewReader { scrollReader in
                 ScrollView(showsIndicators: false) {
                     Rectangle().frame(width: 0, height: 0).id("topView")
                     
-                    if !viewModel.model.shows.isEmpty {
-                        showsView(geometry: geometry)
-                    } else if !viewModel.model.loadMoreSpinnerIsVisible {
+                    if !shows.isEmpty {
+                        showsView(shows: shows,
+                                  loadMoreSpinnerIsVisible: loadMoreAvailable,
+                                  geometry: geometry)
+                    } else if !loadMoreAvailable {
                         STSpacer(height: geometry.size.height / 4)
                         HStack {
                             Spacer()
@@ -159,7 +170,7 @@ struct ShowsListView: View {
                     
                     STSpacer(height: 16)
                     
-                    if viewModel.model.loadMoreSpinnerIsVisible {
+                    if loadMoreAvailable {
                         HStack {
                             Spacer()
                             STSpinner()
@@ -169,7 +180,12 @@ struct ShowsListView: View {
                     }
                 }
                 .onChange(of: viewModel.model.currentRepresentation) { representation in
-                    let timeout: TimeInterval = representation == .filter || representation == .search ? 0.1 : 0.05
+                    var timeout: TimeInterval {
+                        switch representation {
+                        case .filter, .search: return 0.1
+                        default: return 0.05
+                        }
+                    }
                     after(timeout: timeout) {
                         withAnimation {
                             scrollReader.scrollTo("topView")
@@ -180,15 +196,19 @@ struct ShowsListView: View {
         }
     }
     
-    func showsView(geometry: GeometryProxy) -> some View {
+    func showsView(
+        shows: [ShowView.Model],
+        loadMoreSpinnerIsVisible: Bool,
+        geometry: GeometryProxy
+    ) -> some View {
         gridView(geometry: geometry) { itemWidth in
-            ForEach(viewModel.model.shows, id: \.id) { model in
+            ForEach(shows, id: \.id) { model in
                 ShowView(model: model, itemWidth: itemWidth) { showID in
                     sheetNavigator.sheetDestination = .showDetails(showID: showID)
                 }
             }
             
-            if viewModel.model.loadMoreSpinnerIsVisible {
+            if loadMoreSpinnerIsVisible {
                 Rectangle()
                     .frame(width: 0, height: 0)
                     .foregroundColor(.clear)
@@ -210,6 +230,20 @@ struct ShowsListView: View {
             spacing: 16,
             pinnedViews: []) { content(itemWidth) }
     }
+    
+    var errorViewOnLoading: some View {
+        VStack(spacing: 16) {
+            Text(Strings.errorOccured)
+                .font(.regular17)
+                .foregroundColor(.text100)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 24)
+            STButton(title: Strings.retry,
+                     style: .medium,
+                     action: viewModel.retryAfterError)
+            Spacer()
+        }
+    }
 }
 
 private extension ShowsListView {
@@ -227,10 +261,13 @@ private extension ShowsListView {
             VStack(spacing: 0) {
                 Spacer()
                 FilterView(model: viewModel.model.filter, onConfirm: { model in
+                    defer {
+                        filterIsShown = false
+                        after(timeout: 0.3) { filterActive = false }
+                    }
+                    guard viewModel.model.filter != model else { return }
                     viewModel.filterSelected(model)
                     viewModel.getShowsByFilter()
-                    filterIsShown = false
-                    after(timeout: 0.3) { filterActive = false }
                 }, onClose: {
                     filterIsShown = false
                     after(timeout: 0.3) { filterActive = false }

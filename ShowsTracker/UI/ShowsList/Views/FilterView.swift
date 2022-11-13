@@ -87,7 +87,7 @@ struct FilterView: View {
             HStack {
                 Spacer()
                 Button {
-                    onConfirm(.empty)
+                    onConfirm(model.clear())
                 } label: {
                     Text(Strings.clear)
                         .font(.regular13)
@@ -322,6 +322,16 @@ extension FilterView {
         static let empty = Model()
         static var originalMinYear = 1950
         static var originalMaxYear = (Calendar.current.dateComponents([.year], from: .now).year ?? 2025) + 3
+        
+        @discardableResult
+        mutating func clear() -> Self {
+            minYear = Self.originalMinYear
+            maxYear = Self.originalMaxYear
+            selectedGenres = []
+            selectedOriginalLanguage = nil
+            sorting = .popularity
+            return self
+        }
     }
 }
 
