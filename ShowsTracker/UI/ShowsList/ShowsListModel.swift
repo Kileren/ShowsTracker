@@ -16,7 +16,7 @@ struct ShowsListModel {
     var tabIsVisible: Bool = true
     var filterButtonIsVisible: Bool = true
     var loadMoreAvailable: Bool = true
-    var loadingMoreError = false
+    var loadMoreError = false
     
     enum Representation: Equatable {
         case popular(state: State)

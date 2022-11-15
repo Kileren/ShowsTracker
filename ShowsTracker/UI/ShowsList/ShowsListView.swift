@@ -152,31 +152,20 @@ struct ShowsListView: View {
                     Rectangle().frame(width: 0, height: 0).id("topView")
                     
                     if !shows.isEmpty {
-                        showsView(shows: shows,
-                                  loadMoreSpinnerIsVisible: loadMoreAvailable,
-                                  geometry: geometry)
+                        showsView(
+                            shows: shows,
+                            loadMoreSpinnerIsVisible: loadMoreAvailable,
+                            geometry: geometry
+                        )
                     } else if !loadMoreAvailable {
-                        STSpacer(height: geometry.size.height / 4)
-                        HStack {
-                            Spacer()
-                            Text(Strings.emptySearchResult)
-                                .font(.regular17)
-                                .foregroundColor(.dynamic.text100)
-                                .multilineTextAlignment(.center)
-                                .lineSpacing(4)
-                            Spacer()
-                        }
+                        emptySearchResultView(geometry: geometry)
                     }
-                    
                     STSpacer(height: 16)
                     
-                    if loadMoreAvailable {
-                        HStack {
-                            Spacer()
-                            STSpinner()
-                            Spacer()
-                        }
-                        STSpacer(height: 8)
+                    if viewModel.model.loadMoreError {
+                        loadMoreErrorView
+                    } else if loadMoreAvailable {
+                        bottomSpinnerView
                     }
                 }
                 .onChange(of: viewModel.model.currentRepresentation) { representation in
@@ -231,6 +220,20 @@ struct ShowsListView: View {
             pinnedViews: []) { content(itemWidth) }
     }
     
+    @ViewBuilder
+    func emptySearchResultView(geometry: GeometryProxy) -> some View {
+        STSpacer(height: geometry.size.height / 4)
+        HStack {
+            Spacer()
+            Text(Strings.emptySearchResult)
+                .font(.regular17)
+                .foregroundColor(.dynamic.text100)
+                .multilineTextAlignment(.center)
+                .lineSpacing(4)
+            Spacer()
+        }
+    }
+    
     var errorViewOnLoading: some View {
         VStack(spacing: 16) {
             Text(Strings.errorOccured)
@@ -243,6 +246,30 @@ struct ShowsListView: View {
                      action: viewModel.retryAfterError)
             Spacer()
         }
+    }
+    
+    var loadMoreErrorView: some View {
+        VStack(spacing: 8) {
+            Text(Strings.errorOccured)
+                .font(.regular13)
+                .foregroundColor(.text100)
+                .multilineTextAlignment(.center)
+            STButton(title: Strings.retry, style: .small(width: .fit)) {
+                viewModel.getMore()
+            }
+            STSpacer(height: 8)
+        }
+        .padding(.horizontal, 24)
+    }
+    
+    @ViewBuilder
+    var bottomSpinnerView: some View {
+        HStack {
+            Spacer()
+            STSpinner()
+            Spacer()
+        }
+        STSpacer(height: 34)
     }
 }
 

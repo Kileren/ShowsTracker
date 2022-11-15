@@ -96,6 +96,10 @@ final class ShowsListViewModel: ObservableObject {
     }
     
     func getMore() {
+        if model.loadMoreError {
+            model.loadMoreError.toggle()
+        }
+        
         switch model.currentRepresentation {
         case .popular: getMorePopular()
         case .filter: getMoreShowsByFilter()
@@ -118,7 +122,7 @@ final class ShowsListViewModel: ObservableObject {
                 if case TVService.InternalError.allShowsLoaded = error {
                     await changeModel { $0.loadMoreAvailable = false }
                 } else {
-                    Logger.log(warning: "Additional popular shows not loaded and not handled")
+                    await changeModel { $0.loadMoreError = true }
                 }
             }
             tasks[.morePopular] = (nil, false)
@@ -192,7 +196,7 @@ final class ShowsListViewModel: ObservableObject {
                 if case TVService.InternalError.allShowsLoaded = error {
                     await changeModel { $0.loadMoreAvailable = false }
                 } else {
-                    Logger.log(warning: "More filter shows not loaded and not handled")
+                    await changeModel { $0.loadMoreError = true }
                 }
             }
             tasks[.moreShowsByFilter] = (nil, false)
@@ -263,7 +267,7 @@ final class ShowsListViewModel: ObservableObject {
                 if case TVService.InternalError.allShowsLoaded = error {
                     await changeModel { $0.loadMoreAvailable = false }
                 } else {
-                    Logger.log(warning: "Upcoming shows not loaded and not handled")
+                    await changeModel { $0.loadMoreError = true }
                 }
             }
             tasks[.moreUpcoming] = (nil, false)
@@ -283,7 +287,7 @@ final class ShowsListViewModel: ObservableObject {
                 if case SearchService.InternalError.allShowsLoaded = error {
                     await changeModel { $0.loadMoreAvailable = false }
                 } else {
-                    Logger.log(warning: "Shows not loaded after search and not handled")
+                    await changeModel { $0.loadMoreError = true }
                 }
             }
             tasks[.search] = (nil, false)
