@@ -288,6 +288,7 @@ private extension DetailedShow.Status {
         case .ended: return .ended
         case .inProduction: return .inProduction
         case .planned: return .planned
+        case .canceled: return .canceled
         case .unknown: return .ongoing
         }
     }

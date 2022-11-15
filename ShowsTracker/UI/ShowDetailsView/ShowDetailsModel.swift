@@ -35,6 +35,7 @@ struct ShowDetailsModel: Equatable {
         case ended
         case inProduction
         case planned
+        case canceled
     }
     
     enum InfoTab: String {

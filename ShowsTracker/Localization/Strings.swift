@@ -22,6 +22,7 @@ enum Strings {
     static let archive = string(forKey: "archive")
     static let backToFavourites = string(forKey: "backToFavourites")
     static let cancel = string(forKey: "cancel")
+    static let canceled = string(forKey: "canceled")
     static let clear = string(forKey: "clear")
     static let close = string(forKey: "close")
     static let confirm = string(forKey: "confirm")

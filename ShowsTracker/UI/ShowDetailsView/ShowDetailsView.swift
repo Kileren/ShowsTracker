@@ -320,6 +320,7 @@ private extension ShowDetailsView {
             switch viewModel.model.status {
             case .ongoing: return (Strings.ongoing, .greenHard)
             case .ended: return (Strings.ended, .redSoft)
+            case .canceled: return (Strings.canceled, .redSoft)
             case .inProduction, .planned: return (Strings.inProduction, .yellowSoft)
             }
         }

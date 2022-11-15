@@ -12,6 +12,7 @@
 "archive" = "Архив";
 "backToFavourites" = "Вернуть в избранное";
 "cancel" = "Отмена";
+"canceled" = "Отменён";
 "clear" = "Очистить";
 "close" = "Закрыть";
 "confirm" = "Подтвердить";
