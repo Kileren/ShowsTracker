@@ -63,6 +63,11 @@
 		8C28960F25C5D0AD00C2AC37 /* DetailedShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C28960E25C5D0AD00C2AC37 /* DetailedShow.swift */; };
 		8C3994762620DBCE005BD7DB /* PlainShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3994752620DBCE005BD7DB /* PlainShow.swift */; };
 		8C3994782620DCCD005BD7DB /* Data+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C3994772620DCCD005BD7DB /* Data+Image.swift */; };
+		8C44E3172925FD3300F94570 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 8C44E3162925FD3300F94570 /* FirebaseAnalytics */; };
+		8C44E3192925FD3300F94570 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 8C44E3182925FD3300F94570 /* FirebaseCrashlytics */; };
+		8C44E31B29274AAA00F94570 /* GoogleService-Info-Release.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C44E31A29274AAA00F94570 /* GoogleService-Info-Release.plist */; };
+		8C44E31D29274E0300F94570 /* GoogleService-Info-QA.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C44E31C29274E0300F94570 /* GoogleService-Info-QA.plist */; };
+		8C44E3222928EEEE00F94570 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C44E3212928EEEE00F94570 /* AnalyticsService.swift */; };
 		8C4605DA28B7410B00ADCB0C /* STAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C4605D928B7410B00ADCB0C /* STAnimation.swift */; };
 		8C4605DD28BB71CE00ADCB0C /* ScaleButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C4605DC28BB71CE00ADCB0C /* ScaleButtonStyle.swift */; };
 		8C4605DF28BB85D800ADCB0C /* HorizontalAlignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C4605DE28BB85D800ADCB0C /* HorizontalAlignment.swift */; };
@@ -192,6 +197,9 @@
 		8C28960E25C5D0AD00C2AC37 /* DetailedShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedShow.swift; sourceTree = "<group>"; };
 		8C3994752620DBCE005BD7DB /* PlainShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainShow.swift; sourceTree = "<group>"; };
 		8C3994772620DCCD005BD7DB /* Data+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Image.swift"; sourceTree = "<group>"; };
+		8C44E31A29274AAA00F94570 /* GoogleService-Info-Release.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-Release.plist"; sourceTree = "<group>"; };
+		8C44E31C29274E0300F94570 /* GoogleService-Info-QA.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-QA.plist"; sourceTree = "<group>"; };
+		8C44E3212928EEEE00F94570 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		8C4605D928B7410B00ADCB0C /* STAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STAnimation.swift; sourceTree = "<group>"; };
 		8C4605DC28BB71CE00ADCB0C /* ScaleButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleButtonStyle.swift; sourceTree = "<group>"; };
 		8C4605DE28BB85D800ADCB0C /* HorizontalAlignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalAlignment.swift; sourceTree = "<group>"; };
@@ -272,7 +280,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C156CD8280B23390049DDD1 /* Moya in Frameworks */,
+				8C44E3192925FD3300F94570 /* FirebaseCrashlytics in Frameworks */,
 				8CFADEFE25C6B19A00597413 /* Resolver in Frameworks */,
+				8C44E3172925FD3300F94570 /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -678,6 +688,8 @@
 			isa = PBXGroup;
 			children = (
 				8CD6C1E025C327D4004CF261 /* Assets.xcassets */,
+				8C44E31A29274AAA00F94570 /* GoogleService-Info-Release.plist */,
+				8C44E31C29274E0300F94570 /* GoogleService-Info-QA.plist */,
 				8CD6C1E525C327D4004CF261 /* Info.plist */,
 				8CD6C1DC25C327D3004CF261 /* ShowsTrackerApp.swift */,
 			);
@@ -765,6 +777,7 @@
 				8C156CEE2811CD370049DDD1 /* Logger.swift */,
 				8C7DD06128FC16C2003FE1ED /* NotificationsService.swift */,
 				8C7DD06628FC2204003FE1ED /* Resolver+Services.swift */,
+				8C44E3212928EEEE00F94570 /* AnalyticsService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -823,6 +836,8 @@
 			packageProductDependencies = (
 				8CFADEFD25C6B19A00597413 /* Resolver */,
 				8C156CD7280B23390049DDD1 /* Moya */,
+				8C44E3162925FD3300F94570 /* FirebaseAnalytics */,
+				8C44E3182925FD3300F94570 /* FirebaseCrashlytics */,
 			);
 			productName = ShowsTracker;
 			productReference = 8CD6C1D925C327D3004CF261 /* ShowsTracker.app */;
@@ -854,6 +869,7 @@
 			packageReferences = (
 				8CD6C1ED25C32905004CF261 /* XCRemoteSwiftPackageReference "Resolver" */,
 				8C156CD6280B23390049DDD1 /* XCRemoteSwiftPackageReference "Moya" */,
+				8C44E3152925FD3300F94570 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 8CD6C1DA25C327D3004CF261 /* Products */;
 			projectDirPath = "";
@@ -880,6 +896,8 @@
 				8C156CE3280FCEDF0049DDD1 /* WitcherPlain.json in Resources */,
 				8C156D452841F7D40049DDD1 /* TVGenres.json in Resources */,
 				8C156D322833734C0049DDD1 /* tv_popular_2.json in Resources */,
+				8C44E31D29274E0300F94570 /* GoogleService-Info-QA.plist in Resources */,
+				8C44E31B29274AAA00F94570 /* GoogleService-Info-Release.plist in Resources */,
 				8C156D0F281FDD740049DDD1 /* TVSeasons_Details_s2.json in Resources */,
 				8CF52878267DE6A200351915 /* TheMandalorianDetailed.json in Resources */,
 				8C5B18D42905B4360007BE0E /* Localization.stringsdict in Resources */,
@@ -971,6 +989,7 @@
 				8C28960F25C5D0AD00C2AC37 /* DetailedShow.swift in Sources */,
 				8C156D402841EFCF0049DDD1 /* GenresView.swift in Sources */,
 				8C9DFCEA29048C5900A57B0F /* NotificationsView.swift in Sources */,
+				8C44E3222928EEEE00F94570 /* AnalyticsService.swift in Sources */,
 				8C7DCFD728D5E72E003FE1ED /* FloatingErrorView.swift in Sources */,
 				8CDCCF0028434B4A006EC106 /* LangCode.swift in Sources */,
 				8C1DBA352910390C007B5F09 /* LikedShowsListModel.swift in Sources */,
@@ -1166,18 +1185,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"ShowsTracker/Preview Content\"";
 				DEVELOPMENT_TEAM = 5NEDSJ89NK;
 				ENABLE_PREVIEWS = YES;
+				FIREBASE_CONFIG_FILE = "GoogleService-Info-QA";
 				INFOPLIST_FILE = ShowsTracker/SupportingFiles/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = s.bogachev.ShowsTracker;
+				PRODUCT_BUNDLE_IDENTIFIER = s.bogachev.tvShowsTrackerQA;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1188,18 +1210,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"ShowsTracker/Preview Content\"";
 				DEVELOPMENT_TEAM = 5NEDSJ89NK;
 				ENABLE_PREVIEWS = YES;
+				FIREBASE_CONFIG_FILE = "GoogleService-Info-Release";
 				INFOPLIST_FILE = ShowsTracker/SupportingFiles/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = s.bogachev.ShowsTracker;
+				PRODUCT_BUNDLE_IDENTIFIER = s.bogachev.tvShowsTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1237,6 +1262,14 @@
 				minimumVersion = 15.0.0;
 			};
 		};
+		8C44E3152925FD3300F94570 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 9.6.0;
+			};
+		};
 		8CD6C1ED25C32905004CF261 /* XCRemoteSwiftPackageReference "Resolver" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/hmlongco/Resolver";
@@ -1252,6 +1285,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8C156CD6280B23390049DDD1 /* XCRemoteSwiftPackageReference "Moya" */;
 			productName = Moya;
+		};
+		8C44E3162925FD3300F94570 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8C44E3152925FD3300F94570 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		8C44E3182925FD3300F94570 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8C44E3152925FD3300F94570 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
 		};
 		8CFADEFD25C6B19A00597413 /* Resolver */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -294,7 +294,6 @@ private extension ShowsListView {
                     }
                     guard viewModel.model.filter != model else { return }
                     viewModel.filterSelected(model)
-                    viewModel.getShowsByFilter()
                 }, onClose: {
                     filterIsShown = false
                     after(timeout: 0.3) { filterActive = false }

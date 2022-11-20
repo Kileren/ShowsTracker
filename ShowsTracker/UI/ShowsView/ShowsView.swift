@@ -14,6 +14,7 @@ struct ShowsView: View {
     // MARK: - Injected
     
     @Injected private var imageService: IImageService
+    @Injected private var analyticsService: AnalyticsService
     @InjectedObject private var viewModel: ShowsViewModel
     @ObservedObject private var sheetNavigator = SheetNavigator()
     
@@ -35,7 +36,7 @@ struct ShowsView: View {
                         
                         VStack(spacing: 32) {
                             if !viewModel.model.userShows.isEmpty {
-                                currentShows(geometry: geometry)
+                                likedShows(geometry: geometry)
                                 if viewModel.model.userShows.count > 1 {
                                     pageDotsView(geometry: geometry)
                                 }
@@ -136,13 +137,14 @@ struct ShowsView: View {
         .scaleEffect(1.1, anchor: .center)
     }
     
-    func currentShows(geometry: GeometryProxy) -> some View {
+    func likedShows(geometry: GeometryProxy) -> some View {
         let maxIndex = min(index + 3, viewModel.model.userShows.count - 1)
         let models = viewModel.model.userShows.isEmpty
         ? []
         : viewModel.model.userShows[0...maxIndex].enumerated().map {
             ShowsScrollView.Model(image: $0.element.image, index: $0.offset, showID: $0.element.id) { showID in
                 sheetNavigator.sheetDestination = .showDetails(showID: showID)
+                analyticsService.logMainShowsTapLikedShow()
             }
         }
         
@@ -189,6 +191,7 @@ struct ShowsView: View {
                 title: Strings.all,
                 style: .custom(width: 54, height: 24, font: .regular15)) {
                     sheetNavigator.sheetDestination = .likedShows
+                    analyticsService.logMainShowsTapAllShows()
                 }
             PageDotsView(numberOfPages: viewModel.model.userShows.count, currentIndex: index)
                 .frame(height: 12, alignment: .center)
@@ -270,6 +273,7 @@ struct ShowsView: View {
                         .cornerRadius(DesignConst.smallCornerRadius)
                         .onTapGesture {
                             sheetNavigator.sheetDestination = .showDetails(showID: show.id)
+                            analyticsService.logMainShowsTapPopularShow()
                         }
                 }
             })

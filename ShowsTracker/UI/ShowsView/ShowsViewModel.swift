@@ -12,12 +12,16 @@ final class ShowsViewModel: ObservableObject {
     
     @Published var model: ShowsView.Model = .init()
     
+    @AppSettings<AppLanguageKey> private var appLanguage
+    
     @Injected private var imageService: IImageService
     @Injected private var tvService: ITVService
     @Injected private var coreDataStorage: ICoreDataStorage
     @Injected private var inMemoryStorage: InMemoryStorageProtocol
+    @Injected private var analyticsService: AnalyticsService
     
     func viewAppeared() {
+        logLanguage()
         Task {
             let model = await ShowsView.Model(
                 isUserShowsLoaded: true,
@@ -85,7 +89,12 @@ private extension ShowsViewModel {
 private extension ShowsViewModel {
     
     func getUserShows() async -> [ShowsView.Model.UserShow] {
-        let likedShows = coreDataStorage.get(objectsOfType: Shows.self).first?.likedShows ?? []
+        guard let shows = coreDataStorage.get(objectsOfType: Shows.self).first else { return [] }
+        
+        analyticsService.setUserProperty(property: .numberOfLikedShows(value: shows.likedShows.count))
+        analyticsService.setUserProperty(property: .numberOfArchivedShows(value: shows.archivedShows.count))
+        
+        let likedShows = shows.likedShows
         inMemoryStorage.cacheShows(likedShows)
         var userShows: [ShowsView.Model.UserShow] = []
         for show in likedShows {
@@ -94,5 +103,10 @@ private extension ShowsViewModel {
             userShows.append(.init(id: show.id, image: image))
         }
         return userShows
+    }
+    
+    func logLanguage() {
+        let language = AppLanguage(rawValue: appLanguage)
+        analyticsService.setUserProperty(property: .language(value: language))
     }
 }

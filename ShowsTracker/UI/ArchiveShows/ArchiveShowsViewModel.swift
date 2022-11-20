@@ -13,9 +13,11 @@ final class ArchiveShowsViewModel: ObservableObject {
     @Published var model = ArchiveShowsModel()
     
     @Injected private var coreDataStorage: ICoreDataStorage
+    @Injected private var analyticsService: AnalyticsService
     
     func onAppear() {
         reload()
+        analyticsService.logSettingsTapArchive()
     }
     
     func reload() {
@@ -26,5 +28,7 @@ final class ArchiveShowsViewModel: ObservableObject {
             let models = shows.archivedShows.map { ShowView.Model(plainShow: $0) }
             model.state = .shows(shows: models)
         }
+        
+        analyticsService.setUserProperty(property: .numberOfArchivedShows(value: shows.archivedShows.count))
     }
 }

@@ -10,5 +10,6 @@ import Resolver
 extension Resolver {
     static func registerOtherServices() {
         register { NotificationsService() }.scope(.application)
+        register { AnalyticsService() }.scope(.application)
     }
 }

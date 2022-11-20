@@ -12,11 +12,12 @@ final class ShowDetailsViewModel: ObservableObject {
     
     @Published var model: ShowDetailsModel = .init()
     
-    @Injected var tvService: ITVService
-    @Injected var coreDataStorage: ICoreDataStorage
-    @Injected var imageService: IImageService
+    @Injected private var tvService: ITVService
+    @Injected private var coreDataStorage: ICoreDataStorage
+    @Injected private var imageService: IImageService
     @Injected private var inMemoryStorage: InMemoryStorageProtocol
     @Injected private var notificationsService: NotificationsService
+    @Injected private var analyticsService: AnalyticsService
     
     private var showID: Int = 0
     
@@ -28,6 +29,8 @@ final class ShowDetailsViewModel: ObservableObject {
             await loadModel()
             await checkForMissedNotifications()
         }
+        
+        analyticsService.logShowDetailsShown()
     }
     
     func didTapLikeButton() {
@@ -78,6 +81,11 @@ final class ShowDetailsViewModel: ObservableObject {
             withAnimation(.easeIn) {
                 model.selectedInfoTab = tab
             }
+            switch tab {
+            case .episodes: analyticsService.logShowDetailsTapEpisodes()
+            case .details: analyticsService.logShowDetailsTapDetails()
+            case .similar: analyticsService.logShowDetailsTapSimilar()
+            }
         }
     }
     
@@ -85,8 +93,10 @@ final class ShowDetailsViewModel: ObservableObject {
         switch seasonInfo.notificationStatus {
         case .off:
             addNotifications(seasonInfo: seasonInfo)
+            analyticsService.logShowDetailsTapNotify(on: true)
         case .on:
             removeNotifications(seasonInfo: seasonInfo)
+            analyticsService.logShowDetailsTapNotify(on: false)
         case .none:
             break
         }
@@ -97,6 +107,8 @@ final class ShowDetailsViewModel: ObservableObject {
         loadSimilarShows()
     }
 }
+
+// MARK: - Private
 
 private extension ShowDetailsViewModel {
     
@@ -263,6 +275,8 @@ private extension ShowDetailsViewModel {
         }
     }
 }
+
+// MARK: - Private UI
 
 private extension ShowDetailsViewModel {
     @MainActor

@@ -15,6 +15,7 @@ struct ShowDetailsView: View {
     
     @InjectedObject private var viewModel: ShowDetailsViewModel
     @ObservedObject private var sheetNavigator: SheetNavigator = SheetNavigator()
+    @Injected private var analyticsService: AnalyticsService
     
     // MARK: - State
     
@@ -621,6 +622,7 @@ private extension ShowDetailsView {
                 ForEach(models, id: \.self) { model in
                     ShowView(model: model, itemWidth: itemWidth) { showID in
                         sheetNavigator.sheetDestination = .showDetails(showID: showID)
+                        analyticsService.logShowDetailsTapSimilarShow()
                     }
                 }
             }

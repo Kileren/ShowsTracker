@@ -15,6 +15,7 @@ final class ShowsListViewModel: ObservableObject {
     @Injected private var tvService: ITVService
     @Injected private var searchService: ISearchService
     @Injected private var genresService: IGenresService
+    @Injected private var analyticsService: AnalyticsService
     
     private var popularShows: [ShowView.Model] = []
     private var upcomingShows: [ShowView.Model] = []
@@ -27,6 +28,7 @@ final class ShowsListViewModel: ObservableObject {
             await preloadGenresIfNeeded()
             await getPopular()
         }
+        analyticsService.logShowsListShown()
     }
     
     func getPopular() async {
@@ -93,6 +95,8 @@ final class ShowsListViewModel: ObservableObject {
             tasks[.search] = (nil, false)
         }
         tasks[.search] = (task, true)
+        
+        analyticsService.logShowsListStartSearch()
     }
     
     func getMore() {
@@ -181,6 +185,8 @@ final class ShowsListViewModel: ObservableObject {
             tasks[.showsByFilter] = (nil, false)
         }
         tasks[.showsByFilter] = (task, true)
+        
+        analyticsService.logShowsListStartFilter()
     }
     
     func getMoreShowsByFilter() {
@@ -208,10 +214,17 @@ final class ShowsListViewModel: ObservableObject {
     func filterSelected(_ filter: FilterView.Model) {
         model.filter = filter
         setNewRepresentation(.filter(state: .loading), with: [])
+        getShowsByFilter()
     }
     
     @MainActor
     func didSelectTab(_ tab: ShowsListModel.Tab) {
+        if model.chosenTab != tab {
+            switch tab {
+            case .popular: analyticsService.logShowsListTapPopular()
+            case .soon: analyticsService.logShowsListTapUpcoming()
+            }
+        }
         model.chosenTab = tab
         switch tab {
         case .popular:

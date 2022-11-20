@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import Resolver
 
 struct AboutAppView: View {
+    
+    @Injected private var analyticsService: AnalyticsService
     
     private let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     
@@ -25,6 +28,9 @@ struct AboutAppView: View {
                     .padding(.bottom, 16)
             }
             .navigationTitle(Strings.aboutAppTitle)
+            .onAppear {
+                analyticsService.logAboutAppShown()
+            }
         }
     }
 }

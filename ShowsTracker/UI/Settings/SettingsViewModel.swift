@@ -11,6 +11,7 @@ import Resolver
 final class SettingsViewModel: ObservableObject {
     
     @Injected private var notificationsService: NotificationsService
+    @Injected private var analyticsService: AnalyticsService
     
     @AppSettings<AppLanguageKey> private var appLanguageValue
     @AppSettings<AppThemeKey> private var appThemeValue
@@ -20,6 +21,7 @@ final class SettingsViewModel: ObservableObject {
     func viewAppeared() {
         Task {
             await getNotificationStatusAndChangeModel()
+            await logNotificationStatus()
         }
         getLanguageAndChangeModel()
         getAppThemeAndChangeModel()
@@ -66,5 +68,15 @@ private extension SettingsViewModel {
     
     func getAppThemeAndChangeModel() {
         model.selectedTheme = AppTheme(rawValue: appThemeValue)
+    }
+    
+    func logNotificationStatus() async {
+        let value: String
+        switch await notificationsService.getStatus() {
+        case .authorized: value = "authorized"
+        case .notDetermined: value = "notDetermined"
+        default: value = "denied"
+        }
+        analyticsService.setUserProperty(property: .notificationStatus(value: value))
     }
 }

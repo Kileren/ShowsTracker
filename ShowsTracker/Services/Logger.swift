@@ -10,8 +10,9 @@ import Moya
 import UIKit
 
 struct Logger {
-    static func log(message: String) {
-        print("✉️ \(message)")
+    static func log(message: String, withImage: Bool = true) {
+        let message = withImage ? "✉️ \(message)" : message
+        print(message)
     }
     
     static func log(warning: String, response: Response? = nil, error: Error? = nil, file: String = #file, line: Int = #line) {
