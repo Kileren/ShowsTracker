@@ -10,7 +10,7 @@ import Foundation
 extension Dictionary where Key == String, Value == Any {
     var withApiKey: [String: Any] {
         var dict = self
-        dict["api_key"] = ""
+        dict["api_key"] = "8e67cdcb302c5a5a29f22f6db5180fd9"
         dict["language"] = languageCode
         return dict
     }
