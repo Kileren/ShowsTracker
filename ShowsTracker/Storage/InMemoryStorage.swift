@@ -22,10 +22,15 @@ final class InMemoryStorage: InMemoryStorageProtocol {
     private var cachedShows: Set<PlainShow> = []
     private var cachedSeasonDetails: [Int: [Int: SeasonDetails]] = [:]
     
+    private let showsLock = NSLock()
+    private let seasonDetailsLock = NSLock()
+    
     // MARK: - Show
     
     func cacheShow(_ show: PlainShow) {
+        showsLock.lock()
         cachedShows.insert(show)
+        showsLock.unlock()
     }
     
     func cacheShows(_ shows: [PlainShow]) {
@@ -39,10 +44,12 @@ final class InMemoryStorage: InMemoryStorageProtocol {
     // MARK: - Season Details
     
     func cache(seasonDetails: SeasonDetails, showID: Int, seasonNumber: Int) {
+        seasonDetailsLock.lock()
         if cachedSeasonDetails[showID] == nil {
             cachedSeasonDetails[showID] = [:]
         }
         cachedSeasonDetails[showID]?[seasonNumber] = seasonDetails
+        seasonDetailsLock.unlock()
     }
     
     func getCachedSeasonDetails(showID: Int) -> [SeasonDetails] {

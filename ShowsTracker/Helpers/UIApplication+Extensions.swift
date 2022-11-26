@@ -9,7 +9,7 @@ import UIKit
 
 extension UIApplication {
     
-    var keyWindow: UIWindow? {
+    var keyWindowScene: UIWindowScene? {
         // Get connected scenes
         return UIApplication.shared.connectedScenes
             // Keep only active scenes, onscreen and visible to the user
@@ -17,7 +17,12 @@ extension UIApplication {
             // Keep only the first `UIWindowScene`
             .first(where: { $0 is UIWindowScene })
             // Get its associated windows
-            .flatMap({ $0 as? UIWindowScene })?.windows
+            .flatMap({ $0 as? UIWindowScene })
+    }
+    
+    var keyWindow: UIWindow? {
+        // Get window scene
+        return keyWindowScene?.windows
             // Finally, keep only the key window
             .first(where: \.isKeyWindow)
     }

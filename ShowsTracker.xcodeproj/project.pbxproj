@@ -107,6 +107,7 @@
 		8CA0ECB2262AFABF00EB20D9 /* STButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA0ECB1262AFABF00EB20D9 /* STButton.swift */; };
 		8CB9F5BB25CFB0680095F063 /* TruncableText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB9F5BA25CFB0680095F063 /* TruncableText.swift */; };
 		8CB9F5BE25CFB0D70095F063 /* View+ReadSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB9F5BD25CFB0D70095F063 /* View+ReadSize.swift */; };
+		8CBDFF742930CCA200C31156 /* AboutAppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBDFF732930CCA200C31156 /* AboutAppViewModel.swift */; };
 		8CD2004427A30B9100F61C6D /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD2004327A30B9100F61C6D /* TabBarView.swift */; };
 		8CD2004627A311D300F61C6D /* EnvironmentValues+isPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD2004527A311D300F61C6D /* EnvironmentValues+isPreview.swift */; };
 		8CD6C1DD25C327D3004CF261 /* ShowsTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6C1DC25C327D3004CF261 /* ShowsTrackerApp.swift */; };
@@ -239,6 +240,7 @@
 		8CA0ECB1262AFABF00EB20D9 /* STButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STButton.swift; sourceTree = "<group>"; };
 		8CB9F5BA25CFB0680095F063 /* TruncableText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TruncableText.swift; sourceTree = "<group>"; };
 		8CB9F5BD25CFB0D70095F063 /* View+ReadSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+ReadSize.swift"; sourceTree = "<group>"; };
+		8CBDFF732930CCA200C31156 /* AboutAppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAppViewModel.swift; sourceTree = "<group>"; };
 		8CD2004327A30B9100F61C6D /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		8CD2004527A311D300F61C6D /* EnvironmentValues+isPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EnvironmentValues+isPreview.swift"; sourceTree = "<group>"; };
 		8CD6C1D925C327D3004CF261 /* ShowsTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShowsTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -581,6 +583,7 @@
 			isa = PBXGroup;
 			children = (
 				8C7DD05B28F67C30003FE1ED /* AboutAppView.swift */,
+				8CBDFF732930CCA200C31156 /* AboutAppViewModel.swift */,
 			);
 			path = AboutApp;
 			sourceTree = "<group>";
@@ -964,6 +967,7 @@
 				8CFAD6A625C86EA80090DC4F /* Example.swift in Sources */,
 				8C156D37283A684F0049DDD1 /* FilterView.swift in Sources */,
 				8C156D3028295FEF0049DDD1 /* ShowsListSkeletonView.swift in Sources */,
+				8CBDFF742930CCA200C31156 /* AboutAppViewModel.swift in Sources */,
 				8CF5286E26778F5400351915 /* LoadableImageView.swift in Sources */,
 				8C156D4B2842521E0049DDD1 /* DispatchQueue+After.swift in Sources */,
 				8C7DD06228FC16C2003FE1ED /* NotificationsService.swift in Sources */,
