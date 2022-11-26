@@ -60,6 +60,8 @@ private extension SettingsCardView {
             .overlay {
                 image
                     .resizable()
+                    .renderingMode(.template)
+                    .foregroundColor(.dynamic.bay)
                     .frame(width: 20, height: 20)
             }
     }

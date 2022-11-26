@@ -102,6 +102,25 @@ final class ShowDetailsViewModel: ObservableObject {
         }
     }
     
+    func didTapEpisodeWatched(seasonNumber: Int, episodeNumber: Int) {
+        var shows = self.shows
+        let episodeId = "\(showID).\(seasonNumber).\(episodeNumber)"
+        if shows.watchedEpisodes.contains(episodeId) {
+            shows.watchedEpisodes.removeAll(where: { $0 == episodeId })
+        } else {
+            shows.watchedEpisodes.append(episodeId)
+        }
+        coreDataStorage.save(object: shows)
+        
+        guard let seasonIndex = model.seasonsInfo.firstIndex(where: { $0.seasonNumber == seasonNumber }),
+              let episodeIndex = model.seasonsInfo[seasonIndex].episodes.firstIndex(where: { $0.episodeNumber == episodeNumber }) else { return }
+        Task {
+            await changeModel {
+                $0.seasonsInfo[seasonIndex].episodes[episodeIndex].isWatched.toggle()
+            }
+        }
+    }
+
     func reloadSimilarShows() {
         model.similarShowsInfo.state = .loading
         loadSimilarShows()
@@ -144,6 +163,7 @@ private extension ShowDetailsViewModel {
     func seasonsInfo(from show: DetailedShow) async -> [ShowDetailsModel.SeasonInfo] {
         guard let seasons = show.seasons, seasons.count > 0 else { return [] }
         
+        let watchedEpisodes = self.shows.watchedEpisodes.filter { $0.starts(with: "\(showID)") }
         let seasonsDetails: [SeasonDetails] = await withTaskGroup(of: SeasonDetails?.self) { taskGroup in
             seasons.compactMap { $0.seasonNumber }.forEach { season in
                 taskGroup.addTask {
@@ -169,7 +189,8 @@ private extension ShowDetailsViewModel {
                     episodeNumber: episode.episodeNumber ?? 0,
                     name: episode.name ?? "",
                     date: STDateFormatter.format(episode.airDate ?? "", format: .full),
-                    overview: episode.overview ?? "")
+                    overview: episode.overview ?? "",
+                    isWatched: watchedEpisodes.contains("\(showID).\(seasonNumber).\(episode.episodeNumber ?? 0)"))
             }
             let seasonInfo = ShowDetailsModel.SeasonInfo(
                 seasonNumber: seasonNumber,
@@ -184,7 +205,9 @@ private extension ShowDetailsViewModel {
     }
     
     func notificationStatus(for seasonDetails: SeasonDetails, seasonNumber: Int) async -> ShowDetailsModel.NotificationStatus {
-        guard let episodes = seasonDetails.episodes else { return .none }
+        guard await notificationsService.getStatus() != .denied,
+              let episodes = seasonDetails.episodes else { return .none }
+        
         let currentDate = Date()
         let dates = episodes
             .compactMap { $0.airDate }

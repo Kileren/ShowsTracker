@@ -2,6 +2,8 @@
 "aboutAppTitle" = "О приложении";
 "actualInfoOnAllDevices" = "Актуальная информация на всех ваших устройствах";
 "add" = "Добавить";
+"additionalApplicationSettings" = "Дополнительные настройки приложения";
+"additionally" = "Дополнительно";
 "addToArchive" = "Добавить в архив";
 "addToArchiveHint" = "При добавлении сериала в архив, вы сможете найти его на вкладке профиля в разделе \"Архив\"";
 "all" = "Все";
@@ -24,6 +26,8 @@
 "emptySearchResult" = "¯\\_(ツ)_/¯\nК сожалению, ничего не найдено.\nПопробуйте изменить запрос.";
 "ended" = "Закончен";
 "episodes" = "Эпизоды";
+"episodesTracking" = "Отслеживание просмотренных серий";
+"episodesTrackingDescription" = "Дает возможность отмечать какие серии были просмотрены";
 "errorOccured" = "Произошла ошибка при загрузке данных";
 "filters" = "Фильтры";
 "genres" = "Жанры";
@@ -50,9 +54,11 @@
 "notificationsTimeTitle" = "Время отправки";
 "notificationsTitle" = "Уведомления";
 "noTrackingShows" = "Нет отслеживаемых\nсериалов";
+"off" = "Выключено";
 "ongoing" = "Идет";
 "open" = "Открыть";
 "originalLanguage" = "Язык оригинала";
+"otherSettings" = "Другие настройки";
 "ourTime" = "н.в.";
 "popular" = "Популярное";
 "popularShowsLoadingError" = "Не получилось загрузить популярные сериалы";

@@ -17,6 +17,8 @@ struct ShowDetailsView: View {
     @ObservedObject private var sheetNavigator: SheetNavigator = SheetNavigator()
     @Injected private var analyticsService: AnalyticsService
     
+    @AppSettings<EpisodesTrackingKey> private var episodesTrackingEnabled
+    
     // MARK: - State
     
     @AnimatedState(
@@ -513,7 +515,7 @@ private extension ShowDetailsView {
                 if seasonIsSelected {
                     VStack(alignment: .leading, spacing: 16) {
                         ForEach(info.episodes, id: \.self) {
-                            episodeInfo(episode: $0)
+                            episodeInfo(episode: $0, seasonNumber: info.seasonNumber)
                         }
                     }
                     .padding(.top, seasonInfoAdditionalYOffset)
@@ -532,7 +534,10 @@ private extension ShowDetailsView {
         }
     }
     
-    func episodeInfo(episode: ShowDetailsModel.Episode) -> some View {
+    func episodeInfo(
+        episode: ShowDetailsModel.Episode,
+        seasonNumber: Int
+    ) -> some View {
         HStack(spacing: 24) {
             Text("\(episode.episodeNumber)")
                 .font(.medium32)
@@ -547,6 +552,21 @@ private extension ShowDetailsView {
                 Text(episode.date)
                     .font(.regular13)
                     .foregroundColor(.dynamic.text40)
+            }
+            
+            if episodesTrackingEnabled {            
+                Spacer()
+                Image("checkmark")
+                    .renderingMode(.template)
+                    .foregroundColor(
+                        episode.isWatched ? .dynamic.bay : .dynamic.text20
+                    )
+                    .padding(.trailing, 16)
+                    .onTapGesture {
+                        viewModel.didTapEpisodeWatched(
+                            seasonNumber: seasonNumber,
+                            episodeNumber: episode.episodeNumber)
+                    }
             }
         }
         .frame(height: 40)
@@ -667,7 +687,8 @@ private extension ShowDetailsView {
     
     var activeNotification: some View {
         Circle()
-            .foregroundColor(.dynamic.bay.opacity(0.15))
+            .foregroundColor(Color(light: .dynamic.bay.opacity(0.15),
+                                   dark: .dynamic.bay.opacity(0.25)))
             .frame(width: 20, height: 20)
             .overlay {
                 Image("Icons/Settings/notificationOn")

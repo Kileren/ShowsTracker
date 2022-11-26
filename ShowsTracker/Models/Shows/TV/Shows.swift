@@ -9,13 +9,9 @@ import Foundation
 import CoreData
 
 struct Shows: Codable {
-    var likedShows: [PlainShow]
-    var archivedShows: [PlainShow]
-    
-    init(likedShows: [PlainShow] = [], archivedShows: [PlainShow] = []) {
-        self.likedShows = likedShows
-        self.archivedShows = archivedShows
-    }
+    var likedShows: [PlainShow] = []
+    var archivedShows: [PlainShow] = []
+    var watchedEpisodes: [String] = []
 
     var id: Int = 0
 }
@@ -30,7 +26,8 @@ extension ShowsMO: ManagedObjectDecodable {
     var object: Shows {
         get {
             Shows(likedShows: (likedShows?.array as? [PlainShowMO])?.map { $0.object } ?? [],
-                  archivedShows: (archivedShows?.array as? [PlainShowMO])?.map { $0.object } ?? [])
+                  archivedShows: (archivedShows?.array as? [PlainShowMO])?.map { $0.object } ?? [],
+                  watchedEpisodes: watchedEpisodes ?? [])
         }
         set {
             guard let context = managedObjectContext else { return }
@@ -49,6 +46,8 @@ extension ShowsMO: ManagedObjectDecodable {
                 moShow.object = show
                 addToArchivedShows(moShow)
             }
+            
+            watchedEpisodes = newValue.watchedEpisodes
         }
     }
 }

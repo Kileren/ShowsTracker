@@ -2,6 +2,8 @@
 "aboutAppTitle" = "About the app";
 "actualInfoOnAllDevices" = "Up-to-date information on all your devices";
 "add" = "Add";
+"additionalApplicationSettings" = "Additional app settings";
+"additionally" = "Additionally";
 "addToArchive" = "Add to archive";
 "addToArchiveHint" = "After adding a show to the archive, you can find it on the profile tab in the \"Archive\" section";
 "all" = "All";
@@ -24,6 +26,8 @@
 "emptySearchResult" = "¯\\_(ツ)_/¯\nUnfortunately, nothing was found.\nTry to change the query.";
 "ended" = "Finished";
 "episodes" = "Episodes";
+"episodesTracking" = "Watched episodes tracking";
+"episodesTrackingDescription" = "Allows you to mark which episodes have been viewed";
 "errorOccured" = "An error occurred while loading the data";
 "filters" = "Filters";
 "genres" = "Genres";
@@ -50,9 +54,11 @@
 "notificationsTimeTitle" = "Sending time";
 "notificationsTitle" = "Notifications";
 "noTrackingShows" = "There are no\ntracked series";
+"off" = "Off";
 "ongoing" = "Returning Series";
 "open" = "Open";
 "originalLanguage" = "Original language";
+"otherSettings" = "Other settings";
 "ourTime" = "now";
 "popular" = "Popular";
 "popularShowsLoadingError" = "Couldn't load popular TV shows";

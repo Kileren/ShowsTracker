@@ -22,6 +22,10 @@ struct AppSettings<Key: AppSettingKey> {
     public static func value<T: AppSettingKey>(for key: T.Type) -> Key.Value {
         (UserDefaults.standard.value(forKey: Key.key) as? Key.Value) ?? Key.defaultValue
     }
+    
+    public static func setValue<T: AppSettingKey>(value: T.Value, for key: T.Type) {
+        UserDefaults.standard.set(value, forKey: T.key)
+    }
 }
 
 protocol AppSettingKey {
@@ -47,4 +51,10 @@ struct AppLanguageKey: AppSettingKey {
 struct AppThemeKey: AppSettingKey {
     static var defaultValue: String { AppTheme.unspecified.rawValue }
     static var key: String { "showsTracker.selectedAppTheme" }
+}
+
+/// Boolean indicating whether episodes tracking enabled or not
+struct EpisodesTrackingKey: AppSettingKey {
+    static var defaultValue: Bool { true }
+    static var key: String { "showsTracker.episodesTrackingKey" }
 }

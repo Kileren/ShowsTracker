@@ -71,6 +71,7 @@ struct ShowDetailsModel: Equatable {
         var name = ""
         var date = ""
         var overview = ""
+        var isWatched = false
     }
     
     struct SimilarShowsInfo: Equatable {

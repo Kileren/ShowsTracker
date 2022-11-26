@@ -22,15 +22,15 @@ struct SettingsView: View {
             VStack {
                 VStack(spacing: 16) {
                     HStack(spacing: 16) {
-                        cloudView
                         archiveView
+                        themeView
                     }
                     HStack(spacing: 16) {
                         languageView
                         notificationView
                     }
                     HStack(spacing: 16) {
-                        themeView
+                        otherSettingsView
                         aboutAppView
                     }
                 }
@@ -64,20 +64,6 @@ private extension SettingsView {
         Text("")
     }
     
-    var cloudView: some View {
-        SettingsCardView(
-            image: Image("Icons/Settings/cloud"),
-            title: Strings.iCloudSync,
-            description: Strings.actualInfoOnAllDevices) {
-                HStack {
-                    Toggle(isOn: $cloudIsActive) { }
-                        .labelsHidden()
-                        .tint(.bay)
-                        .frame(height: 20)
-                }
-            }
-    }
-    
     var archiveView: some View {
         NavigationLink {
             ArchiveShowsView()
@@ -96,6 +82,15 @@ private extension SettingsView {
                     }
                 }
         }
+    }
+    
+    var themeView: some View {
+        SettingsCardView(
+            image: Image("Icons/Settings/theme"),
+            title: Strings.appThemeTitle,
+            description: Strings.appThemeDescription) {
+                ThemeToggleView(selectedTheme: $viewModel.model.selectedTheme)
+            }
     }
     
     var languageView: some View {
@@ -135,7 +130,7 @@ private extension SettingsView {
                             .tint(.bay)
                             .frame(height: 20)
                     case .empty:
-                        Text("Выключено")
+                        Text(Strings.off)
                             .font(.regular10)
                             .foregroundColor(.dynamic.text40)
                             .frame(height: 24)
@@ -144,13 +139,20 @@ private extension SettingsView {
         }
     }
     
-    var themeView: some View {
-        SettingsCardView(
-            image: Image("Icons/Settings/theme"),
-            title: Strings.appThemeTitle,
-            description: Strings.appThemeDescription) {
-                ThemeToggleView(selectedTheme: $viewModel.model.selectedTheme)
-            }
+    var otherSettingsView: some View {
+        NavigationLink {
+            OtherSettingsView()
+        } label: {
+            SettingsCardView(
+                image: Image(systemName: "ellipsis.circle.fill"),
+                title: Strings.otherSettings,
+                description: Strings.additionalApplicationSettings) {
+                    Text(Strings.open)
+                        .font(.regular11)
+                        .foregroundColor(.dynamic.bay)
+                        .frame(height: 24)
+                }
+        }
     }
     
     var aboutAppView: some View {
