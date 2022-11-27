@@ -412,7 +412,7 @@ private class SheetNavigator: ObservableObject {
 }
 
 fileprivate extension CGFloat {
-    static let topCurrentShowsOffset: CGFloat = 80
+    static let topCurrentShowsOffset: CGFloat = UIScreen.hasNotch ? 80 : 50
 }
 
 // MARK: - Preview

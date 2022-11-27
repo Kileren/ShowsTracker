@@ -160,13 +160,16 @@ struct ShowDetailsView: View {
     func imageView(geometry: GeometryProxy) -> some View {
         let (width, height) = imageWidthHeight(for: geometry)
         let (scale, anchor) = imageScaleParams(for: geometry, width: width)
+        let offset: CGFloat = scale > 1
+            ? (geometry.size.height - height * scale) / 2 + contentOffset
+            : offsetForImage(geometry: geometry) + 40
+        
         return LoadableImageView(path: viewModel.model.posterPath)
             .frame(width: width, height: height)
             .clipped()
             .cornerRadius(DesignConst.normalCornerRadius)
-            .padding(.top, 40)
             .scaleEffect(scale, anchor: anchor)
-            .offset(y: offsetForImage(geometry: geometry))
+            .offset(y: offset)
             .onTapGesture { imageScaled.toggle() }
     }
 }

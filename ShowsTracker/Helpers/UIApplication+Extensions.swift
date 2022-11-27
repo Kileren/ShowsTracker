@@ -12,8 +12,8 @@ extension UIApplication {
     var keyWindowScene: UIWindowScene? {
         // Get connected scenes
         return UIApplication.shared.connectedScenes
-            // Keep only active scenes, onscreen and visible to the user
-            .filter { $0.activationState == .foregroundActive }
+            // Keep only active scenes, onscreen and visible to the user (only for apps with multi scenes)
+            // .filter { $0.activationState == .foregroundActive }
             // Keep only the first `UIWindowScene`
             .first(where: { $0 is UIWindowScene })
             // Get its associated windows
