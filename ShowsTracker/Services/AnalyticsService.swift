@@ -15,6 +15,7 @@ final class AnalyticsService {
         case numberOfArchivedShows(value: Int)
         case language(value: AppLanguage)
         case notificationStatus(value: String)
+        case episodesTrackingEnabled(value: Bool)
         
         var rawValue: String {
             switch self {
@@ -22,6 +23,7 @@ final class AnalyticsService {
             case .numberOfArchivedShows: return "numberOfArchivedShows"
             case .language: return "language"
             case .notificationStatus: return "notificationStatus"
+            case .episodesTrackingEnabled: return "episodesTrackingEnabled"
             }
         }
         
@@ -31,6 +33,7 @@ final class AnalyticsService {
             case .numberOfArchivedShows(let value): return String(value)
             case .language(let value): return value.rawValue
             case .notificationStatus(let value): return value
+            case .episodesTrackingEnabled(let value): return String(value)
             }
         }
     }

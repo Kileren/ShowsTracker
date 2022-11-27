@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import Resolver
 
 struct OtherSettingsView: View {
+    
+    @Injected private var analyticsService: AnalyticsService
     
     @State private var trackEpisodesEnabled: Bool = AppSettings<EpisodesTrackingKey>
         .value(for: EpisodesTrackingKey.self)
@@ -46,6 +49,9 @@ struct OtherSettingsView: View {
             AppSettings<EpisodesTrackingKey>.setValue(
                 value: newValue,
                 for: EpisodesTrackingKey.self)
+            analyticsService.setUserProperty(
+                property: .episodesTrackingEnabled(value: newValue)
+            )
         }
     }
 }

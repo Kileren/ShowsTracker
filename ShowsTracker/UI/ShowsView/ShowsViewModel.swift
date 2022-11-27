@@ -12,8 +12,6 @@ final class ShowsViewModel: ObservableObject {
     
     @Published var model: ShowsView.Model = .init()
     
-    @AppSettings<AppLanguageKey> private var appLanguage
-    
     @Injected private var imageService: IImageService
     @Injected private var tvService: ITVService
     @Injected private var coreDataStorage: ICoreDataStorage
@@ -21,7 +19,7 @@ final class ShowsViewModel: ObservableObject {
     @Injected private var analyticsService: AnalyticsService
     
     func viewAppeared() {
-        logLanguage()
+        logStartupUserProperties()
         Task {
             let model = await ShowsView.Model(
                 isUserShowsLoaded: true,
@@ -105,8 +103,12 @@ private extension ShowsViewModel {
         return userShows
     }
     
-    func logLanguage() {
-        let language = AppLanguage(rawValue: appLanguage)
+    func logStartupUserProperties() {
+        let languageValue = AppSettings<AppLanguageKey>.value(for: AppLanguageKey.self)
+        let language = AppLanguage(rawValue: languageValue)
+        let episodesTracking = AppSettings<EpisodesTrackingKey>.value(for: EpisodesTrackingKey.self)
+        
         analyticsService.setUserProperty(property: .language(value: language))
+        analyticsService.setUserProperty(property: .episodesTrackingEnabled(value: episodesTracking))
     }
 }
