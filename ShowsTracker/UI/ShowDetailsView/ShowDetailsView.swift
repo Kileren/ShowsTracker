@@ -517,8 +517,14 @@ private extension ShowDetailsView {
                 
                 if seasonIsSelected {
                     VStack(alignment: .leading, spacing: 16) {
+                        let maxEpisodeNumberInSeason = info.episodes
+                            .max(by: { $0.episodeNumber < $1.episodeNumber })?
+                            .episodeNumber ?? 10
                         ForEach(info.episodes, id: \.self) {
-                            episodeInfo(episode: $0, seasonNumber: info.seasonNumber)
+                            episodeInfo(
+                                episode: $0,
+                                seasonNumber: info.seasonNumber,
+                                maxEpisodeNumberInSeason: maxEpisodeNumberInSeason)
                         }
                     }
                     .padding(.top, seasonInfoAdditionalYOffset)
@@ -539,13 +545,14 @@ private extension ShowDetailsView {
     
     func episodeInfo(
         episode: ShowDetailsModel.Episode,
-        seasonNumber: Int
+        seasonNumber: Int,
+        maxEpisodeNumberInSeason: Int
     ) -> some View {
         HStack(spacing: 24) {
             Text("\(episode.episodeNumber)")
                 .font(.medium32)
                 .foregroundColor(.dynamic.text40)
-                .frame(width: 40)
+                .frame(width: widthForEpisodeNumber(maxEpisodeNumberInSeason))
             
             VStack(alignment: .leading, spacing: 2) {
                 Text(episode.name)
@@ -785,6 +792,18 @@ private extension ShowDetailsView {
     
     func spacer(height: CGFloat) -> some View {
         Color.clear.frame(height: height)
+    }
+    
+    func widthForEpisodeNumber(_ episodeNumber: Int) -> CGFloat {
+        if episodeNumber < 10 {
+            return 21
+        } else if episodeNumber < 100 {
+            return 42
+        } else if episodeNumber < 1000 {
+            return 63
+        } else {
+            return 84
+        }
     }
 }
 
