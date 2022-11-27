@@ -19,6 +19,8 @@ struct ShowDetailsView: View {
     
     @AppSettings<EpisodesTrackingKey> private var episodesTrackingEnabled
     
+    @Environment(\.dismiss) private var dismiss
+    
     // MARK: - State
     
     @AnimatedState(
@@ -49,6 +51,7 @@ struct ShowDetailsView: View {
                 ZStack(alignment: .top) {
                     blurBackground(geometry: geometry)
                     detailsInfoScrollView(geometry: geometry)
+                    closeButton
                 }
             case .loading:
                 ShowDetailsSkeletonView()
@@ -171,6 +174,29 @@ struct ShowDetailsView: View {
             .scaleEffect(scale, anchor: anchor)
             .offset(y: offset)
             .onTapGesture { imageScaled.toggle() }
+    }
+    
+    var closeButton: some View {
+        HStack {
+            Button {
+                dismiss.callAsFunction()
+            } label: {
+                RoundedRectangle(cornerRadius: 8)
+                    .foregroundColor(.text60)
+                    .overlay {
+                        Image(systemName: "plus")
+                            .resizable()
+                            .frame(width: 12, height: 12)
+                            .rotationEffect(.degrees(45))
+                            .foregroundColor(.white100)
+                    }
+                    .frame(width: 32, height: 32)
+                    .padding([.leading, .top], 24)
+            }
+            .buttonStyle(ScaleButtonStyle())
+            
+            Spacer()
+        }
     }
 }
 
@@ -548,20 +574,22 @@ private extension ShowDetailsView {
         seasonNumber: Int,
         maxEpisodeNumberInSeason: Int
     ) -> some View {
-        HStack(spacing: 24) {
-            Text("\(episode.episodeNumber)")
-                .font(.medium32)
-                .foregroundColor(.dynamic.text40)
-                .frame(width: widthForEpisodeNumber(maxEpisodeNumberInSeason))
-            
-            VStack(alignment: .leading, spacing: 2) {
-                Text(episode.name)
-                    .font(.medium17)
-                    .foregroundColor(.dynamic.text100)
-                    .lineLimit(1)
-                Text(episode.date)
-                    .font(.regular13)
+        HStack(spacing: 8) {
+            HStack(spacing: 24) {            
+                Text("\(episode.episodeNumber)")
+                    .font(.medium32)
                     .foregroundColor(.dynamic.text40)
+                    .frame(width: widthForEpisodeNumber(maxEpisodeNumberInSeason))
+                
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(episode.name)
+                        .font(.medium17)
+                        .foregroundColor(.dynamic.text100)
+                        .lineLimit(1)
+                    Text(episode.date)
+                        .font(.regular13)
+                        .foregroundColor(.dynamic.text40)
+                }
             }
             
             if episodesTrackingEnabled {            

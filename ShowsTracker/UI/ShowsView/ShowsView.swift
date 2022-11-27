@@ -145,7 +145,7 @@ struct ShowsView: View {
                 sheetNavigator.sheetDestination = .showsList
             } label: {
                 ZStack {
-                    RoundedRectangle(cornerRadius: 4)
+                    RoundedRectangle(cornerRadius: 8)
                         .frame(width: 32, height: 32)
                         .foregroundColor(.text60)
                     Image(systemName: "text.justify.left")
