@@ -33,7 +33,6 @@ struct ShowsView: View {
                     ZStack(alignment: .top) {
                         blurBackground(geometry: geometry)
                             .offset(y: verticalScrollOffset < 0 ? verticalScrollOffset : 0)
-                        
                         VStack(spacing: 32) {
                             if !viewModel.model.userShows.isEmpty {
                                 likedShows(geometry: geometry)
@@ -53,6 +52,7 @@ struct ShowsView: View {
                                 popularShowsLoadingError
                             }
                         }
+                        addButton
                     }
                 }
             } else {
@@ -135,6 +135,28 @@ struct ShowsView: View {
             Color.dynamic.background.edgesIgnoringSafeArea(.all)
         )
         .scaleEffect(1.1, anchor: .center)
+    }
+    
+    var addButton: some View {
+        let opacity = 1 - (min(max(verticalScrollOffset, 0), 32) / 32)
+        return HStack {
+            Spacer()
+            Button {
+                sheetNavigator.sheetDestination = .showsList
+            } label: {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 4)
+                        .frame(width: 32, height: 32)
+                        .foregroundColor(.text60)
+                    Image(systemName: "text.justify.left")
+                        .foregroundColor(.white100)
+                }
+            }
+            .offset(y: .topCurrentShowsOffset)
+            .opacity(opacity)
+            .buttonStyle(ScaleButtonStyle())
+        }
+        .padding(.horizontal, 16)
     }
     
     func likedShows(geometry: GeometryProxy) -> some View {

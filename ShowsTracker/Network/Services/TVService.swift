@@ -59,9 +59,7 @@ extension TVService: ITVService {
     
     func getDetails(for showId: Int) async throws -> DetailedShow {
         let result = await tvProvider.request(target: .details(id: showId))
-        let show = try parse(result: result, to: DetailedShow.self)
-        refreshSavedInfo(basedOn: show)
-        return show
+        return try parse(result: result, to: DetailedShow.self)
     }
     
     func getSeasonDetails(for showId: Int, season: Int) async throws -> SeasonDetails {
@@ -180,19 +178,19 @@ private extension TVService {
         return nil
     }
     
-    func refreshSavedInfo(basedOn detailedShow: DetailedShow) {
-        guard var shows = coreDataStorage.get(objectsOfType: Shows.self).first else { return }
-        
-        let findAndChangeIfNeeded: (WritableKeyPath<Shows, [PlainShow]>) -> Void = { keyPath in
-            if let index = shows[keyPath: keyPath].firstIndex(where: { $0.id == detailedShow.id }) {
-                shows[keyPath: keyPath][index].posterPath = detailedShow.posterPath
-            }
-        }
-        findAndChangeIfNeeded(\.likedShows)
-        findAndChangeIfNeeded(\.archivedShows)
-        
-        coreDataStorage.save(object: shows)
-    }
+//    func refreshSavedInfo(basedOn detailedShow: DetailedShow) {
+//        guard var shows = coreDataStorage.get(objectsOfType: Shows.self).first else { return }
+//
+//        let findAndChangeIfNeeded: (WritableKeyPath<Shows, [PlainShow]>) -> Void = { keyPath in
+//            if let index = shows[keyPath: keyPath].firstIndex(where: { $0.id == detailedShow.id }) {
+//                shows[keyPath: keyPath][index].posterPath = detailedShow.posterPath
+//            }
+//        }
+//        findAndChangeIfNeeded(\.likedShows)
+//        findAndChangeIfNeeded(\.archivedShows)
+//
+//        coreDataStorage.save(object: shows)
+//    }
 }
 
 extension TVService {
