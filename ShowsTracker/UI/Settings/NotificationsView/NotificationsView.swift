@@ -6,11 +6,10 @@
 //
 
 import SwiftUI
-import Resolver
 
 struct NotificationsView: View {
     
-    @InjectedObject private var viewModel: NotificationsViewModel
+    @StateObject private var viewModel = NotificationsViewModel()
     
     var body: some View {
         ZStack {

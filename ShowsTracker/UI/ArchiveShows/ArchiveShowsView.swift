@@ -6,11 +6,10 @@
 //
 
 import SwiftUI
-import Resolver
 
 struct ArchiveShowsView: View {
     
-    @InjectedObject private var viewModel: ArchiveShowsViewModel
+    @StateObject private var viewModel = ArchiveShowsViewModel()
     @ObservedObject private var sheetNavigator = SheetNavigator()
     
     var body: some View {

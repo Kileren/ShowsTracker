@@ -15,7 +15,7 @@ struct ShowsView: View {
     
     @Injected private var imageService: IImageService
     @Injected private var analyticsService: AnalyticsService
-    @InjectedObject private var viewModel: ShowsViewModel
+    @StateObject private var viewModel = ShowsViewModel()
     @ObservedObject private var sheetNavigator = SheetNavigator()
     
     // MARK: - State
