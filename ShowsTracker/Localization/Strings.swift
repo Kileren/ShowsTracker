@@ -53,6 +53,8 @@ enum Strings {
     static let more = string(forKey: "more")
     static let newEpisodeTitleWithoutName = string(forKey: "newEpisodeTitleWithoutName")
     static let noDescription = string(forKey: "noDescription")
+    static let noShowDescription = string(forKey: "noShowDescription")
+    static let noSimilarShows = string(forKey: "noSimilarShows")
     static let notificationsAllowedText = string(forKey: "notificationsAllowedText")
     static let notificationsDeniedText = string(forKey: "notificationsDeniedText")
     static let notificationsDescription = string(forKey: "notificationsDescription")

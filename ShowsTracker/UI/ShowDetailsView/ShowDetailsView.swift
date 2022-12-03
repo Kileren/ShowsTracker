@@ -278,8 +278,10 @@ private extension ShowDetailsView {
                         Text("") // Initial state not shown
                     case .loading:
                         STSpinner()
-                    case .loaded(let models):
+                    case .loaded(let models) where !models.isEmpty:
                         similarInfo(models: models, geometry: geometry)
+                    case .loaded:
+                        noSimilarInfo(geometry: geometry)
                     case .error:
                         errorView {
                             viewModel.reloadSimilarShows()
@@ -627,14 +629,21 @@ private extension ShowDetailsView {
     var detailsInfo: some View {
         VStack(alignment: .leading, spacing: 16) {
             tagsView
-            VStack(alignment: .leading, spacing: 8) {
-                Text(Strings.description)
-                    .font(.semibold17)
+            
+            if viewModel.model.detailsInfo.overview.isEmpty {
+                Text(Strings.noShowDescription)
+                    .font(.regular17)
                     .foregroundColor(.dynamic.text100)
-                ScrollView(.vertical, showsIndicators: false) {
-                    Text(viewModel.model.detailsInfo.overview)
-                        .font(.regular17)
+            } else {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(Strings.description)
+                        .font(.semibold17)
                         .foregroundColor(.dynamic.text100)
+                    ScrollView(.vertical, showsIndicators: false) {
+                        Text(viewModel.model.detailsInfo.overview)
+                            .font(.regular17)
+                            .foregroundColor(.dynamic.text100)
+                    }
                 }
             }
         }
@@ -684,6 +693,20 @@ private extension ShowDetailsView {
                     }
                 }
             }
+    }
+    
+    func noSimilarInfo(geometry: GeometryProxy) -> some View {
+        VStack(spacing: 8) {
+            Text(Strings.noSimilarShows)
+                .multilineTextAlignment(.center)
+            Image("Icons/EmptyList")
+                .renderingMode(.template)
+                .resizable()
+                .frame(width: geometry.size.width * 0.4,
+                       height: geometry.size.width * 0.4)
+                .foregroundColor(.dynamic.text100)
+        }
+        .padding(.top, 16)
     }
     
     func errorView(retryAction: @escaping () -> Void) -> some View {

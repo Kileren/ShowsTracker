@@ -45,6 +45,8 @@
 "newEpisodeTitleWithName" = "%@ - new episode!";
 "newEpisodeTitleWithoutName" = "A new episode has been released!";
 "noDescription" = "There is no description yet";
+"noShowDescription" = "There is no description yet\U00A0😔";
+"noSimilarShows" = "Similar shows have not been added yet\U00A0😔";
 "notificationsAllowedText" = "Notifications are allowed. Choose the series you want to follow and receive notifications about the release of new episodes.";
 "notificationsDeniedText" = "Unfortunately, you have disabled notifications. If you have changed your mind, you can give permission in the iPhone settings.";
 "notificationsDescription" = "Notifications about the release of new episodes";
