@@ -39,7 +39,8 @@ final class ShowsViewModel: ObservableObject {
     func reloadPopularShows() async {
         await changeModel { $0.popularShowsState = .loading }
         do {
-            let popularShows = try await tvService.getPopular()
+            var popularShows = try await tvService.getPopular()
+            popularShows.removeLast(popularShows.count % 3)
             await changeModel {
                 $0.popularShowsState = .loaded(
                     models: popularShows.map { .init(id: $0.id, posterPath: $0.posterPath ?? "") }
