@@ -593,9 +593,12 @@ private extension ShowDetailsView {
                         .foregroundColor(.dynamic.text40)
                 }
             }
+            .layoutPriority(1)
             
-            if episodesTrackingEnabled {            
-                Spacer()
+            Rectangle()
+                .foregroundColor(Color(light: .separators, dark: .backgroundDarkEl1))
+            
+            if episodesTrackingEnabled {
                 Image("checkmark")
                     .renderingMode(.template)
                     .foregroundColor(
