@@ -13,7 +13,7 @@ struct ShowDetailsView: View {
     
     // MARK: - Dependencies
     
-    @InjectedObject private var viewModel: ShowDetailsViewModel
+    @StateObject private var viewModel = ShowDetailsViewModel()
     @ObservedObject private var sheetNavigator: SheetNavigator = SheetNavigator()
     @Injected private var analyticsService: AnalyticsService
     
