@@ -15,25 +15,25 @@ struct SettingsView: View {
     
     @State private var cloudIsActive: Bool = true
     @State private var notificationsIsActive: Bool = false
-//    @State private var selectedTheme: AppTheme = .unspecified
     
     var body: some View {
         NavigationView {
             VStack {
                 VStack(spacing: 16) {
                     HStack(spacing: 16) {
-                        archiveView
                         themeView
-                    }
-                    HStack(spacing: 16) {
                         languageView
-                        notificationView
                     }
                     HStack(spacing: 16) {
                         otherSettingsView
+                        notificationView
+                    }
+                    HStack(spacing: 16) {
                         aboutAppView
+                        aboutAppView.opacity(0)
                     }
                 }
+                .buttonStyle(ScaleButtonStyle())
                 Spacer()
             }
             .navigationTitle(Strings.settings)
@@ -62,26 +62,6 @@ struct SettingsView: View {
 private extension SettingsView {
     var cardsView: some View {
         Text("")
-    }
-    
-    var archiveView: some View {
-        NavigationLink {
-            ArchiveShowsView()
-        } label: {
-            SettingsCardView(
-                image: Image("Icons/Settings/archive"),
-                title: Strings.archive,
-                description: Strings.lookYourHistory) {
-                    NavigationLink {
-                        ArchiveShowsView()
-                    } label: {
-                        Text(Strings.look)
-                            .font(.regular11)
-                            .foregroundColor(.dynamic.bay)
-                            .frame(height: 24)
-                    }
-                }
-        }
     }
     
     var themeView: some View {
@@ -156,22 +136,23 @@ private extension SettingsView {
     }
     
     var aboutAppView: some View {
-        SettingsCardView(
-            image: Image("Icons/Settings/notificationOn"),
-            title: Strings.aboutAppTitle,
-            description: Strings.aboutAppDescription) {
-                Button {
-                    sheetNavigator.sheetDestination = .aboutApp
-                } label: {
-                    Text(Strings.open)
-                        .font(.regular11)
-                        .foregroundColor(.dynamic.bay)
-                        .frame(height: 24)
+        Button {
+            sheetNavigator.sheetDestination = .aboutApp
+        } label: {
+            SettingsCardView(
+                image: Image("Icons/Settings/notificationOn"),
+                title: Strings.aboutAppTitle,
+                description: Strings.aboutAppDescription) {
+                    Button {
+                        sheetNavigator.sheetDestination = .aboutApp
+                    } label: {
+                        Text(Strings.open)
+                            .font(.regular11)
+                            .foregroundColor(.dynamic.bay)
+                            .frame(height: 24)
+                    }
                 }
-            }
-            .onTapGesture {
-                sheetNavigator.sheetDestination = .aboutApp
-            }
+        }
     }
 }
 

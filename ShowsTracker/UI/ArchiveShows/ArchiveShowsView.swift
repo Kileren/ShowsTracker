@@ -12,6 +12,8 @@ struct ArchiveShowsView: View {
     @StateObject private var viewModel = ArchiveShowsViewModel()
     @ObservedObject private var sheetNavigator = SheetNavigator()
     
+    @Environment(\.dismiss) private var dismiss
+    
     var body: some View {
         GeometryReader { geometry in
             switch viewModel.model.state {
@@ -27,6 +29,11 @@ struct ArchiveShowsView: View {
         }
         .padding(.all, 16)
         .navigationTitle(Strings.archive)
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button(Strings.close) { dismiss.callAsFunction() }
+            }
+        }
         .background {
             Color.dynamic.background.ignoresSafeArea()
         }
@@ -36,6 +43,7 @@ struct ArchiveShowsView: View {
             content: sheetNavigator.sheetView
         )
         .onAppear { viewModel.onAppear() }
+        .embedInNavigationView()
     }
 }
 

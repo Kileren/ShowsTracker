@@ -76,8 +76,7 @@ struct ShowsView: View {
             VStack(spacing: 32) {
                 RoundedRectangle(cornerRadius: 16)
                     .foregroundColor(.dynamic.separators)
-                    .frame(width: geometry.size.width * 0.6,
-                           height: geometry.size.width * 0.9)
+                    .frame(width: .currentShowsWidth, height: .currentShowsHeight)
                     .padding(.top, .topCurrentShowsOffset)
                 
                 RoundedRectangle(cornerRadius: 6)
@@ -139,23 +138,31 @@ struct ShowsView: View {
     
     var addButton: some View {
         let opacity = 1 - (min(max(verticalScrollOffset, 0), 32) / 32)
+        let buttonLabel: (Image) -> ZStack = { image in
+            ZStack {
+                RoundedRectangle(cornerRadius: 8)
+                    .frame(width: 32, height: 32)
+                    .foregroundColor(.text60)
+                image
+                    .foregroundColor(.white100)
+            }
+        }
         return HStack {
             Spacer()
             Button {
+                sheetNavigator.sheetDestination = .archiveView
+            } label: {
+                buttonLabel(Image("Icons/Settings/archive").renderingMode(.template))
+            }
+            Button {
                 sheetNavigator.sheetDestination = .showsList
             } label: {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .frame(width: 32, height: 32)
-                        .foregroundColor(.text60)
-                    Image(systemName: "text.justify.left")
-                        .foregroundColor(.white100)
-                }
+                buttonLabel(Image(systemName: "text.justify.left"))
             }
-            .offset(y: .topCurrentShowsOffset)
-            .opacity(opacity)
-            .buttonStyle(ScaleButtonStyle())
         }
+        .offset(y: .topMenuButtonsOffset)
+        .opacity(opacity)
+        .buttonStyle(ScaleButtonStyle())
         .padding(.horizontal, 16)
     }
     
@@ -171,7 +178,7 @@ struct ShowsView: View {
         }
         
         return ShowsScrollView(models: models, currentCardIndex: $index, scrollProgress: $scrollProgress)
-            .frame(width: geometry.size.width, height: geometry.size.width * 0.9)
+            .frame(width: geometry.size.width, height: .currentShowsHeight)
             .padding(.top, .topCurrentShowsOffset)
     }
     
@@ -179,9 +186,7 @@ struct ShowsView: View {
         ZStack(alignment: .bottom) {
             Rectangle()
                 .cornerRadius(DesignConst.normalCornerRadius)
-                .frame(width: geometry.size.width * 0.6,
-                       height: geometry.size.width * 0.9)
-                .padding(.top, .topCurrentShowsOffset)
+                .frame(width: .currentShowsWidth, height: .currentShowsHeight)
                 .foregroundColor(.dynamic.infoView)
                 .shadow(color: .black.opacity(0.15), radius: 8, x: 4, y: 4)
             
@@ -189,8 +194,7 @@ struct ShowsView: View {
                 Images.emptyList
                     .renderingMode(.template)
                     .resizable()
-                    .frame(width: geometry.size.width * 0.35,
-                       height: geometry.size.width * 0.35)
+                    .frame(width: 90, height: 90)
                     .foregroundColor(.dynamic.text100)
                 
                 Text(Strings.noTrackingShows)
@@ -198,13 +202,16 @@ struct ShowsView: View {
                     .foregroundColor(.dynamic.text100)
                     .multilineTextAlignment(.center)
             }
-            .padding(.bottom, 55 + geometry.size.width * 0.15)
+            .padding(.bottom, 100)
             
             STButton(title: Strings.add, style: .small(width: .fit)) {
                 sheetNavigator.sheetDestination = .showsList
             }
             .padding(.bottom, 24)
         }
+        .frame(width: geometry.size.width * 0.6,
+               height: .currentShowsHeight)
+        .padding(.top, .topCurrentShowsOffset)
     }
     
     func pageDotsView(geometry: GeometryProxy) -> some View {
@@ -395,6 +402,7 @@ private class SheetNavigator: ObservableObject {
         case showDetails(showID: Int)
         case showsList
         case likedShows
+        case archiveView
     }
     
     func sheetView() -> AnyView {
@@ -407,12 +415,17 @@ private class SheetNavigator: ObservableObject {
             return AnyView(ShowsListView())
         case .likedShows:
             return AnyView(LikedShowsListView())
+        case .archiveView:
+            return AnyView(ArchiveShowsView())
         }
     }
 }
 
 fileprivate extension CGFloat {
-    static let topCurrentShowsOffset: CGFloat = UIScreen.hasNotch ? 80 : 50
+    static let topCurrentShowsOffset: CGFloat = UIScreen.hasNotch ? 130 : 100
+    static let topMenuButtonsOffset: CGFloat = UIScreen.hasNotch ? 80 : 50
+    static let currentShowsWidth: CGFloat = 182
+    static let currentShowsHeight: CGFloat = 280
 }
 
 // MARK: - Preview

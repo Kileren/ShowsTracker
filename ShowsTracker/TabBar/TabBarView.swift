@@ -26,7 +26,7 @@ struct TabBarView: View {
                     button(for: .profile)
                 }
                 .frame(width: geometry.size.width, height: 60)
-                .background(Color.dynamic.backgroundEl1)
+                .background(Color(light: .white100, dark: .backgroundDarkEl1))
             }
         }
     }
