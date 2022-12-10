@@ -61,6 +61,10 @@ private extension RootManager {
             assertionFailure("Top view controller doesn't exist")
             return
         }
+        if topViewController is UIHostingController<NetworkErrorView> {
+            // NetworkErrorView already shown
+            return
+        }
         let hostingViewController = UIHostingController(rootView: NetworkErrorView())
         hostingViewController.modalPresentationStyle = .fullScreen
         hostingViewController.modalTransitionStyle = .crossDissolve
