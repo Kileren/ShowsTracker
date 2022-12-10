@@ -7,8 +7,11 @@
 
 import UIKit
 import SwiftUI
+import Resolver
 
 final class RootManager {
+    
+    @Injected private var pingService: IPingService
     
     @AppSettings<AppLanguageKey> private var appLanguage
     
@@ -34,6 +37,13 @@ final class RootManager {
     
     @objc func willEnterForeground() {
         UIApplication.shared.applicationIconBadgeNumber = 0
+        
+        Task {
+            let serverAvailable = await pingService.ping()
+            if !serverAvailable {
+                await showNetworkErrorView()
+            }
+        }
     }
     
     func saveCurrentLanguage() {
@@ -41,5 +51,19 @@ final class RootManager {
            let language = AppLanguage.allCases.first(where: { preferredLanguage.starts(with: $0.rawValue) }) {
             appLanguage = language.rawValue
         }
+    }
+}
+
+private extension RootManager {
+    @MainActor
+    func showNetworkErrorView() {
+        guard let topViewController = UIApplication.shared.topViewController else {
+            assertionFailure("Top view controller doesn't exist")
+            return
+        }
+        let hostingViewController = UIHostingController(rootView: NetworkErrorView())
+        hostingViewController.modalPresentationStyle = .fullScreen
+        hostingViewController.modalTransitionStyle = .crossDissolve
+        topViewController.present(hostingViewController, animated: true)
     }
 }

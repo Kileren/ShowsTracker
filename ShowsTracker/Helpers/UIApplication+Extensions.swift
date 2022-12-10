@@ -26,4 +26,12 @@ extension UIApplication {
             // Finally, keep only the key window
             .first(where: \.isKeyWindow)
     }
+    
+    var topViewController: UIViewController? {
+        guard var viewController = keyWindow?.rootViewController else { return nil }
+        while let presentedViewController = viewController.presentedViewController {
+            viewController = presentedViewController
+        }
+        return viewController
+    }
 }

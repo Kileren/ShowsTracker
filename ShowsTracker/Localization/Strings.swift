@@ -51,6 +51,9 @@ enum Strings {
     static let look = string(forKey: "look")
     static let lookYourHistory = string(forKey: "lookYourHistory")
     static let more = string(forKey: "more")
+    static let networkError = string(forKey: "networkError")
+    static let networkErrorHint1 = string(forKey: "networkErrorHint1")
+    static let networkErrorHint2 = string(forKey: "networkErrorHint2")
     static let newEpisodeTitleWithoutName = string(forKey: "newEpisodeTitleWithoutName")
     static let noDescription = string(forKey: "noDescription")
     static let noShowDescription = string(forKey: "noShowDescription")
@@ -87,6 +90,7 @@ enum Strings {
     static let sortByPopularity = string(forKey: "sortByPopularity")
     static let sortByRating = string(forKey: "sortByRating")
     static let status = string(forKey: "status")
+    static let tryAgain = string(forKey: "tryAgain")
     static let version = string(forKey: "version")
     static let yourShows = string(forKey: "yourShows")
     

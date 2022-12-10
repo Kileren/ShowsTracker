@@ -41,6 +41,9 @@
 "look" = "Look";
 "lookYourHistory" = "Look at your history and deferred tv shows";
 "more" = "More";
+"networkError" = "Network error";
+"networkErrorHint1" = "1. Check your internet connection.";
+"networkErrorHint2" = "2. Try to use VPN connection. Unfortunately, the resources of the TMDB service are not available in some countries.";
 "newEpisodeDescription" = "The episode \"%@\" is coming out today, don't forget to watch it.";
 "newEpisodeTitleWithName" = "%@ - new episode!";
 "newEpisodeTitleWithoutName" = "A new episode has been released!";
@@ -79,5 +82,6 @@
 "sortByPopularity" = "Popularity";
 "sortByRating" = "Score";
 "status" = "Status";
+"tryAgain" = "Try again";
 "version" = "Version";
 "yourShows" = "Your series";

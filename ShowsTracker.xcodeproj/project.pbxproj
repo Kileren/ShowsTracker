@@ -112,6 +112,9 @@
 		8CBDFF7D2933B01B00C31156 /* UIScreen+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBDFF7C2933B01B00C31156 /* UIScreen+Extensions.swift */; };
 		8CBDFF7F2935D4E900C31156 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8CBDFF7E2935D4E900C31156 /* LaunchScreen.storyboard */; };
 		8CBDFF81293CE16000C31156 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBDFF80293CE16000C31156 /* View+Extensions.swift */; };
+		8CBDFF8429435C2500C31156 /* NetworkErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBDFF8329435C2500C31156 /* NetworkErrorView.swift */; };
+		8CBDFF862943D8C100C31156 /* PingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBDFF852943D8C100C31156 /* PingService.swift */; };
+		8CBDFF882943D90400C31156 /* PingTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBDFF872943D90400C31156 /* PingTarget.swift */; };
 		8CD2004427A30B9100F61C6D /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD2004327A30B9100F61C6D /* TabBarView.swift */; };
 		8CD2004627A311D300F61C6D /* EnvironmentValues+isPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD2004527A311D300F61C6D /* EnvironmentValues+isPreview.swift */; };
 		8CD6C1DD25C327D3004CF261 /* ShowsTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD6C1DC25C327D3004CF261 /* ShowsTrackerApp.swift */; };
@@ -248,6 +251,9 @@
 		8CBDFF7C2933B01B00C31156 /* UIScreen+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+Extensions.swift"; sourceTree = "<group>"; };
 		8CBDFF7E2935D4E900C31156 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8CBDFF80293CE16000C31156 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
+		8CBDFF8329435C2500C31156 /* NetworkErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkErrorView.swift; sourceTree = "<group>"; };
+		8CBDFF852943D8C100C31156 /* PingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PingService.swift; sourceTree = "<group>"; };
+		8CBDFF872943D90400C31156 /* PingTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PingTarget.swift; sourceTree = "<group>"; };
 		8CD2004327A30B9100F61C6D /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		8CD2004527A311D300F61C6D /* EnvironmentValues+isPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EnvironmentValues+isPreview.swift"; sourceTree = "<group>"; };
 		8CD6C1D925C327D3004CF261 /* ShowsTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShowsTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -350,6 +356,7 @@
 				8C156CF9281527C70049DDD1 /* TVTarget.swift */,
 				8C156D412841F6C80049DDD1 /* GenresTarget.swift */,
 				8CDCCF0528531836006EC106 /* DiscoverTarget.swift */,
+				8CBDFF872943D90400C31156 /* PingTarget.swift */,
 			);
 			path = Targets;
 			sourceTree = "<group>";
@@ -361,6 +368,7 @@
 				8C156CF228149D550049DDD1 /* ImageService.swift */,
 				8C156CFB281528A90049DDD1 /* TVService.swift */,
 				8C156D482841F8ED0049DDD1 /* GenresService.swift */,
+				8CBDFF852943D8C100C31156 /* PingService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -647,6 +655,14 @@
 			path = OtherSettingsView;
 			sourceTree = "<group>";
 		};
+		8CBDFF8229435C1800C31156 /* NetworkErrorView */ = {
+			isa = PBXGroup;
+			children = (
+				8CBDFF8329435C2500C31156 /* NetworkErrorView.swift */,
+			);
+			path = NetworkErrorView;
+			sourceTree = "<group>";
+		};
 		8CD2004027A30B5A00F61C6D /* TabBar */ = {
 			isa = PBXGroup;
 			children = (
@@ -729,6 +745,7 @@
 		8CD6C1FD25C32D54004CF261 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				8CBDFF8229435C1800C31156 /* NetworkErrorView */,
 				8C7DD05A28F67C28003FE1ED /* AboutApp */,
 				8C7DD04B28F335F1003FE1ED /* ArchiveShows */,
 				8C7DD04028E975D1003FE1ED /* Settings */,
@@ -951,12 +968,14 @@
 				8C156CFE28152C510049DDD1 /* Dictionary+ApiKey.swift in Sources */,
 				8CA0ECB2262AFABF00EB20D9 /* STButton.swift in Sources */,
 				8C156CED2811CC270049DDD1 /* Network+Resolver.swift in Sources */,
+				8CBDFF862943D8C100C31156 /* PingService.swift in Sources */,
 				8C5B18DB2907A37D0007BE0E /* AppLanguageView.swift in Sources */,
 				8CF528702679267E00351915 /* UIImage+Extensions.swift in Sources */,
 				8C156D422841F6C80049DDD1 /* GenresTarget.swift in Sources */,
 				8C518F3E2662B28B00EE6C4F /* Redactable+Shimmered.swift in Sources */,
 				8CDCCF042843F93F006EC106 /* LanguageSelectorView.swift in Sources */,
 				8C3994762620DBCE005BD7DB /* PlainShow.swift in Sources */,
+				8CBDFF882943D90400C31156 /* PingTarget.swift in Sources */,
 				8C7DD06528FC201C003FE1ED /* NotificationCenter.swift in Sources */,
 				8C496FA725C47DAE000282C5 /* PagingScrollView.swift in Sources */,
 				8CDCCEFE28434886006EC106 /* View+DisableDragging.swift in Sources */,
@@ -984,6 +1003,7 @@
 				8CBDFF7D2933B01B00C31156 /* UIScreen+Extensions.swift in Sources */,
 				8CFAD6A625C86EA80090DC4F /* Example.swift in Sources */,
 				8C156D37283A684F0049DDD1 /* FilterView.swift in Sources */,
+				8CBDFF8429435C2500C31156 /* NetworkErrorView.swift in Sources */,
 				8C156D3028295FEF0049DDD1 /* ShowsListSkeletonView.swift in Sources */,
 				8CBDFF742930CCA200C31156 /* AboutAppViewModel.swift in Sources */,
 				8CF5286E26778F5400351915 /* LoadableImageView.swift in Sources */,

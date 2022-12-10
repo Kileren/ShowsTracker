@@ -13,5 +13,6 @@ extension Resolver {
         register(IImageService.self) { ImageService() }.scope(.application)
         register(ITVService.self) { TVService() }.scope(.application)
         register(IGenresService.self) { GenresService() }.scope(.application)
+        register(IPingService.self) { PingService() }.scope(.application)
     }
 }

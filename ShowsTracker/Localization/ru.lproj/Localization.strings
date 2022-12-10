@@ -41,6 +41,9 @@
 "look" = "Посмотреть";
 "lookYourHistory" = "Посмотрите свою историю и отложенные картины";
 "more" = "Больше";
+"networkError" = "Сетевая ошибка";
+"networkErrorHint1" = "1. Проверьте ваше соединение с интернетом.";
+"networkErrorHint2" = "2. Попробуйте воспользоваться VPN соединением. К сожалению, ресурсы сервиса TMDB доступны не во всех странах.";
 "newEpisodeDescription" = "Серия \"%@\" выходит сегодня, не забудьте посмотреть.";
 "newEpisodeTitleWithName" = "%@ - новая серия!";
 "newEpisodeTitleWithoutName" = "Вышла новая серия!";
@@ -79,5 +82,6 @@
 "sortByPopularity" = "Популярности";
 "sortByRating" = "Оценке";
 "status" = "Статус";
+"tryAgain" = "Попробовать снова";
 "version" = "Версия";
 "yourShows" = "Ваши сериалы";
