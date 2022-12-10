@@ -11,6 +11,7 @@ import Resolver
 struct NetworkErrorView: View {
     
     @Injected private var pingService: IPingService
+    @Injected private var analyticsService: AnalyticsService
     
     @Environment(\.dismiss) private var dismiss
     
@@ -33,6 +34,9 @@ struct NetworkErrorView: View {
         }
         .navigationTitle(Strings.networkError)
         .embedInNavigationView()
+        .onAppear {
+            analyticsService.logNetworkErrorShown()
+        }
     }
     
     var imageView: some View {

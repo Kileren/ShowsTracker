@@ -109,6 +109,10 @@ final class AnalyticsService {
         logEvent("showsList_startFilter", parameters: nil)
     }
     
+    func logNetworkErrorShown() {
+        logEvent("networkError_shown", parameters: nil)
+    }
+    
     func logSettingsTapArchive() {
         logEvent("settings_tapArchive", parameters: nil)
     }
