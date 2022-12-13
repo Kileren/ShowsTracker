@@ -57,7 +57,7 @@ private extension AboutAppView {
                 }
                 .padding(.leading, 16)
                 
-                Text("Оценить приложение")
+                Text(Strings.rateTheApp)
                     .font(.regular17)
                     .foregroundColor(.dynamic.text100)
             }

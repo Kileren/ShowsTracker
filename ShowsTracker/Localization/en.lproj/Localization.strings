@@ -67,6 +67,7 @@
 "ourTime" = "now";
 "popular" = "Popular";
 "popularShowsLoadingError" = "Couldn't load popular TV shows";
+"rateTheApp" = "Rate the App";
 "releaseYear" = "Year of release";
 "removeFromArchive" = "Delete from the archive";
 "removeFromFavourites" = "Delete from favourites";
