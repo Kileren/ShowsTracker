@@ -25,7 +25,7 @@ struct ShowView: View {
     var body: some View {
         VStack(spacing: 4) {
             LoadableImageView(path: model.posterPath, isImageLoaded: $isImageLoaded)
-                .mask(RoundedRectangle(cornerRadius: 8))
+                .mask(RoundedRectangle(cornerRadius: 8).frame(width: itemWidth, height: itemWidth * 1.5))
                 .overlay {
                     if isImageLoaded {
                         ZStack(alignment: .bottomTrailing) {
@@ -42,6 +42,7 @@ struct ShowView: View {
                                 dateAccessoryView(day: day, month: month)
                             }
                         }
+                        .frame(width: itemWidth, height: itemWidth * 1.5)
                     }
                 }
                 .frame(width: itemWidth, height: itemWidth * 1.5)
