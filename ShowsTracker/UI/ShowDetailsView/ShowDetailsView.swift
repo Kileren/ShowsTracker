@@ -38,6 +38,11 @@ struct ShowDetailsView: View {
         animation: .spring(response: 0.65)
     ) private var imageScaled: Bool
     
+    @AnimatedState(
+        value: .defaultScaledSeasonPoster,
+        animation: .easeInOut(duration: 0.25)
+    ) private var scaledSeasonPoster: Int
+    
     var showID: Int
     
     @State private var contentOffset: CGFloat = 0
@@ -267,7 +272,7 @@ private extension ShowDetailsView {
                 
                 switch viewModel.model.selectedInfoTab {
                 case .episodes where viewModel.model.seasonsInfo.count > 0:
-                    episodesInfo
+                    episodesInfo(geometry: geometry)
                 case .episodes:
                     Rectangle().foregroundColor(.clear)
                 case .details:
@@ -463,22 +468,30 @@ private extension ShowDetailsView {
 // MARK: - Episode Info
 
 private extension ShowDetailsView {
-    var episodesInfo: some View {
+    func episodesInfo(geometry: GeometryProxy) -> some View {
         VStack(spacing: 16) {
             ForEach(viewModel.model.seasonsInfo, id: \.self) { info in
-                seasonInfoView(info: info)
+                seasonInfoView(info: info, geometry: geometry)
             }
         }
     }
     
-    func seasonInfoView(info: ShowDetailsModel.SeasonInfo) -> some View {
+    func seasonInfoView(info: ShowDetailsModel.SeasonInfo, geometry: GeometryProxy) -> some View {
         let seasonIsSelected = seasonNumberInfoShown == info.seasonNumber
+        let posterIsScaled = scaledSeasonPoster == info.seasonNumber
+        let defaultPosterWidth: CGFloat = 66
+        let defaultPosterHeight: CGFloat = 100
+        let scaledPosterWidth = geometry.size.width - 12 * 2 - 24 * 2
+        let scaledPosterHeight = (scaledPosterWidth / defaultPosterWidth) * defaultPosterHeight
         var backgroundRectangleHeight: CGFloat {
             if seasonIsSelected {
-                return CGFloat(130 + info.episodes.count * (40 + 16)) + seasonInfoAdditionalYOffset
-            } else {
-                return info.overview.isEmpty ? 92 : 130
+                let extraHeightForScaledPoster = posterIsScaled ? (scaledPosterHeight - defaultPosterHeight) : 0
+                return CGFloat(130 + info.episodes.count * (40 + 16)) + seasonInfoAdditionalYOffset + extraHeightForScaledPoster
             }
+            if posterIsScaled {
+                return scaledPosterHeight + 12 * 2
+            }
+            return info.overview.isEmpty ? 92 : 130
         }
         return ZStack(alignment: .topLeading) {
             VStack(spacing: 0) {
@@ -539,9 +552,17 @@ private extension ShowDetailsView {
             
             VStack(alignment: .leading, spacing: 16) {
                 LoadableImageView(path: info.posterPath)
-                    .frame(width: 66, height: 100)
+                    .frame(width: posterIsScaled ? scaledPosterWidth : defaultPosterWidth,
+                           height: posterIsScaled ? scaledPosterHeight : defaultPosterHeight)
                     .cornerRadius(12)
-                    .padding(.top, seasonIsSelected ? 12 : 0)
+                    .padding(.top, seasonIsSelected ? 12 : (posterIsScaled ? 32 : 0))
+                    .onTapGesture {
+                        if scaledSeasonPoster == info.seasonNumber {
+                            scaledSeasonPoster = .defaultScaledSeasonPoster
+                        } else {
+                            scaledSeasonPoster = info.seasonNumber
+                        }
+                    }
                 
                 if seasonIsSelected {
                     VStack(alignment: .leading, spacing: 16) {
@@ -567,6 +588,7 @@ private extension ShowDetailsView {
                 } else {
                     seasonNumberInfoShown = info.seasonNumber
                 }
+                scaledSeasonPoster = .defaultScaledSeasonPoster
             }
         }
     }
@@ -911,4 +933,8 @@ struct ShowDetailsView_Previews: PreviewProvider {
         Resolver.registerAllServices()
         return ShowDetailsView(showID: 0)
     }
+}
+
+private extension Int {
+    static var defaultScaledSeasonPoster: Int = -1
 }

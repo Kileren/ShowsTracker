@@ -22,4 +22,5 @@ extension PingTarget: TargetType {
     var task: Task {
         .requestPlain
     }
+    var sampleData: Data { Data() }
 }
