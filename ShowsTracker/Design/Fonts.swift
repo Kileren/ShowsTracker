@@ -27,6 +27,9 @@ extension Font {
     static let semibold17: Font = .system(size: 17, weight: .semibold, design: .default)
     static let semibold20: Font = .system(size: 20, weight: .semibold, design: .default)
     
+    static let bold27: Font = .system(size: 27, weight: .bold, design: .default)
+    static let bold34: Font = .system(size: 34, weight: .bold, design: .default)
+    
     static let medium13Rounded: Font = .system(size: 13, weight: .medium, design: .rounded)
     static let medium17Rounded: Font = .system(size: 17, weight: .medium, design: .rounded)
     static let medium32Rounded: Font = .system(size: 32, weight: .medium, design: .rounded)

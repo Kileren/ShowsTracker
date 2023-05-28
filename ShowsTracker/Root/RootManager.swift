@@ -14,11 +14,13 @@ final class RootManager {
     @Injected private var pingService: IPingService
     
     @AppSettings<AppLanguageKey> private var appLanguage
+    @AppSettings<LastUpdatesCheckKey> private var lastUpdatesCheck
     
     init() {
         setupUI()
         addObservers()
         saveCurrentLanguage()
+        setLastUpdatesCheckIfNeeded()
     }
     
     func setupUI() {
@@ -39,6 +41,8 @@ final class RootManager {
         UIApplication.shared.applicationIconBadgeNumber = 0
         
         Task {
+            guard !isPreview else { return }
+            
             let serverAvailable = await pingService.ping()
             if !serverAvailable {
                 await showNetworkErrorView()
@@ -50,6 +54,12 @@ final class RootManager {
         if let preferredLanguage = NSLocale.preferredLanguages.first,
            let language = AppLanguage.allCases.first(where: { preferredLanguage.starts(with: $0.rawValue) }) {
             appLanguage = language.rawValue
+        }
+    }
+    
+    func setLastUpdatesCheckIfNeeded() {
+        if lastUpdatesCheck == nil {
+            lastUpdatesCheck = Date()
         }
     }
 }

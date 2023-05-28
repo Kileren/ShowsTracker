@@ -148,6 +148,11 @@ struct ShowsView: View {
             }
         }
         return HStack {
+            Button {
+                sheetNavigator.sheetDestination = .updatesView
+            } label: {
+                buttonLabel(Image(systemName: "clock.badge").renderingMode(.template))
+            }
             Spacer()
             Button {
                 sheetNavigator.sheetDestination = .archiveView
@@ -403,6 +408,7 @@ private class SheetNavigator: ObservableObject {
         case showsList
         case likedShows
         case archiveView
+        case updatesView
     }
     
     func sheetView() -> AnyView {
@@ -417,6 +423,8 @@ private class SheetNavigator: ObservableObject {
             return AnyView(LikedShowsListView())
         case .archiveView:
             return AnyView(ArchiveShowsView())
+        case .updatesView:
+            return AnyView(UpdatesView())
         }
     }
 }

@@ -58,3 +58,9 @@ struct EpisodesTrackingKey: AppSettingKey {
     static var defaultValue: Bool { true }
     static var key: String { "showsTracker.episodesTrackingKey" }
 }
+
+/// The date when user checked his shows updates last time
+struct LastUpdatesCheckKey: AppSettingKey {
+    static var defaultValue: Date? { nil }
+    static var key: String { "showsTracker.lastUpdatesCheckKey" }
+}

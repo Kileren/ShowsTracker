@@ -38,6 +38,7 @@
 "languageChangeInstruction" = "App language can be changed in\niPhone Settings";
 "languageDescription" = "The specified language is used in the search";
 "languageRecommendation" = "It is recommended to use English, because the database in English is updated faster and contains more information";
+"lastCheck" = "Last check - %@";
 "look" = "Look";
 "lookYourHistory" = "Look at your history and deferred tv shows";
 "more" = "More";
@@ -45,8 +46,10 @@
 "networkErrorHint1" = "1. Check your internet connection.";
 "networkErrorHint2" = "2. Try to use VPN connection. Unfortunately, the resources of the TMDB service are not available in some countries.";
 "newEpisodeDescription" = "The episode \"%@\" is coming out today, don't forget to watch it.";
+"newEpisodesOut" = "The released episodes:";
 "newEpisodeTitleWithName" = "%@ - new episode!";
 "newEpisodeTitleWithoutName" = "A new episode has been released!";
+"newSeasonOut" = "New season - %@";
 "noDescription" = "There is no description yet";
 "noShowDescription" = "There is no description yet\U00A0😔";
 "noSimilarShows" = "Similar shows have not been added yet\U00A0😔";
@@ -59,6 +62,7 @@
 "notificationsTimeTitle" = "Sending time";
 "notificationsTitle" = "Notifications";
 "noTrackingShows" = "There are no\ntracked series";
+"noUpdates" = "There are no updates";
 "off" = "Off";
 "ongoing" = "Returning Series";
 "open" = "Open";
@@ -68,6 +72,7 @@
 "popular" = "Popular";
 "popularShowsLoadingError" = "Couldn't load popular TV shows";
 "rateTheApp" = "Rate the App";
+"refresh" = "Refresh";
 "releaseYear" = "Year of release";
 "removeFromArchive" = "Delete from the archive";
 "removeFromFavourites" = "Delete from favourites";
@@ -83,6 +88,8 @@
 "sortByPopularity" = "Popularity";
 "sortByRating" = "Score";
 "status" = "Status";
+"tapRefreshToGetUpdates" = "Tap \"Refresh\" to find out what's new since your last check";
 "tryAgain" = "Try again";
 "version" = "Version";
+"whatsNew" = "What's new";
 "yourShows" = "Your series";

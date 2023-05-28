@@ -13,6 +13,9 @@ struct STDateFormatter {
         /// dd MMMM yyyy
         case full = "dd MMMM yyyy"
         
+        /// dd/MM/yyyy
+        case mid = "dd/MM/yyyy"
+        
         /// yyyy-MM-dd
         case airDate = "yyyy-MM-dd"
         

@@ -10,6 +10,7 @@
 		8C00633428574F0B00893ECB /* discover_tv_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 8C00633328574EFF00893ECB /* discover_tv_1.json */; };
 		8C00633628574F2600893ECB /* discover_tv_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 8C00633528574F1E00893ECB /* discover_tv_2.json */; };
 		8C006338285E578600893ECB /* Storages+Resolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C006337285E578600893ECB /* Storages+Resolver.swift */; };
+		8C0D965129EDB8E000A964F7 /* UpdatedShowsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0D965029EDB8E000A964F7 /* UpdatedShowsView.swift */; };
 		8C0F5D3225CFB9D500B9983C /* View+CornerRadius.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0F5D3125CFB9D500B9983C /* View+CornerRadius.swift */; };
 		8C156CD8280B23390049DDD1 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 8C156CD7280B23390049DDD1 /* Moya */; };
 		8C156CDB280B244D0049DDD1 /* SearchTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C156CDA280B244D0049DDD1 /* SearchTarget.swift */; };
@@ -129,6 +130,12 @@
 		8CDCCF0628531836006EC106 /* DiscoverTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CDCCF0528531836006EC106 /* DiscoverTarget.swift */; };
 		8CE2693E25CEE5040045903F /* DesignConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE2693D25CEE5040045903F /* DesignConst.swift */; };
 		8CE2694125CEE7A20045903F /* ShowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE2694025CEE7A20045903F /* ShowView.swift */; };
+		8CE5646929F9B3C9003E9A24 /* TappableCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE5646829F9B3C9003E9A24 /* TappableCardView.swift */; };
+		8CE5646B29FD8AD0003E9A24 /* UpdatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE5646A29FD8AD0003E9A24 /* UpdatesView.swift */; };
+		8CE5646D2A06798E003E9A24 /* UpdatesNotFoundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE5646C2A06798E003E9A24 /* UpdatesNotFoundView.swift */; };
+		8CE5646F2A067FDF003E9A24 /* UpdatesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE5646E2A067FDF003E9A24 /* UpdatesViewModel.swift */; };
+		8CE564712A06800B003E9A24 /* UpdatesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE564702A06800B003E9A24 /* UpdatesModel.swift */; };
+		8CE564772A236254003E9A24 /* UpdatesLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE564762A236254003E9A24 /* UpdatesLoadingView.swift */; };
 		8CF2F09C2905428D00E85060 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF2F09B2905428D00E85060 /* AppSettings.swift */; };
 		8CF2F09F2905AB0600E85060 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF2F09E2905AB0600E85060 /* SettingsViewModel.swift */; };
 		8CF2F0A12905AB2700E85060 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF2F0A02905AB2700E85060 /* SettingsModel.swift */; };
@@ -152,6 +159,7 @@
 		8C00633328574EFF00893ECB /* discover_tv_1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = discover_tv_1.json; sourceTree = "<group>"; };
 		8C00633528574F1E00893ECB /* discover_tv_2.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = discover_tv_2.json; sourceTree = "<group>"; };
 		8C006337285E578600893ECB /* Storages+Resolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Storages+Resolver.swift"; sourceTree = "<group>"; };
+		8C0D965029EDB8E000A964F7 /* UpdatedShowsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatedShowsView.swift; sourceTree = "<group>"; };
 		8C0F5D3125CFB9D500B9983C /* View+CornerRadius.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+CornerRadius.swift"; sourceTree = "<group>"; };
 		8C156CDA280B244D0049DDD1 /* SearchTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTarget.swift; sourceTree = "<group>"; };
 		8C156CDE280FCC7B0049DDD1 /* WitcherSearch.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = WitcherSearch.json; sourceTree = "<group>"; };
@@ -270,6 +278,12 @@
 		8CDCCF0528531836006EC106 /* DiscoverTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverTarget.swift; sourceTree = "<group>"; };
 		8CE2693D25CEE5040045903F /* DesignConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignConst.swift; sourceTree = "<group>"; };
 		8CE2694025CEE7A20045903F /* ShowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowView.swift; sourceTree = "<group>"; };
+		8CE5646829F9B3C9003E9A24 /* TappableCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TappableCardView.swift; sourceTree = "<group>"; };
+		8CE5646A29FD8AD0003E9A24 /* UpdatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatesView.swift; sourceTree = "<group>"; };
+		8CE5646C2A06798E003E9A24 /* UpdatesNotFoundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatesNotFoundView.swift; sourceTree = "<group>"; };
+		8CE5646E2A067FDF003E9A24 /* UpdatesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatesViewModel.swift; sourceTree = "<group>"; };
+		8CE564702A06800B003E9A24 /* UpdatesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatesModel.swift; sourceTree = "<group>"; };
+		8CE564762A236254003E9A24 /* UpdatesLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatesLoadingView.swift; sourceTree = "<group>"; };
 		8CF2F09B2905428D00E85060 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		8CF2F09E2905AB0600E85060 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		8CF2F0A02905AB2700E85060 /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
@@ -310,6 +324,20 @@
 				8C00633328574EFF00893ECB /* discover_tv_1.json */,
 			);
 			path = Discover;
+			sourceTree = "<group>";
+		};
+		8C0D964F29EDB8C100A964F7 /* UpdatesView */ = {
+			isa = PBXGroup;
+			children = (
+				8CE5646A29FD8AD0003E9A24 /* UpdatesView.swift */,
+				8CE564762A236254003E9A24 /* UpdatesLoadingView.swift */,
+				8C0D965029EDB8E000A964F7 /* UpdatedShowsView.swift */,
+				8CE5646829F9B3C9003E9A24 /* TappableCardView.swift */,
+				8CE5646C2A06798E003E9A24 /* UpdatesNotFoundView.swift */,
+				8CE5646E2A067FDF003E9A24 /* UpdatesViewModel.swift */,
+				8CE564702A06800B003E9A24 /* UpdatesModel.swift */,
+			);
+			path = UpdatesView;
 			sourceTree = "<group>";
 		};
 		8C156CD9280B24160049DDD1 /* Network */ = {
@@ -745,6 +773,7 @@
 		8CD6C1FD25C32D54004CF261 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				8C0D964F29EDB8C100A964F7 /* UpdatesView */,
 				8CBDFF8229435C1800C31156 /* NetworkErrorView */,
 				8C7DD05A28F67C28003FE1ED /* AboutApp */,
 				8C7DD04B28F335F1003FE1ED /* ArchiveShows */,
@@ -974,6 +1003,7 @@
 				8C156D422841F6C80049DDD1 /* GenresTarget.swift in Sources */,
 				8C518F3E2662B28B00EE6C4F /* Redactable+Shimmered.swift in Sources */,
 				8CDCCF042843F93F006EC106 /* LanguageSelectorView.swift in Sources */,
+				8CE5646D2A06798E003E9A24 /* UpdatesNotFoundView.swift in Sources */,
 				8C3994762620DBCE005BD7DB /* PlainShow.swift in Sources */,
 				8CBDFF882943D90400C31156 /* PingTarget.swift in Sources */,
 				8C7DD06528FC201C003FE1ED /* NotificationCenter.swift in Sources */,
@@ -1001,6 +1031,7 @@
 				8C7DD05E28F7C9B9003FE1ED /* STSpinner.swift in Sources */,
 				8CF5285D2677780500351915 /* CoreDataStorage.swift in Sources */,
 				8CBDFF7D2933B01B00C31156 /* UIScreen+Extensions.swift in Sources */,
+				8CE564772A236254003E9A24 /* UpdatesLoadingView.swift in Sources */,
 				8CFAD6A625C86EA80090DC4F /* Example.swift in Sources */,
 				8C156D37283A684F0049DDD1 /* FilterView.swift in Sources */,
 				8CBDFF8429435C2500C31156 /* NetworkErrorView.swift in Sources */,
@@ -1017,6 +1048,7 @@
 				8C7DD04228E975F0003FE1ED /* SettingsView.swift in Sources */,
 				8C7DD05728F523B8003FE1ED /* ShowDetailsModel.swift in Sources */,
 				8CF2F09C2905428D00E85060 /* AppSettings.swift in Sources */,
+				8C0D965129EDB8E000A964F7 /* UpdatedShowsView.swift in Sources */,
 				8C156D472841F86E0049DDD1 /* Genre.swift in Sources */,
 				8C7DD05C28F67C30003FE1ED /* AboutAppView.swift in Sources */,
 				8C156D0028152E7B0049DDD1 /* ProcessInfo+isPreview.swift in Sources */,
@@ -1035,6 +1067,7 @@
 				8C7DCFD728D5E72E003FE1ED /* FloatingErrorView.swift in Sources */,
 				8CDCCF0028434B4A006EC106 /* LangCode.swift in Sources */,
 				8C1DBA352910390C007B5F09 /* LikedShowsListModel.swift in Sources */,
+				8CE564712A06800B003E9A24 /* UpdatesModel.swift in Sources */,
 				8C156D492841F8ED0049DDD1 /* GenresService.swift in Sources */,
 				8C156D272827057B0049DDD1 /* AnimatedState.swift in Sources */,
 				8CF5285F2677782600351915 /* ManagedObjectCodable.swift in Sources */,
@@ -1051,6 +1084,7 @@
 				8C156CFA281527C70049DDD1 /* TVTarget.swift in Sources */,
 				8CF2F09F2905AB0600E85060 /* SettingsViewModel.swift in Sources */,
 				8C1DBA43291ACD6F007B5F09 /* DisabledScroll.swift in Sources */,
+				8CE5646B29FD8AD0003E9A24 /* UpdatesView.swift in Sources */,
 				8CD2004627A311D300F61C6D /* EnvironmentValues+isPreview.swift in Sources */,
 				8C156CFC281528A90049DDD1 /* TVService.swift in Sources */,
 				8C1DBA3D29167BFB007B5F09 /* EmptyView.swift in Sources */,
@@ -1058,6 +1092,7 @@
 				8C4605DD28BB71CE00ADCB0C /* ScaleButtonStyle.swift in Sources */,
 				8CBDFF7B2932567000C31156 /* OtherSettingsView.swift in Sources */,
 				8C156CE82811C79B0049DDD1 /* SearchService.swift in Sources */,
+				8CE5646F2A067FDF003E9A24 /* UpdatesViewModel.swift in Sources */,
 				8C7DD05528F33639003FE1ED /* ArchiveShowsModel.swift in Sources */,
 				8CBDFF81293CE16000C31156 /* View+Extensions.swift in Sources */,
 				8C518F3C2662B27800EE6C4F /* Redactable.swift in Sources */,
@@ -1067,6 +1102,7 @@
 				8C5B18D829065A4D0007BE0E /* AppLanguage.swift in Sources */,
 				8C4605E128C1380A00ADCB0C /* AnimatedTemporaryState.swift in Sources */,
 				8C156D1C28202D010049DDD1 /* STDateFormatter.swift in Sources */,
+				8CE5646929F9B3C9003E9A24 /* TappableCardView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

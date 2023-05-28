@@ -54,6 +54,7 @@ enum Strings {
     static let networkError = string(forKey: "networkError")
     static let networkErrorHint1 = string(forKey: "networkErrorHint1")
     static let networkErrorHint2 = string(forKey: "networkErrorHint2")
+    static let newEpisodesOut = string(forKey: "newEpisodesOut")
     static let newEpisodeTitleWithoutName = string(forKey: "newEpisodeTitleWithoutName")
     static let noDescription = string(forKey: "noDescription")
     static let noShowDescription = string(forKey: "noShowDescription")
@@ -67,6 +68,7 @@ enum Strings {
     static let notificationsTimeTitle = string(forKey: "notificationsTimeTitle")
     static let notificationsTitle = string(forKey: "notificationsTitle")
     static let noTrackingShows = string(forKey: "noTrackingShows")
+    static let noUpdates = string(forKey: "noUpdates")
     static let off = string(forKey: "off")
     static let ongoing = string(forKey: "ongoing")
     static let open = string(forKey: "open")
@@ -76,6 +78,7 @@ enum Strings {
     static let popular = string(forKey: "popular")
     static let popularShowsLoadingError = string(forKey: "popularShowsLoadingError")
     static let rateTheApp = string(forKey: "rateTheApp")
+    static let refresh = string(forKey: "refresh")
     static let releaseYear = string(forKey: "releaseYear")
     static let removeFromArchive = string(forKey: "removeFromArchive")
     static let removeFromFavourites = string(forKey: "removeFromFavourites")
@@ -91,8 +94,10 @@ enum Strings {
     static let sortByPopularity = string(forKey: "sortByPopularity")
     static let sortByRating = string(forKey: "sortByRating")
     static let status = string(forKey: "status")
+    static let tapRefreshToGetUpdates = string(forKey: "tapRefreshToGetUpdates")
     static let tryAgain = string(forKey: "tryAgain")
     static let version = string(forKey: "version")
+    static let whatsNew = string(forKey: "whatsNew")
     static let yourShows = string(forKey: "yourShows")
     
     static func newEpisodeDescription(_ s1: String) -> String {
@@ -101,6 +106,14 @@ enum Strings {
     
     static func newEpisodeTitleWithName(_ s1: String) -> String {
         string(forKey: "newEpisodeTitleWithName", args: s1)
+    }
+    
+    static func newSeasonOut(_ s1: String) -> String {
+        string(forKey: "newSeasonOut", args: s1)
+    }
+    
+    static func lastCheck(_ s1: String) -> String {
+        string(forKey: "lastCheck", args: s1)
     }
     
     static func genrePlural(_ count: Int) -> String {
