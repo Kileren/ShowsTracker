@@ -61,28 +61,12 @@ struct TappableCardView: View {
                 .lineLimit(2)
                 .multilineTextAlignment(.center)
             ScrollView {
-                HStack {
-                    VStack(alignment: .leading, spacing: 12) {
-                        if let season = model.season {
-                            Text(Strings.newSeasonOut(season))
-                        }
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(Strings.newEpisodesOut)
-                            
-                            ForEach(model.episodes, id: \.self) { episode in
-                                HStack(alignment: .top, spacing: 0) {
-                                    Text(" • ")
-                                    Text(episode)
-                                }
-                                .font(.regular17)
-                            }
-                        }
+                VStack(alignment: .leading, spacing: 16) {
+                    if let season = model.season {
+                        seasonView(seasonName: season)
                     }
-                    .font(.medium17)
-                    .foregroundColor(.dynamic.text100)
-                    Spacer()
+                    seriesView()
                 }
-                Spacer()
             }
             STButton(
                 title: Strings.open,
@@ -97,6 +81,33 @@ struct TappableCardView: View {
         .opacity(textOpacity)
         .offset(x: xOffset, y: yOffset)
         .frame(width: expandedWidth, height: expandedWidth * 1.5)
+    }
+    
+    func seasonView(seasonName: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(Strings.newSeasonOut)
+                .foregroundColor(.dynamic.text20)
+                .font(.regular15)
+            Text(seasonName)
+                .foregroundColor(.dynamic.text100)
+                .font(.medium17)
+        }
+    }
+    
+    func seriesView() -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(Strings.newEpisodesOut)
+                .foregroundColor(.dynamic.text20)
+                .font(.regular15)
+            
+            VStack(alignment: .leading, spacing: 2) {
+                ForEach(model.episodes, id: \.self) { episode in
+                    Text(episode)
+                        .foregroundColor(.dynamic.text100)
+                        .font(.medium17)
+                }
+            }
+        }
     }
     
     func onTap(card: GeometryProxy?) {

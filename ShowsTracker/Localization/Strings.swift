@@ -56,6 +56,7 @@ enum Strings {
     static let networkErrorHint2 = string(forKey: "networkErrorHint2")
     static let newEpisodesOut = string(forKey: "newEpisodesOut")
     static let newEpisodeTitleWithoutName = string(forKey: "newEpisodeTitleWithoutName")
+    static let newSeasonOut = string(forKey: "newSeasonOut")
     static let noDescription = string(forKey: "noDescription")
     static let noShowDescription = string(forKey: "noShowDescription")
     static let noSimilarShows = string(forKey: "noSimilarShows")
@@ -106,10 +107,6 @@ enum Strings {
     
     static func newEpisodeTitleWithName(_ s1: String) -> String {
         string(forKey: "newEpisodeTitleWithName", args: s1)
-    }
-    
-    static func newSeasonOut(_ s1: String) -> String {
-        string(forKey: "newSeasonOut", args: s1)
     }
     
     static func lastCheck(_ s1: String) -> String {

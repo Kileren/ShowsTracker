@@ -46,10 +46,10 @@
 "networkErrorHint1" = "1. Check your internet connection.";
 "networkErrorHint2" = "2. Try to use VPN connection. Unfortunately, the resources of the TMDB service are not available in some countries.";
 "newEpisodeDescription" = "The episode \"%@\" is coming out today, don't forget to watch it.";
-"newEpisodesOut" = "The released episodes:";
+"newEpisodesOut" = "The released episodes";
 "newEpisodeTitleWithName" = "%@ - new episode!";
 "newEpisodeTitleWithoutName" = "A new episode has been released!";
-"newSeasonOut" = "New season - %@";
+"newSeasonOut" = "New season";
 "noDescription" = "There is no description yet";
 "noShowDescription" = "There is no description yet\U00A0😔";
 "noSimilarShows" = "Similar shows have not been added yet\U00A0😔";
